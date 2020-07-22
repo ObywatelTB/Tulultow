@@ -22,7 +22,7 @@ app.use(express.static(publicDirectoryPath))
 
 app.get('',(req,res)=>{
 	res.render('index',{
-		title: 'Weather',
+		title: 'Gallery',
 		name: 'Tom Hanks'
 	})
 })
@@ -46,7 +46,7 @@ app.get('/about',(req,res)=>{
 // req-(uest) to the server; res(ponse) of the server
 
  
-app.get('/weather',(req,res)=>{
+app.get('/gallery',(req,res)=>{
 	if(!req.query.address){
 		return res.send({
 			error: 'you must provide an address term!'
@@ -67,7 +67,6 @@ app.get('/weather',(req,res)=>{
 			})
 		})
 	})
-		
 })
 	
 
