@@ -29,8 +29,8 @@ app.get('',(req,res)=>{
 
 app.get('/help', (req,res)=>{
 	res.render('help',{
-		title: 'helppppp',
-		name: 'yolo'
+		title: 'Help page',
+		name: 'something'
 	})
 })
 
@@ -41,12 +41,17 @@ app.get('/about',(req,res)=>{
 	})
 })
 
+app.get('/weather',(req,res)=>{
+	res.render('weather', {
+		title: 'Weather page',
+		name: 'check weather out'
+	})
+})
+
 //the 2nd argument, function, describes what happens
 // when somebody visits the chosen page 
 // req-(uest) to the server; res(ponse) of the server
-
- 
-app.get('/gallery',(req,res)=>{
+app.get('/w',(req,res)=>{
 	if(!req.query.address){
 		return res.send({
 			error: 'you must provide an address term!'

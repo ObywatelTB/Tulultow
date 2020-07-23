@@ -10,7 +10,7 @@ body {
 	min-height: 100vh;
 }
 
-.main-content{
+.weather-content{
 	flex-grow: 1;
 }
 
@@ -37,9 +37,14 @@ header a{
 	text-decoration: none;
 }
 
-.portrait {
-	width: 250px;
+.weather_link{
+	color: #B0E0E6;
 }
+
+.portrait {
+	width: 350px;
+}
+
 
 input{
 	border: 1px solid #cccccc;
