@@ -1,14 +1,18 @@
+require('./db/mongoose')
 const path  = require('path')
 const express = require('express')
 const hbs = require('hbs')
-const geocode = require('./utils/geocode')
-const forecast = require('./utils/forecast')
+const geocode = require('./weather_utils/geocode')
+const forecast = require('./weather_utils/forecast')
+const User = require('./models/user')
 
 const app = express()
 const port = process.env.PORT || 3000
 
+app.use(express.json()) //to jest ta dodana linijka!!!
+
 //Define paths for Express config
-const publicDirectoryPath = path.join(__dirname,'../public')
+const publicDirectoryPath = path.join(__dirname, '../public')
 const viewsPath = path.join(__dirname, '../templates/views')
 const partialsPath = path.join(__dirname, '../templates/partials')
 
@@ -19,6 +23,40 @@ hbs.registerPartials(partialsPath)
 
 //Setup static directory to serve
 app.use(express.static(publicDirectoryPath))
+
+//BAZA DANYCH
+app.post('/users', async (req,res)=>{
+	const user = new User(req.body)
+	
+	try{
+		await user.save()
+		res.status(201).send(user)
+	}catch(e){
+		res.status(400).send(e)
+	}
+})
+
+app.get('/users', async (req,res)=>{
+	try{
+		const users = await User.find({})
+		res.send(users)
+	}catch(e){
+		res.status(500).send(e)
+	}
+})
+
+app.get('/users/:id', async(req,res)=>{
+	const _id = req.params.id
+	try{
+		const user = await User.findById(_id)
+		if(!user){
+			throw new Error('no such user in the db!')
+		}
+		res.send(user)
+	}catch(e){
+		
+	}
+})
 
 app.get('',(req,res)=>{
 	res.render('index',{
@@ -40,6 +78,36 @@ app.get('/about',(req,res)=>{
 		name: 'tom h'
 	})
 })
+
+app.get('/user',(req,res)=>{
+	res.render('user', {
+		title: 'Tobiasz Barzek',
+		name: 'Tobiasz Barzek'
+	})
+})
+
+app.get('/help/*',(req,res)=>{
+	res.render('404',{
+		title: '404',
+		name: 'Tobson',
+		message:'Help article not found.'
+	})
+})
+
+//THIS ONE HAS TO BE LAST!
+//* -wild card character. match everything that wasnt matched so far
+app.get('*',(req,res)=>{
+	res.render('404',{
+		title: '404',
+		name: 'Tobson',
+		message: 'Page not found.'
+	})
+})
+
+
+
+
+//====== POGODA, DO WYWALENIA. + na koncu wazna komenda listen
 
 app.get('/weather',(req,res)=>{
 	res.render('weather', {
@@ -74,7 +142,6 @@ app.get('/w',(req,res)=>{
 	})
 })
 	
-
 app.get('/products',(req,res)=>{
 	if(!req.query.search){
 		return res.send({
@@ -87,23 +154,7 @@ app.get('/products',(req,res)=>{
 	})
 })
 
-app.get('/help/*',(req,res)=>{
-	res.render('404',{
-		title: '404',
-		name: 'Tobson',
-		message:'Help article not found.'
-	})
-})
 
-//THIS ONE HAS TO BE LAST!
-//* -wild card character. match everything that wasnt matched so far
-app.get('*',(req,res)=>{
-	res.render('404',{
-		title: '404',
-		name: 'Tobson',
-		message: 'Page not found.'
-	})
-})
 
 
 //starts a server, makes it listen on a specific port
