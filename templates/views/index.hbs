@@ -10,12 +10,22 @@
 
 <body>
 	{{>header}}
-	<p>Use this site to create your gallery.</p>
+	<h3>About the Gallery</h3>
+	<p>This site is great. Trust me.</p>
+		<img class="portrait other" src="/img/a.jpg"></img>
+		
+	<p></p>
+	<h3>Below you can create your account</h3>
 	<form>
-		<input placeholder="User name">
-		<input placeholder="Password">
-		<button>Log in</button>
+		<p><input id="input_name" placeholder="User name *"></p>
+		<p><input id="input_email" placeholder="Email *"></p>
+		<p><input id="input_pass" placeholder="Password *"></p>
+		<p><input id="input_city" placeholder="City"></p>
+		<p><input id="input_country" placeholder="Country"></p>
+		<button>Sign up</button>
 	</form>
+	
+	<p id="message"> </p>
 	{{>footer}}
 	
 	<script src="/js/login.js"></script>

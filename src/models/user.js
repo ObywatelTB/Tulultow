@@ -22,6 +22,16 @@ const User = mongoose.model('User',{
 			if(!validator.isEmail(value))
 				throw new Error('wrong format of a mail!')
 		}
+	},
+	city:{
+		type: String,
+		required: false,
+		default: "let us know"
+	},
+	country:{
+		type: String,
+		required: false,
+		default: "so where is it?"
 	}
 })
 

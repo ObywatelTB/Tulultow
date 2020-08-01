@@ -17,8 +17,8 @@ body {
 footer{
 	color: #888888;
 	border-top: 1px solid #eeeeee;
-	margin-top: 16px;
-	padding: 16px 0;
+	margin-top: 1px; //bylo 16
+	padding: 1px 0;  //bylo 16
 }
 
 header{
@@ -60,5 +60,16 @@ button{
 }
 
 
+table{
+	border-collapse: collapse;
+	width: 100%;
+}
 
+th,td{
+	padding: 8px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+tr:hover{ background-color: #f5f5f5;}
  

@@ -1,83 +1,83 @@
-Przed zalogowaniem
+ï»¿Przed zalogowaniem
 
-1. Okno g³ówne:
+1. Okno gÅ‚Ã³wne:
 - zaloguj/zarejestruj
-- about(w osobnej zak³adce lub bezpoœrednio na stronie g³ównej)
-- czy mo¿na zobaczyæ profile innych nie bêd¹c zalogowanym?
+- about(w osobnej zakÂ³adce lub bezpoÅ›rednio na stronie gÂ³Ã³wnej)
+- czy moÂ¿na zobaczyÃ¦ profile innych nie bÃªdÂ¹c zalogowanym?
 
-x. Po klikniêciu zarejestruj jakie informacje wymagane? 
-Najpierw pewnie trzeba by by³o podaæ nik, has³o, mail i opcjonalnie wiek i region (coœ jeszcze?)
+x. Po klikniÃªciu zarejestruj jakie informacje wymagane? 
+Najpierw pewnie trzeba by byÂ³o podaÃ¦ nik, hasÂ³o, mail i opcjonalnie wiek i region (coÅ“ jeszcze?)
 
-Trzeba jeszcze poprosiæ u¿ytkownika o weryfikacje maila.
-Jesli siê da, to mo¿e trzeba zrobiæ opcjê zaloguj przez facebooka\gmail, tak jak da siê to zrobiæ na przyk³ad w chess.com
+Trzeba jeszcze poprosiÃ¦ uÂ¿ytkownika o weryfikacje maila.
+Jesli siÃª da, to moÂ¿e trzeba zrobiÃ¦ opcjÃª zaloguj przez facebooka\gmail, tak jak da siÃª to zrobiÃ¦ na przykÂ³ad w chess.com
  
 
 
 
 Po zalogowaniu
 
-roponowane zak³adki: 1. Moja galeria,  2. Przegl¹daj inne galerie,  3. Ulubione galerie?,  4. opcje,   
+roponowane zakÂ³adki: 1. Moja galeria,  2. PrzeglÂ¹daj inne galerie,  3. Ulubione galerie?,  4. opcje,   
 
 1. Moja Galeria
-- tu wyœwietla³aby siê galeria
+- tu wyÅ“wietlaÂ³aby siÃª galeria
 
-- do ka¿dego elementu opcje(edytuj/usuñ)
+- do kaÂ¿dego elementu opcje(edytuj/usuÃ±)
 
-- najlepiej jakby do ka¿dego elementu da³o siê dodaæ jakiœ w³asny komentarz/opis.
+- najlepiej jakby do kaÂ¿dego elementu daÂ³o siÃª dodaÃ¦ jakiÅ“ wÂ³asny komentarz/opis.
 
-- dodaj nowy element - (nowa zak³adka/czy mo¿e ma³e okienko?) dobrze jak oprócz elementu trzeba by by³o sprecyzowaæ
- kategoriê do której nale¿y (ksi¹¿ka/ film/ sport itd.) 
- Mo¿e jeszcze jakieœ dok³adniejsze kategorie (ksi¹¿ka: krymina³\fantastyka itd..)
+- dodaj nowy element - (nowa zakÂ³adka/czy moÂ¿e maÂ³e okienko?) dobrze jak oprÃ³cz elementu trzeba by byÂ³o sprecyzowaÃ¦
+ kategoriÃª do ktÃ³rej naleÂ¿y (ksiÂ¹Â¿ka/ film/ sport itd.) 
+ MoÂ¿e jeszcze jakieÅ“ dokÂ³adniejsze kategorie (ksiÂ¹Â¿ka: kryminaÂ³\fantastyka itd..)
 
-- informacje o w³aœcicielu profilu (imiê/wiek/miasto itd)
+- informacje o wÂ³aÅ“cicielu profilu (imiÃª/wiek/miasto itd)
 
--wygl¹d: na razie bym nie kombinowa³ i zrobi³ to jak najproœciej siê da.
-Ale idea³em by³aby mo¿liwoœæ kompletnego dostosowania galerii do w³asnych potrzeb.
-W tej aplikacji da³eœ na przyk³ad zdjêcie z pomnikiem i obrazami. Powinna byæ mo¿liwoœæ ustawienia wszystkiego
-³¹cznie z tym jaki pomnik tam stoi i rozmieszczeniem obrazów. Najlepszy by by³ jakiœ widok pseudo 3D 
-i mo¿liwoœæ poustawiania wszystkich mebli tak jak siê chce. Wtedy trzeba by by³o stworzyæ jakiœ olbrzymi zbiór modeli,
-aby ka¿dy znalaz³ coœ dla siebie (rega³y, pomniki, obrazy, kominki. Mo¿e nawet jakieœ rowery, czy sztangi).
+-wyglÂ¹d: na razie bym nie kombinowaÂ³ i zrobiÂ³ to jak najproÅ“ciej siÃª da.
+Ale ideaÂ³em byÂ³aby moÂ¿liwoÅ“Ã¦ kompletnego dostosowania galerii do wÂ³asnych potrzeb.
+W tej aplikacji daÂ³eÅ“ na przykÂ³ad zdjÃªcie z pomnikiem i obrazami. Powinna byÃ¦ moÂ¿liwoÅ“Ã¦ ustawienia wszystkiego
+Â³Â¹cznie z tym jaki pomnik tam stoi i rozmieszczeniem obrazÃ³w. Najlepszy by byÂ³ jakiÅ“ widok pseudo 3D 
+i moÂ¿liwoÅ“Ã¦ poustawiania wszystkich mebli tak jak siÃª chce. Wtedy trzeba by byÂ³o stworzyÃ¦ jakiÅ“ olbrzymi zbiÃ³r modeli,
+aby kaÂ¿dy znalazÂ³ coÅ“ dla siebie (regaÂ³y, pomniki, obrazy, kominki. MoÂ¿e nawet jakieÅ“ rowery, czy sztangi).
 
-Na razie jednak da³bym po prostu jakieœ zdjêcia do wyboru(takie jak to z pomnikiem) i mo¿liwoœæ wype³nienia obrazów zawartosci¹. 
-Przyda³by siê na zdjêciu mo¿e jeszcze tylko rega³
-
-
-
-2 Przegl¹daj inne galerie
-- lista galerii - nie wiem jak to zrobiæ, ale musz¹ tu byæ zawarte informacje o tym co siê znajduje
-w podanych galeriach, aby u¿ytkownik nie marnowa³ czasu na klikanie w profile które go nie 
-interesuj¹. Jednoczeœnie nie mo¿e to chyba byæ sucha lista rzeczy znajduj¹cych siê w galerii,
-Musi to wygl¹daæ na tyle zachêcaj¹co aby u¿ytkownik chcia³ w to klikn¹æ, aby dowiedzieæ siê wiêcej.
-
-- search po nazwach u¿ytkowników/ regionie / elementach galerii / ulubionych
-
-3. lista ulubionych galerii - nie wiem czy ca³a zak³adka jest potrzebna, mo¿e lepiej dodaæ to do 'Przegl¹daj inne galerie'
--wyœwietla³oby siê to samo co po 'search po ulubionych'
-
-4.Opcje / Wiêcej /Profil  - nie wiem jak to nazwaæ 
-jezyki/ ustawnienia / wyloguj . Najlepiej w formie rozwijanego menu, tak jak jest na wiêkszoœci stron.
+Na razie jednak daÂ³bym po prostu jakieÅ“ zdjÃªcia do wyboru(takie jak to z pomnikiem) i moÂ¿liwoÅ“Ã¦ wypeÂ³nienia obrazÃ³w zawartosciÂ¹. 
+PrzydaÂ³by siÃª na zdjÃªciu moÂ¿e jeszcze tylko regaÂ³
 
 
 
-x. Galeria kogoœ innego
+2 PrzeglÂ¹daj inne galerie
+- lista galerii - nie wiem jak to zrobiÃ¦, ale muszÂ¹ tu byÃ¦ zawarte informacje o tym co siÃª znajduje
+w podanych galeriach, aby uÂ¿ytkownik nie marnowaÂ³ czasu na klikanie w profile ktÃ³re go nie 
+interesujÂ¹. JednoczeÅ“nie nie moÂ¿e to chyba byÃ¦ sucha lista rzeczy znajdujÂ¹cych siÃª w galerii,
+Musi to wyglÂ¹daÃ¦ na tyle zachÃªcajÂ¹co aby uÂ¿ytkownik chciaÂ³ w to kliknÂ¹Ã¦, aby dowiedzieÃ¦ siÃª wiÃªcej.
 
-- tu by siê wyœwietla³a galeria wybrana z listy 'search'.
+- search po nazwach uÂ¿ytkownikÃ³w/ regionie / elementach galerii / ulubionych
 
-- musi byæ jakiœ system interakcji  z przedmiotami (lajki/emotikiony/komentarze)
- wydaje mi siê ¿e nie musi byæ to zrobione tak samo jak na facebooku, bo to powoduje ¿e ludzie
- goniliby za lajkami. Zamiast tego wszystkie komentarze i lajki by³y by widoczne tylko przez 
- w³aœciciela profilu. Inni zwiedzaj¹cy widzieliby tylko to, co sami dodali.
+3. lista ulubionych galerii - nie wiem czy caÂ³a zakÂ³adka jest potrzebna, moÂ¿e lepiej dodaÃ¦ to do 'PrzeglÂ¹daj inne galerie'
+-wyÅ“wietlaÂ³oby siÃª to samo co po 'search po ulubionych'
 
-- przyda³by siê jakiœ czat
+4.Opcje / WiÃªcej /Profil  - nie wiem jak to nazwaÃ¦ 
+jezyki/ ustawnienia / wyloguj . Najlepiej w formie rozwijanego menu, tak jak jest na wiÃªkszoÅ“ci stron.
 
-- opcje polubienia ca³ej galerii
 
-- co po opuszczeniu galerii? Powrót do poprzedni otwartej karty?
+
+x. Galeria kogoÅ“ innego
+
+- tu by siÃª wyÅ“wietlaÂ³a galeria wybrana z listy 'search'.
+
+- musi byÃ¦ jakiÅ“ system interakcji  z przedmiotami (lajki/emotikiony/komentarze)
+ wydaje mi siÃª Â¿e nie musi byÃ¦ to zrobione tak samo jak na facebooku, bo to powoduje Â¿e ludzie
+ goniliby za lajkami. Zamiast tego wszystkie komentarze i lajki byÂ³y by widoczne tylko przez 
+ wÂ³aÅ“ciciela profilu. Inni zwiedzajÂ¹cy widzieliby tylko to, co sami dodali.
+
+- przydaÂ³by siÃª jakiÅ“ czat
+
+- opcje polubienia caÂ³ej galerii
+
+- co po opuszczeniu galerii? PowrÃ³t do poprzedni otwartej karty?
 
 ==========
 
-Trzeba te¿ jakoœ oddzieliæ galerie od u¿ytkownika. Je¿eli ktoœ chce pogadaæ na czacie, nie powinien musieæ wchodziæ
-w jego galeriê. Powinna byæ jakaœ lista znajomych
+Trzeba teÂ¿ jakoÅ“ oddzieliÃ¦ galerie od uÂ¿ytkownika. JeÂ¿eli ktoÅ“ chce pogadaÃ¦ na czacie, nie powinien musieÃ¦ wchodziÃ¦
+w jego galeriÃª. Powinna byÃ¦ jakaÅ“ lista znajomych
 
 
 

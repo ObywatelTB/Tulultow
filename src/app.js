@@ -65,49 +65,37 @@ app.get('',(req,res)=>{
 	})
 })
 
-app.get('/help', (req,res)=>{
-	res.render('help',{
-		title: 'Help page',
+app.get('/favourites', (req,res)=>{
+	res.render('favourites',{
+		title: 'Your favourite galleries',
 		name: 'something'
 	})
 })
 
-app.get('/about',(req,res)=>{
-	res.render('about', {
-		title: 'About me',
+app.get('/browse_galleries',(req,res)=>{
+	res.render('browse_galleries', {
+		title: 'Browse galleries',
 		name: 'tom h'
 	})
 })
 
-app.get('/user',(req,res)=>{
-	res.render('user', {
-		title: 'Tobiasz Barzek',
-		name: 'Tobiasz Barzek'
+app.get('/user', async(req,res)=>{
+	try{
+		const users = await User.find({})
+		res.render('user', {
+			title: users[0].name,
+			name: 'something'
 	})
-})
-
-app.get('/help/*',(req,res)=>{
-	res.render('404',{
-		title: '404',
-		name: 'Tobson',
-		message:'Help article not found.'
-	})
-})
-
-//THIS ONE HAS TO BE LAST!
-//* -wild card character. match everything that wasnt matched so far
-app.get('*',(req,res)=>{
-	res.render('404',{
-		title: '404',
-		name: 'Tobson',
-		message: 'Page not found.'
-	})
+	}catch(e){
+		res.statu(500).send(e)
+	}
 })
 
 
 
 
-//====== POGODA, DO WYWALENIA. + na koncu wazna komenda listen
+
+//====== POGODA, DO WYWALENIA. 
 
 app.get('/weather',(req,res)=>{
 	res.render('weather', {
@@ -156,6 +144,25 @@ app.get('/products',(req,res)=>{
 
 
 
+
+
+app.get('/favourites/*',(req,res)=>{
+	res.render('404',{
+		title: '404',
+		name: 'Tobson',
+		message:'Favourites subpage not found.'
+	})
+})
+
+//THIS ONE HAS TO BE LAST!
+//* -wild card character. match everything that wasnt matched so far
+app.get('*',(req,res)=>{
+	res.render('404',{
+		title: '404',
+		name: 'Tobson',
+		message: 'Page not found.'
+	})
+})
 
 //starts a server, makes it listen on a specific port
 // its waiting for requests
