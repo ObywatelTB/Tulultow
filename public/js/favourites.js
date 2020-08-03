@@ -35,7 +35,7 @@ fetch('/users',{method: 'GET'}).then((response)=>{
 	console.log(e)
 })
 
-document.getElementById('table').appendChild(table);
+document.getElementById('divi').appendChild(table);
 //document.body.appendChild(table);
 
 /* 

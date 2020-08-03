@@ -8,6 +8,14 @@
  Morawiec:
 
 
+OGOLNA KONCEPCJA: (luzne pomysly)
+ -Mogłoby istniec ~15 kategorii "półek" w galerii, z których użytkownik by sobie kilka wybrał.
+   W ten sposób jeśli kogoś interesują bardziej auta, marki ubrań zamiast książek, to w ten sposób
+   szukał by swoich kompanów.
+
+
+
+__________________________________________________________________________________________________
 Przed zalogowaniem
 
 1. Okno główne:

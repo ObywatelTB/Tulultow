@@ -21,6 +21,8 @@ footer{
 	padding: 1px 0;  //bylo 16
 }
 
+
+
 header{
 	margi-top: 16px;
 	margin-bottom: 48px;
@@ -37,12 +39,18 @@ header a{
 	text-decoration: none;
 }
 
+
+
 .weather_link{
 	color: #B0E0E6;
 }
 
-.portrait {
+.landscape{
 	width: 350px;
+}
+
+.portrait {
+	width: 150px;
 }
 
 

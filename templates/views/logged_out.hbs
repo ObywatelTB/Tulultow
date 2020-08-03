@@ -1,0 +1,40 @@
+<! DOCTYPE html>
+<html>
+
+<head>
+	<title> Gallery </title>
+	<link rel="icon" href="/img/logo.png">
+	<link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+	<h1>{{title}}</h1> 
+	
+	<form id="form_login">
+		<input id="input_login_email" placeholder="email">
+		<input id="input_login_pass" placeholder="password">
+		<button>Sign in</button>
+	</form>
+	
+	<h3>About the Gallery</h3>
+	<p>This site is great. Trust me.</p>
+		<img class="landscape" src="/img/a.jpg"></img>
+		
+	<p></p>
+	<h3>Below you can create your account</h3>
+	<form id="form_signup">
+		<p><input id="input_name" placeholder="User name *"></p>
+		<p><input id="input_email" placeholder="Email *"></p>
+		<p><input id="input_pass" placeholder="Password *"></p>
+		<p><input id="input_city" placeholder="City"></p>
+		<p><input id="input_country" placeholder="Country"></p>
+		<button>Sign up</button>
+	</form>
+	
+	<p id="message"> </p>
+	{{>footer}}
+	
+	<script src="/js/start.js"></script>
+</body>
+
+</html>
