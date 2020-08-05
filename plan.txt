@@ -1,12 +1,18 @@
 ﻿TODO 
  Tobiasz: 
-  -szyfrowanie hasel
-  -logowanie - tokeny, autoryzacja, ustawianie Postmana etc
+  [D]-szyfrowanie hasel
+  [D]-logowanie - tokeny, autoryzacja, ustawianie Postmana etc
+  -naprawic buga, ze trzeba zrobic refresha po REJESTRACJI (nie logowaniu)
+     kod powinien byc w start.js, a nie w samym requescie w user.js
+  -naprawic bugi w innych przegladarkach
+  -druga DB dla galerii; polaczyc uzytkownikow z galeriami
   -tworzenie galerii
   -przegladanie galerii, favourites (sprawdzac czy nie ma mniej niz 5)
-  -druga DB dla galerii? jesli tak to polaczyc uzytkownikow z galeriami
+  -[dodatkowe]wrzucanie profilowki przez klienta
  Morawiec:
-
+  -algorytm proponowania galerii
+  -zintegrowanie elementow galerii z (zewnetrznymi bazami danych?, obrazkami?) elementami z sieci, ktore
+   pozwola na proponowanie uzytkownikowi pozycji oraz zilustrowanie elementow grafika. ma byc legalne
 
 OGOLNA KONCEPCJA: (luzne pomysly)
  -Mogłoby istniec ~15 kategorii "półek" w galerii, z których użytkownik by sobie kilka wybrał.
@@ -36,7 +42,7 @@ Opcja zaloguj przez facebooka\gmail
 
 Po zalogowaniu
 
-roponowane zakładki: 1. Moja galeria,  2. Przeglądaj inne galerie,  3. Ulubione galerie?,  4. opcje,   
+proponowane zakładki: 1. Moja galeria,  2. Przeglądaj inne galerie,  3. Ulubione galerie?,  4. opcje,   
 
 1. Moja Galeria
 - tu wyświetlałaby się galeria
@@ -98,6 +104,10 @@ x. Galeria kogoœ innego
 
 Trzeba też jakoś oddzielić galerie od użytkownika. Jeżeli ktoś chce pogadać na czacie, nie powinien musieć wchodzić
 w jego galeriê. Powinna byæ jakaś lista znajomych
+_____________________________________________________________________________________________________________
 
 
+Galeria DB
+-tablica kategorii, tj stringow z opisem kategorii, uzytkownik wybiera kilka, nastepne moze odblokowac
+-2wymiarowa tablica z elementami, dla kazdej kategorii?
 

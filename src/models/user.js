@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const Gallery = require('./gallery')
 
 const userSchema = new mongoose.Schema({
 	name: {
@@ -42,7 +43,25 @@ const userSchema = new mongoose.Schema({
 			required: true
 		}
 	}]
+},{
+	timestamps: true
 })
+
+userSchema.virtual('galleries',{
+	ref: 'Gallery',
+	localField: '_id',
+	foreignField: 'owner'
+})
+
+userSchema.methods.createGallery = async function(){
+	const user = this
+	const gallery = new Gallery({
+		categories: [{category: "Song"}, {category: "Film"}],
+		owner: user._id
+	})
+	await gallery.save()
+	return gallery
+}
 
 userSchema.methods.generateAuthToken = async function(){
 	const user = this
@@ -76,6 +95,13 @@ userSchema.pre('save', async function(next){
 	
 	next()
 })
+
+//delete user gallery when user is removed
+// userSchema.pre('remove', async function(next){
+	// const user = this
+	// await Task.deleteMany({ owner: user._id })
+	// next()
+// })
 
 const User = mongoose.model('User',userSchema)
 

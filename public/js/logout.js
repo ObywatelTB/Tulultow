@@ -27,3 +27,4 @@ p.onclick = function (e){ //e event
 	location.reload()
 	console.log('riload')
 }
+

@@ -19,12 +19,13 @@ const auth = async(req,res,next)=>{
 		req.user = user
 		next()
 	}catch(e){
-		console.log('Brak autoryzacji', e)
 		res.render('logged_out',{
 			title: "Welcome to the Gallery",
 			name: "logged out name"
 		})
-		//res.status(401).send({error:'Please authenticate:',e})
+		// console.log('Brak autoryzacji', e)
+		// res.status(401).send({error:'Please authenticate:',e})
+		
 	}
 }
 

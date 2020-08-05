@@ -2,9 +2,10 @@ require('./db/mongoose')
 const path  = require('path')
 const express = require('express')
 const hbs = require('hbs')
+const cookieParser = require('cookie-parser')
 const userRouter = require('./routers/user')
 const pagesRouter = require('./routers/pages')
-const cookieParser = require('cookie-parser')
+const galleryRouter = require('./routers/gallery')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -25,7 +26,8 @@ app.use(express.static(publicDirectoryPath))
 app.use(express.json()) //to jest ta dodana linijka!
 app.use(cookieParser())
 app.use(userRouter)
-app.use(pagesRouter)
+app.use(galleryRouter)
+app.use(pagesRouter)  //MUSI BYC NA KONCU, BO MA *
 
 
 //starts a server, makes it listen on a specific port

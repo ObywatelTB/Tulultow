@@ -9,9 +9,10 @@ router.post('/users', async (req,res)=>{
 	const user = new User(req.body)
 	try{
 		await user.save()
+		const gallery = await user.createGallery()
 		const token = await user.generateAuthToken()
 		res.cookie('auth',token)
-		res.status(201).send({user,token})
+		res.status(201).send({user,token,gallery})
 	}catch(e){
 		res.status(400).send(e)
 	}
@@ -33,10 +34,11 @@ router.post('/users/login', async(req,res)=>{
 	try{
 		const user = await User.findByCredentials(req.body.email, req.body.password)
 		const token = await user.generateAuthToken()
-		res.cookie('auth',token)
-		console.log('users login, token: ',token)
-		res.send({user,token})
-		location.reload(true)
+		await res.cookie('auth',token)
+		res.send({user}) //{user,token}) //wywala blad, bo chyba nie moze byc po res.cookie()
+
+		//res.redirect('/settings')
+		//location.reload()
 	}catch(e){
 		res.status(400).send(e)
 	}
@@ -47,11 +49,8 @@ router.post('/users/logout', auth, async(req,res)=>{
 		req.user.tokens = req.user.tokens.filter((token)=>{
 			return token.token != req.token
 		})
-		//console.log('AAAAAA')
 		await req.user.save()
 		res.send(req.user)
-		
-		//location.reload(true)
 	}catch(e){
 		res.status(500).send(e)
 	}

@@ -7,13 +7,13 @@ const auth = require('../middleware/auth')
 
 
 router.get('',auth, (req,res)=>{
-	console.log('cookies ',req.cookies)
-	console.log('cookies un ',req.signedCookies)
 	res.render('index',{
 		title: 'Gallery',
 		name: 'Tom Hanks'
 	})
 })
+
+
 
 router.get('/favourites', auth, (req,res)=>{
 	res.render('favourites',{

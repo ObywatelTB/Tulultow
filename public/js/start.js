@@ -45,12 +45,12 @@ signupForm.addEventListener('submit',(e)=>{ //e - event
 				message.textContent = data.error
 			}else{
 				message.textContent = "The account has been created. Welcome, "+data.user.name+'!'
+				location.reload() 
 			}
 		})
 	}).catch((e)=>{
-		console.log('wewnatrz funkcji login',e)
+		console.log('wewnatrz funkcji signup w skrypcie start',e)
 	})
-	location.reload()
 })
 
 //login
@@ -77,12 +77,11 @@ loginForm.addEventListener('submit',(e)=>{ //e - event
 				message.textContent = data.error
 			}else{
 				message.textContent = 'Logowanko! '+data.user.name
+				location.reload(true) 
 			}
 		})
 	}).catch((e)=>{
 		console.log('wewnatrz funkcji login',e)
 	})
-	location.reload()
-	location.reload()
 })
 
