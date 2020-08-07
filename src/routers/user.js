@@ -2,7 +2,7 @@ const express = require('express')
 const User = require('../models/user')
 const router = express.Router()
 const auth = require('../middleware/auth')
-
+const Gallery = require('../models/gallery')
 
 //signup
 router.post('/users', async (req,res)=>{
@@ -53,6 +53,17 @@ router.post('/users/logout', auth, async(req,res)=>{
 		res.send(req.user)
 	}catch(e){
 		res.status(500).send(e)
+	}
+})
+
+//dodawanie punktowanych galerii
+router.post('/galleries/favourite', auth, async(req,res)=>{
+	req.user.favourite_galleries.push({ favourite_gallery: req.body })
+	await req.user.save()
+	try{
+		res.send(req.user)
+	}catch(e){
+		res.status(500).send()
 	}
 })
 

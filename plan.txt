@@ -2,12 +2,14 @@
  Tobiasz: 
   [D]-szyfrowanie hasel
   [D]-logowanie - tokeny, autoryzacja, ustawianie Postmana etc
-  -naprawic buga, ze trzeba zrobic refresha po REJESTRACJI (nie logowaniu)
-     kod powinien byc w start.js, a nie w samym requescie w user.js
-  -naprawic bugi w innych przegladarkach
-  -druga DB dla galerii; polaczyc uzytkownikow z galeriami
+  [D]-naprawic buga, ze trzeba zrobic refresha po REJESTRACJI i logowaniu
+  -naprawic bugi logowania i rejestracji w innych przegladarkach
+  [D]-druga DB dla galerii; polaczyc uzytkownikow z galeriami
   -tworzenie galerii
+  [D]-podczepienie pod uzytkownika listy z punktowanymi galeriami (id+int z punktacja)
+  [D]-stworzenie kolekcji 'exhibits' czyli eksponatow
   -przegladanie galerii, favourites (sprawdzac czy nie ma mniej niz 5)
+  -naprawic estetyke strony, zadbac o spojnosc, raczej minimalizm, nowoczesnosc, popularny obecnie styl
   -[dodatkowe]wrzucanie profilowki przez klienta
  Morawiec:
   -algorytm proponowania galerii

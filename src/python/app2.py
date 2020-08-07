@@ -33,7 +33,7 @@ class Likes(DynamicDocument):
         }
         return json.dumps(likes_dict)
 
-#tworzenie bazy urzytkonwnikow
+#tworzenie bazy uzytkonwnikow
 '''for x in range(100):
     user1 = User(
         username="user "+str(x),

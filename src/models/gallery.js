@@ -5,21 +5,24 @@ const validator = require('validator')
 
 const gallerySchema = mongoose.Schema({
 	categories: [{
-		category:{
-			type: String,
-			required: true,
-			//unique: true,
-			enum: ['Song', 'Film', 'Book', 'Game', 'Quote', 'Place', 'Person', 'Dish', 'Perfume', 'Invention']
-		}
+		type: String,
+		required: true,
+		//unique: true,
+		enum: ['Song', 'Film', 'Book', 'Game', 'Quote', 'Place', 'Person', 'Dish', 'Perfume', 'Invention']
 	}], 
 	rooms: [{
-		room:[{
-			position:{ //na razie tylko w formie stringa z nazwa
-				type: String
-				//required: true,
+		room:{
+			category:{
+				type: String,
+				required: true,
+				enum: ['Song', 'Film', 'Book', 'Game', 'Quote', 'Place', 'Person', 'Dish', 'Perfume', 'Invention']
+			},
+			exhibits: [{
+				type: mongoose.Schema.Types.ObjectId,
+				required: true		
 				//unique: true
-			}
-		}]
+			}]
+		}
 	}],
 	owner:{
 		type: mongoose.Schema.Types.ObjectId, //czyli chyba _id usera

@@ -4,8 +4,8 @@ const router = express.Router()
 const auth = require('../middleware/auth')
 
 //create a gallery - raczej tylko do testu, bo tworzona z marszu przy signup
-router.post('/galleries/create', auth, async(req,res)=>{
-	const gallery = new Gallery({
+router.post('/galleries', auth, async(req,res)=>{
+	/* const gallery = new Gallery({
 		categories: [{category: "Song"}, {category: "Film"}],
 		owner: '5f280d05fe326f2d7410120c'
 	})
@@ -14,7 +14,7 @@ router.post('/galleries/create', auth, async(req,res)=>{
 		res.send(gallery)
 	}catch(e){
 		res.status(500).send(e)
-	}
+	} */
 })
 
 //pokaz dana galerie (swoja lub czyjas)

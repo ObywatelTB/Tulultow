@@ -3,6 +3,7 @@ const validator = require('validator')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const Gallery = require('./gallery')
+const Exhibit = require('./exhibit')
 
 const userSchema = new mongoose.Schema({
 	name: {
@@ -37,8 +38,21 @@ const userSchema = new mongoose.Schema({
 		required: false,
 		default: "so where is it?"
 	},
+	favourite_galleries: [{
+		favourite_gallery:{
+			gallery: {
+				type: mongoose.Schema.Types.ObjectId,
+				required: true
+			},
+			points: {
+				type: Number,
+				required: false,
+				default: 0
+			}
+		}
+	}],
 	tokens: [{
-		token:{
+		token:{ //po co jest ta zmienna. do wywalenia
 			type: String,
 			required: true
 		}
@@ -56,10 +70,32 @@ userSchema.virtual('galleries',{
 userSchema.methods.createGallery = async function(){
 	const user = this
 	const gallery = new Gallery({
-		categories: [{category: "Song"}, {category: "Film"}],
+		//categories: [{category: "Song"}, {category: "Film"}],
+		categories: [ "Song", "Film" ],
+		rooms: {},
 		owner: user._id
 	})
+	const exhibit = new Exhibit({
+		title: 'Know your Enemy',
+		category: 'Song',
+		owner: gallery._id
+	})
+	const exhibit2 = new Exhibit({
+		title: 'Bulls on Parade',
+		category: 'Song',
+		owner: gallery._id
+	})
+	const exhibit3 = new Exhibit({
+		title: 'Terminator',
+		category: 'Film',
+		owner: gallery._id
+	})
+	gallery['rooms'] = [{room:{category: 'Song', exhibits:[ exhibit._id, exhibit2._id ]  }},
+	{room:{category: 'Film', exhibits:[ exhibit3._id ]  }}]
 	await gallery.save()
+	await exhibit.save()
+	await exhibit2.save()
+	await exhibit3.save()
 	return gallery
 }
 
