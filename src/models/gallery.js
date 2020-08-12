@@ -7,7 +7,7 @@ const gallerySchema = mongoose.Schema({
 	categories: [{
 		type: String,
 		required: true,
-		unique: true,
+		//unique: true,
 		enum: ['Song', 'Film', 'Book', 'Game', 'Quote', 'Place', 'Person', 'Dish', 'Perfume', 'Invention']
 	}], 
 	rooms: [{

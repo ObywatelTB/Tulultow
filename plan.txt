@@ -10,7 +10,7 @@
   -DB dot reakcji (czy Likes)
   -przegladanie galerii, favourites (sprawdzac czy nie ma mniej niz 5)
   -naprawic bugi logowania i rejestracji w innych przegladarkach
-  -naprawic bugi: tworzenie duplikatow kategorii, etc
+  -naprawic bugi: tworzenie duplikatow kategorii(jak sie da unique, to nie dziala dla 1 uzytkownika a ponadto blokuje tworzenie nowych uzytkownikow), etc
   -naprawic estetyke strony, zadbac o spojnosc, raczej minimalizm, nowoczesnosc, popularny obecnie styl
   -[dodatkowe]wrzucanie profilowki przez klienta
  Morawiec:

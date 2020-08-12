@@ -87,7 +87,7 @@ userSchema.methods.createGallery = async function(){
 		categories: [ "Song", "Film" ],
 		rooms: {},
 		owner: user._id
-	})
+	})/* 
 	const exhibit = new Exhibit({
 		title: 'Know your Enemy',
 		category: 'Song',
@@ -102,13 +102,15 @@ userSchema.methods.createGallery = async function(){
 		title: 'Terminator',
 		category: 'Film',
 		owner: gallery._id
-	})
-	gallery['rooms'] = [{room:{category: 'Song', exhibits:[ exhibit._id, exhibit2._id ]  }},
-	{room:{category: 'Film', exhibits:[ exhibit3._id ]  }}]
+	}) */
+	// gallery['rooms'] = [{room:{category: 'Song', exhibits:[ exhibit._id, exhibit2._id ]  }},
+	// {room:{category: 'Film', exhibits:[ exhibit3._id ]  }}]
+	gallery['rooms'] = [{room:{category: 'Song' }},
+		{room:{category: 'Film' }}]
 	await gallery.save()
-	await exhibit.save()
-	await exhibit2.save()
-	await exhibit3.save()
+	// await exhibit.save()
+	// await exhibit2.save()
+	// await exhibit3.save()
 	return gallery
 }
 
