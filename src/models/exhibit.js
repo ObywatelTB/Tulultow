@@ -22,7 +22,7 @@ const exhibitSchema = mongoose.Schema({
 		type:String
 	},
 	owner:{
-		type: mongoose.Schema.Types.ObjectId, //czyli chyba _id usera
+		type: mongoose.Schema.Types.ObjectId, //czyli chyba _id galerii
 		required: true,
 		ref: 'Gallery'
 	}		

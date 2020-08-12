@@ -20,7 +20,7 @@ fetch('/users',{method: 'GET'}).then((response)=>{
 				
 				var text1 = document.createTextNode(data[i].name);
 				var text2 = document.createTextNode(data[i].city +', '+data[i].country);
-				var text3 = document.createTextNode(data[i].password);
+				var text3 = document.createTextNode(data[i].createdAt);
 				td1.appendChild(text1);
 				td2.appendChild(text2);
 				td3.appendChild(text3);

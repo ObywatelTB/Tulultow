@@ -3,12 +3,14 @@
   [D]-szyfrowanie hasel
   [D]-logowanie - tokeny, autoryzacja, ustawianie Postmana etc
   [D]-naprawic buga, ze trzeba zrobic refresha po REJESTRACJI i logowaniu
-  -naprawic bugi logowania i rejestracji w innych przegladarkach
   [D]-druga DB dla galerii; polaczyc uzytkownikow z galeriami
-  -tworzenie galerii
+  [D]-tworzenie galerii
   [D]-podczepienie pod uzytkownika listy z punktowanymi galeriami (id+int z punktacja)
   [D]-stworzenie kolekcji 'exhibits' czyli eksponatow
+  -DB dot reakcji (czy Likes)
   -przegladanie galerii, favourites (sprawdzac czy nie ma mniej niz 5)
+  -naprawic bugi logowania i rejestracji w innych przegladarkach
+  -naprawic bugi: tworzenie duplikatow kategorii, etc
   -naprawic estetyke strony, zadbac o spojnosc, raczej minimalizm, nowoczesnosc, popularny obecnie styl
   -[dodatkowe]wrzucanie profilowki przez klienta
  Morawiec:
@@ -21,6 +23,12 @@ OGOLNA KONCEPCJA: (luzne pomysly)
    W ten sposób jeśli kogoś interesują bardziej auta, marki ubrań zamiast książek, to w ten sposób
    szukał by swoich kompanów.
 
+KONCEPCJA DB REAKCJI:
+- nowa DB dla reakcji. kazdy json to tablica reakcji dla konkretnej galerii, ktora je otrzymala.
+  (reakcje pewnie moga miec rozna forme, komentarza lub lajka)
+-ponad to kazdy exhibit zapisuje sobie liczbe reakcji/punktacje
+-punktacja polaczen juz istnieje w uzytkowniku (favourite_galleries)
+-wyswietlanie swoich reakcji w danej galerii to znalezienie reakcji dla danej galerii, a potem odfiltrowanie wlasnych
 
 
 __________________________________________________________________________________________________

@@ -8,7 +8,7 @@ const auth = require('../middleware/auth')
 router.post('/exhibits', auth, async(req,res)=>{
 	const gallery = await Gallery.findOne({owner: req.user._id})
 	const exhibit = new Exhibit({...req.body, owner: gallery._id})
-	//DODAWANIE DO GALERII MOZE BYC ZLOZONE:(trzeba wybrac pokoj, sprawdzic czy istnieje)
+	
 	gal_rooms_cats = gallery.rooms.map((r)=>{ //to bedzie zamienione na prostsze, sprawdzanie categories
 		return r.room.category
 	})
@@ -36,16 +36,32 @@ router.post('/exhibits', auth, async(req,res)=>{
 //pokaz wszystkie eksponaty w galerii zalogowanego uzytkownika
 router.get('/exhibits/:room', auth, async(req,res)=>{
 	const gallery = await Gallery.findOne({owner: req.user._id})
-	const exhibits_ids = gallery.rooms[req.params.room].room.exhibits
-	// console.log(exhibits_ids)
-	const exhibits = await Exhibit.find({'_id': { $in : exhibits_ids }})
-	
+	var exhibits = {}
+	if(gallery.rooms[req.params.room]){
+		exhibits_ids = gallery.rooms[req.params.room].room.exhibits
+		exhibits = await Exhibit.find({'_id': { $in : exhibits_ids }})
+	}else{
+		console.log('get exhibits. nie ma tej kategorii')
+	}
 	try{
 		res.send(exhibits)
 	}catch(e){
 		res.status(500).send(e)
 	}
 })
+
+//DELETE AN EXHIBIT
+router.delete('/exhibits/:id', auth, async(req,res)=>{
+	const gallery = await Gallery.findOne({owner: req.user._id})
+	try{
+		const exhibit = await Exhibit.findOneAndDelete({ _id: req.params.id, owner: gallery._id})
+		if(!exhibit)
+			return res.status(404).send()
+		res.send(exhibit)
+	}catch(e){
+		res.status(505).send(e)
+	}
+}) 
 
 //pokaz wybrany eksponat w galerii
 /* router.get('/exhibits/:id', auth, async(req,res)=>{

@@ -41,22 +41,60 @@ header a{
 }
 
 
+
+
+input{
+	border: 1px solid #cccccc;
+	padding: 8px;
+}
+
+button{
+	cursor: pointer;
+	min-width: 60px;
+	max-width: 100px;
+	border: 1px solid #888888;
+	background: #888888;
+	color: white;
+	padding: 8px; 
+}
+
+
+
+
+/*   Displaying gallery */
 .room{
 	content: "";
 	//display: table;
 	display:block;
 	clear: both;
+	height:130px;
 }
 
 .exhibit{
 	//color: red;
+	//display:block;
 	float: left;
+	text-align: center;
 	width: 17%; //18%;
+	height: 80%;
 	padding: 5px;
 	margin: 1px;
 	border: 2px solid;
-	border-radius: 8px;
+	border-radius: 0px;//8px;
+	//line-height: 1.5;
+	 vertical-align: middle;
 }
+
+button.exhibit{
+	//color: red;
+	//display: inline-block;
+	//line-height: 2.5;
+	//vertical-align: middle;
+	height: 90%;
+	//top: 50%;
+	//transform: translate(0%, 50%);
+}
+
 
 
 
@@ -73,20 +111,9 @@ header a{
 }
 
 
-input{
-	border: 1px solid #cccccc;
-	padding: 8px;
-}
-
-button{
-	cursor: pointer;
-	border: 1px solid #888888;
-	background: #888888;
-	color: white;
-	padding: 8px; 
-}
 
 
+/*   Table of favourite galleries */
 table{
 	border-collapse: collapse;
 	width: 100%;
@@ -100,3 +127,56 @@ th,td{
 
 tr:hover{ background-color: #f5f5f5;}
  
+ 
+ 
+ 
+ 
+ /* The Modal (background)   (when adding an exhibit) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+  min-width: 500px;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.delete{
+  color: #aaa;
+  position: absolute;
+  transform: translate(230%, -30%);
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus,
+.delete:hover,
+.delete:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+

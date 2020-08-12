@@ -51,6 +51,19 @@ const userSchema = new mongoose.Schema({
 			}
 		}
 	}],
+	recommended_galleries: [{
+		recommended_gallery:{
+			gallery: {
+				type: mongoose.Schema.Types.ObjectId,
+				required: true
+			},
+			points: {
+				type: Number,
+				required: false,
+				default: 0
+			}
+		}
+	}],
 	tokens: [{
 		token:{ //po co jest ta zmienna. do wywalenia
 			type: String,

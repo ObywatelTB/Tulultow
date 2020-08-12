@@ -7,7 +7,7 @@ const gallerySchema = mongoose.Schema({
 	categories: [{
 		type: String,
 		required: true,
-		//unique: true,
+		unique: true,
 		enum: ['Song', 'Film', 'Book', 'Game', 'Quote', 'Place', 'Person', 'Dish', 'Perfume', 'Invention']
 	}], 
 	rooms: [{
@@ -19,7 +19,12 @@ const gallerySchema = mongoose.Schema({
 			},
 			exhibits: [{
 				type: mongoose.Schema.Types.ObjectId,
-				required: true		
+				required: false/* ,
+				validate:{
+					validator: function(value){
+						return !(this.exhibits.length > 5);
+					 }
+				}*/
 				//unique: true
 			}]
 		}
