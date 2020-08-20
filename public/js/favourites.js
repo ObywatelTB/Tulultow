@@ -1,59 +1,46 @@
 //client-side java script, loggin in
-//const mongoose = require('mongoose')
 
-//var table = document.createElement('table')
 var table = document.getElementById('table');
 
-_id = "5f2056b3988ca72960b48ad9";
+draw_raw = (data,r)=>{
+	var tr = document.createElement('tr');   
 
-fetch('/users',{method: 'GET'}).then((response)=>{
-	response.json().then((data)=>{
-		if(data.error){
-			message.textContent = data.error
-		}else{
-			for (var i = 0; i < 5;i++){
-				var tr = document.createElement('tr');   
-
-				var td1 = document.createElement('td');
-				var td2 = document.createElement('td');
-				var td3 = document.createElement('td');
-				
-				var text1 = document.createTextNode(data[i].name);
-				var text2 = document.createTextNode(data[i].city +', '+data[i].country);
-				var text3 = document.createTextNode(data[i].createdAt);
-				td1.appendChild(text1);
-				td2.appendChild(text2);
-				td3.appendChild(text3);
-				tr.appendChild(td1);
-				tr.appendChild(td2);
-				tr.appendChild(td3);
-				table.appendChild(tr);
-			}
-		}
-	})
-}).catch((e)=>{
-	console.log(e)
-})
-
-document.getElementById('divi').appendChild(table);
-//document.body.appendChild(table);
-
-/* 
-loginForm.addEventListener('submit',(e)=>{ //e - event
-	e.preventDefault()
+	var td1 = document.createElement('td');
+	var td2 = document.createElement('td');
+	var td3 = document.createElement('td');
 	
-	fetch('/users',{
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			
+	var text1 = document.createTextNode(data[r].name);
+	var text2 = document.createTextNode(data[r].city +', '+data[r].country);
+	var text3 = document.createTextNode(data[r].createdAt);
+	td1.appendChild(text1);
+	td2.appendChild(text2);
+	td3.appendChild(text3);
+	tr.appendChild(td1);
+	tr.appendChild(td2);
+	tr.appendChild(td3);
+	table.appendChild(tr);
+}
+
+draw_table = async()=>{
+	fetch('/users',{method: 'GET'}).then((response)=>{
+		response.json().then((data)=>{
+			if(data.error){
+				message.textContent = data.error
+			}else{
+				for (var r = 0; r<data.length; r++){
+					draw_raw(data,r)
+				}
+				document.getElementById('divi').appendChild(table);
+			}
 		})
-	}).then(()=>{
-		
 	}).catch((e)=>{
 		console.log(e)
-	}) 
-})
-*/
+	})
+}
+
+
+main = async()=>{
+	await draw_table()
+}
+
+main()

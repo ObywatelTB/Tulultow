@@ -86,7 +86,6 @@ draw_gallery = async()=>{
 		})
 	}
 	buttons_array.push(document.querySelector("#new_cat_butt"))
-	$('.room').css('margin-bottom','60px')
 }
 
 //=====modal (adding exhibit)
