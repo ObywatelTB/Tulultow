@@ -6,12 +6,6 @@ const Gallery = require('./gallery')
 const Exhibit = require('./exhibit')
 
 const userSchema = new mongoose.Schema({
-	name: {
-		type: String,
-		required: true,
-		trim: true,
-		minlength: 6
-	},
 	email: {
 		type: String,
 		unique: true,
@@ -28,6 +22,21 @@ const userSchema = new mongoose.Schema({
 		trim: true,
 		minlength: 6
 	},
+	administrator: {
+		type: Boolean,
+		required: true
+	},
+	name: {
+		type: String,
+		required: true,
+		trim: true,
+		minlength: 6
+	},
+	date_of_birth: {
+		type: Date,
+		required: false
+		//trim: true
+	},
 	city:{
 		type: String,
 		required: false,
@@ -39,29 +48,25 @@ const userSchema = new mongoose.Schema({
 		default: "so where is it?"
 	},
 	favourite_galleries: [{
-		favourite_gallery:{
-			gallery: {
-				type: mongoose.Schema.Types.ObjectId,
-				required: true
-			},
-			points: {
-				type: Number,
-				required: false,
-				default: 0
-			}
+		gallery: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true
+		},
+		points: {
+			type: Number,
+			required: false,
+			default: 0
 		}
 	}],
 	recommended_galleries: [{
-		recommended_gallery:{
-			gallery: {
-				type: mongoose.Schema.Types.ObjectId,
-				required: true
-			},
-			points: {
-				type: Number,
-				required: false,
-				default: 0
-			}
+		gallery: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true
+		},
+		points: {
+			type: Number,
+			required: false,
+			default: 0
 		}
 	}],
 	tokens: [{
@@ -83,7 +88,6 @@ userSchema.virtual('galleries',{
 userSchema.methods.createGallery = async function(){
 	const user = this
 	const gallery = new Gallery({
-		//categories: [{category: "Song"}, {category: "Film"}],
 		categories: [ "Song", "Film" ],
 		rooms: {},
 		owner: user._id
@@ -92,16 +96,6 @@ userSchema.methods.createGallery = async function(){
 		title: 'Know your Enemy',
 		category: 'Song',
 		owner: gallery._id
-	})
-	const exhibit2 = new Exhibit({
-		title: 'Bulls on Parade',
-		category: 'Song',
-		owner: gallery._id
-	})
-	const exhibit3 = new Exhibit({
-		title: 'Terminator',
-		category: 'Film',
-		owner: gallery._id
 	}) */
 	// gallery['rooms'] = [{room:{category: 'Song', exhibits:[ exhibit._id, exhibit2._id ]  }},
 	// {room:{category: 'Film', exhibits:[ exhibit3._id ]  }}]
@@ -109,8 +103,6 @@ userSchema.methods.createGallery = async function(){
 		{room:{category: 'Film' }}]
 	await gallery.save()
 	// await exhibit.save()
-	// await exhibit2.save()
-	// await exhibit3.save()
 	return gallery
 }
 

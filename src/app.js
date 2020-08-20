@@ -7,6 +7,7 @@ const userRouter = require('./routers/user')
 const pagesRouter = require('./routers/pages')
 const galleryRouter = require('./routers/gallery')
 const exhibitRouter = require('./routers/exhibit')
+const reactionRouter = require('./routers/reaction')
 const fetch = require("node-fetch") //na potrzeby testow w funkcji main()
 
 const app = express()
@@ -30,6 +31,7 @@ app.use(cookieParser())
 app.use(userRouter)
 app.use(galleryRouter)
 app.use(exhibitRouter)
+app.use(reactionRouter)
 app.use(pagesRouter)  //MUSI BYC NA KONCU, BO MA *
 
 

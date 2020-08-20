@@ -47,6 +47,7 @@ draw_room = (data,r)=>{
 		
 		var div1 = document.createElement('div');
 		div1.setAttribute('class','exhibit');
+		div1.setAttribute('id','exhibit_'+r+e)
 		div1.appendChild(iks);
 		div1.appendChild(p1);
 		div1.appendChild(p2);
@@ -188,6 +189,20 @@ handle_modal_button = async()=>{
 }
 
 handle_exhibit_deletion = async()=>{
+	$('.exhibit').hover(function(){  	//mouse enters
+		const ex_id = $(this).attr('id')
+		const room_nr = 	ex_id.slice(-2,-1)
+		const exhibit_nr =  ex_id.slice(-1)
+		var del_id = '#delete_'+room_nr+exhibit_nr
+		$(del_id).css( "display", "inline" )
+	}, function(){						//mouse leaves
+		const ex_id = $(this).attr('id')
+		const room_nr = 	ex_id.slice(-2,-1)
+		const exhibit_nr =  ex_id.slice(-1)
+		var del_id = '#delete_'+room_nr+exhibit_nr
+		$(del_id).css( "display", "none" )
+	})
+	
 	$('.delete').click(function(){
 		const button_id = $(this).attr('id');
 		const room_nr = button_id.slice(-2,-1)

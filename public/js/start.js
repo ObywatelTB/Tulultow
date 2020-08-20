@@ -36,6 +36,7 @@ signupForm.addEventListener('submit',(e)=>{ //e - event
 			name,
 			email,
 			password,
+			administrator: false,
 			city,
 			country
 		})

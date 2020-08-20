@@ -29,6 +29,26 @@ router.get('/users', async (req,res)=>{
 	}
 })
 
+router.get('/users/me', auth, async (req,res)=>{
+	try{
+		const user = await req.user
+		res.send(user)
+	}catch(e){
+		res.status(500).send(e)
+	}
+})
+
+router.post('/users/recommended', auth, async(req,res)=>{
+	//req.user.recommended_galleries.push({ recommended_gallery: req.body })
+	req.user.recommended_galleries.push( req.body )
+	await req.user.save()
+	try{
+		res.send(req.user)
+	}catch(e){
+		res.status(500).send()
+	}
+})
+
 //login
 router.post('/users/login', async(req,res)=>{
 	try{
@@ -56,8 +76,8 @@ router.post('/users/logout', auth, async(req,res)=>{
 	}
 })
 
-//dodawanie punktowanych galerii
-router.post('/galleries/favourite', auth, async(req,res)=>{
+//dodawanie punktowanych galerii - sprawdzic czy dziala
+router.post('/users/favourite', auth, async(req,res)=>{
 	req.user.favourite_galleries.push({ favourite_gallery: req.body })
 	await req.user.save()
 	try{
