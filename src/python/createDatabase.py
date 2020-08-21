@@ -2,22 +2,39 @@ from mongoengine import *
 import json
 import turtle
 import random
+import datetime
 
-connect("tulultow-api-test")
+connect("z")
 
-class User (Document):
-    email = StringField(unique=True, required=True)
-    name = StringField()
-    age = IntField()
+
+class User (DynamicDocument):
     city = StringField()
     country = StringField()
+    name = StringField()
+    email = StringField(unique=True, required=True)
+    password = StringField()
+    administrator = BooleanField()
+    date_of_birth = DateField()
+    favourite_galleries = ListField()
+    recommended_galleries = ListField()
+    tokens = ListField()
+    createdAt = DateField()
+    updatedAt = DateField()
+
     def json(self):
         user_dict = {
-            "email": self.email,
-            "name": self.name,
-            "age": self.age,
             "city": self.city,
-            "country": self.country
+            "country": self.country,
+            "name": self.name,
+            "email": self.email,
+            "administrator": self.administrator,
+            "password": self.email,
+            "date_of_birth": self.date_of_birth,
+            "favourite_galleries": self.favourite_galleries,
+            "recommended_galleries": self.recommended_galleries,
+            "tokens": self.tokens,
+            "createdAt": self.createdAt,
+            "updatedAt": self.updatedAt
         }
         return json.dumps(user_dict)
 
@@ -26,37 +43,34 @@ class User (Document):
     }
 
 
-
-class Likes(DynamicDocument):
-    author = ReferenceField(User)
-    receivingUser = ReferenceField(User)
-    valueInt = IntField(required=True)
-
-    def json(self):
-        likes_dict = {
-            "author": self.author,
-            "receivingUser": self.receivingUser,
-            "valueInt": self.valueInt
-        }
-        return json.dumps(likes_dict)
-
 #tworzenie bazy urzytkonwnikow
-for x in range(200):
-    user1 = User(
-        email="user "+str(x),
-        name="user "+str(x),
-        age=25,
+for x in range(50):
+     user1 = User(
         city="Krakow",
-        country="Russia"
+        country="Russia",
+        administrator=False,
+        date_of_birth=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
+        name="user " + str(x),
+        email="user "+str(x),
+        password="a",
+        createdAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
+        updatedAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764)
     ).save()
 
 userList = User.objects()
 
-#tworzenie połączen pomiędzy uzytkownikami
-for x in range(100):
-    for y in range(100):
+
+
+#tworzenie połączen pomiędzy urzytkownikami
+for x in range(50):
+    tabTemp = []
+    for y in range(50):
         if userList[x].email != userList[y].email:
-            a = random.randint(0,30)
+            a = random.randint(0,15)
             if a == 0:
                 print(x)
-                ll1 = Likes(author=userList[x], receivingUser=userList[y], valueInt=random.randint(1, 10)).save()
+                userTemp = userList[x]
+                tabTemp1 = [userList[y], random.randint(1, 10)]
+                tabTemp.append(tabTemp1)
+                userTemp.favourite_galleries = tabTemp
+                userTemp.save()
