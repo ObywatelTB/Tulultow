@@ -7,14 +7,22 @@
   [D]-tworzenie galerii
   [D]-podczepienie pod uzytkownika listy z punktowanymi galeriami (id+int z punktacja)
   [D]-stworzenie kolekcji 'exhibits' czyli eksponatow
-  -DB dot reakcji (czy Likes)
-  -przegladanie galerii, favourites (sprawdzac czy nie ma mniej niz 5)
+  -zalatwic se Pythona
+  -DB dot Reakcji (czy Likes)
+  -przegladanie czyjejs galerii z obsluga Reakcji
   -naprawic bugi logowania i rejestracji w innych przegladarkach
+  -ogarnij Heroku
   -naprawic bugi: tworzenie duplikatow kategorii(jak sie da unique, to nie dziala dla 1 uzytkownika a ponadto blokuje tworzenie nowych uzytkownikow), etc
   -naprawic estetyke strony, zadbac o spojnosc, raczej minimalizm, nowoczesnosc, popularny obecnie styl
-  -[dodatkowe]wrzucanie profilowki przez klienta
+  -[dodatkowe]wrzucanie profilowki, wyswietlanej pewnie pozniej jako podglad galerii
+  -[dodatkowe]wysylanie maila (z weryfikacja?) podczas rejestracji uzytkownika	
+  -zrobic environment variables i dac je do folderu config, wylaczyc ten folder z gita 
  Morawiec:
   -algorytm proponowania galerii
+  -1. zrobienie skryptu python, ktory sprawdza czy admin istnieje, jak nie to go dodaje, z pliku json
+   2. zrobienie skryptu python do wypelniania DB wybrana iloscia uzytkownikow.
+   3. zrobienie skryptu python do usuwania calego DB za	wyjatkiem rekordu admina
+
   -zintegrowanie elementow galerii z (zewnetrznymi bazami danych?, obrazkami?) elementami z sieci, ktore
    pozwola na proponowanie uzytkownikowi pozycji oraz zilustrowanie elementow grafika. ma byc legalne
 
