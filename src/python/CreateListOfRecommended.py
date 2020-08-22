@@ -1,17 +1,18 @@
 import math
-'''import json
+import json
 import sys
 sys.path.append('C:/Users/Mateusz/Anaconda3/envs/tulultow/Lib/site-packages')
-from mongoengine import *'''
+from mongoengine import *
 
 print("a")
 
-'''connect("tulultow-api")
+connect("tulultow-api")
 
 def column(matrix, i):
     return [row[i] for row in matrix]
 
-class User (DynamicDocument):
+class Users (DynamicDocument):
+    _id = ObjectIdField()
     email = StringField(unique=True, required=True)
     password = StringField()
     administrator = BooleanField()
@@ -27,6 +28,7 @@ class User (DynamicDocument):
 
     def json(self):
         user_dict = {
+            "_id": self._id,
             "city": self.city,
             "country": self.country,
             "name": self.name,
@@ -46,12 +48,38 @@ class User (DynamicDocument):
         "indexes": ["email"]
     }
 
-userList = User.objects()
+class Galleries (DynamicDocument):
+    _id = ObjectIdField()
+    categories = ListField()
+    rooms = ListField()
+    owner = ObjectIdField()
+    createdAt = DateField()
+    updatedAt = DateField()
+
+    def json(self):
+        user_dict = {
+            "_id": self._id,
+            "categories": self.city,
+            "rooms": self.country,
+            "owner": self.owner,
+            "createdAt": self.createdAt,
+            "updatedAt": self.updatedAt
+        }
+        return json.dumps(user_dict)
+
+    meta = {
+        "indexes": ["email"]
+    }
+
+userList = Users.objects()
+galleries = Galleries.objects()
 
 #john = userList[3]
 #print(sys.argv[1])
 
-john=User.objects.get(email=sys.argv[1])
+#john=Users.objects.get(email=sys.argv[1])
+john=Users.objects.get(email="Username@gmail.com")
+
 print(john.name)
 
 listToShowToJohn = []
@@ -85,6 +113,8 @@ geLikedPoints(john.favourite_galleries, 3)
 
 
 listToShowToJohn.sort(key=lambda x:x[1],reverse=True)
+
+
 top5 = listToShowToJohn[:5]
 
 i=1
@@ -92,12 +122,24 @@ while len(top5)<4:
     top5.append([userList[i], 0])
     i += 1
 
-john.recommended_galleries = top5
-john.save()
+listToShowToJohnWithGalleries = []
+john.recommended_galleries = listToShowToJohnWithGalleries
+
+tabOb=column(top5,0)
+tabVal=column(top5,1)
+for i, element in enumerate(top5):
+    gal = Galleries.objects.get(owner=tabOb[i]._id)
+    john.recommended_galleries.append({"points": tabVal[i], "gallery": gal._id})
+
+
+
+
+#john.recommended_galleries = listToShowToJohnWithGalleries
+john.update()
 
 
 
 for i in listToShowToJohn:
-    print(i[0].name + ' ' + str(i[1]))'''
+    print(i[0].name + ' ' + str(i[1]))
 
 

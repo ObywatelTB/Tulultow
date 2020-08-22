@@ -1,5 +1,6 @@
 const express = require('express')
-const User = require('../models/user')
+const User = require('../models/user') //<==============
+const {spawn} = require('child_process');
 const router = express.Router()
 const auth = require('../middleware/auth')
 const Gallery = require('../models/gallery')
@@ -52,7 +53,8 @@ router.post('/users/recommended', auth, async(req,res)=>{
 //login
 router.post('/users/login', async(req,res)=>{
 	try{
-		const user = await User.findByCredentials(req.body.email, req.body.password)
+	    const user = await User.findByCredentials(req.body.email, req.body.password)
+	    const python = spawn('c:/Users/Mateusz/Anaconda3/envs/tulultow/python', ['src/python/CreateListOfRecommended.py', user.email]); //<==============	
 		const token = await user.generateAuthToken()
 		await res.cookie('auth',token)
 		res.send({user}) //{user,token}) //wywala blad, bo chyba nie moze byc po res.cookie()
