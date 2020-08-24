@@ -54,7 +54,7 @@ router.post('/users/recommended', auth, async(req,res)=>{
 router.post('/users/login', async(req,res)=>{
 	try{
 	    const user = await User.findByCredentials(req.body.email, req.body.password)
-	    const python = spawn('c:/Users/Mateusz/Anaconda3/envs/tulultow/python', ['src/python/CreateListOfRecommended.py', user.email]); //<==============	
+	    //const python = spawn(process.env.PYTHON_LIBRARIES, ['src/python/CreateListOfRecommended.py', user.email]); //<==============	
 		const token = await user.generateAuthToken()
 		await res.cookie('auth',token)
 		res.send({user}) //{user,token}) //wywala blad, bo chyba nie moze byc po res.cookie()

@@ -11,7 +11,7 @@ const reactionRouter = require('./routers/reaction')
 const fetch = require("node-fetch") //na potrzeby testow w funkcji main()
 
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT
 
 //Define paths for Express config
 const publicDirectoryPath = path.join(__dirname, '../public')
@@ -48,27 +48,6 @@ app.listen(port, ()=>{
 	console.log("Server is up on port "+port)
 }) 
 
-main = ()=>{
-	fetch('http://127.0.0.1:3000/exhibits',{
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			title: 'Bibleee',
-			category: 'Book'
-		})
-	}).then((response)=>{
-		response.json().then((data)=>{
-			if(data.error){
-				console.log('main',data.error)
-			}else{
-				console.log('main', data)
-			}
-		})
-	}).catch((e)=>{
-		console.log('wewnatrz funkcji main',e)
-	})
-}
+
 
 //main()
