@@ -9,7 +9,7 @@ const auth = async(req,res,next)=>{
 			token = req.cookies.auth
 		//console.log('autentyk!',token)
 		
-		const decoded = jwt.verify(token,'thisisasignature') //zwraca token
+		const decoded = jwt.verify(token, process.env.TOKEN_SECRET) //zwraca token
 		const user = await User.findOne({_id: decoded._id, 'tokens.token':token})
 		
 		if(!user)

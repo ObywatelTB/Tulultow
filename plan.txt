@@ -18,7 +18,8 @@
   -[dodatkowe]wysylanie maila (z weryfikacja?) podczas rejestracji uzytkownika	
   -zrobic environment variables i dac je do folderu config, wylaczyc ten folder z gita 
  Morawiec:
-  -algorytm proponowania galerii
+  [D]-algorytm proponowania galerii
+  -zmienne srodowiskowe w pythonie
   -1. zrobienie skryptu python, ktory sprawdza czy admin istnieje, jak nie to go dodaje, z pliku json
    2. zrobienie skryptu python do wypelniania DB wybrana iloscia uzytkownikow.
    3. zrobienie skryptu python do usuwania calego DB za	wyjatkiem rekordu admina
@@ -43,15 +44,14 @@ ________________________________________________________________________________
 Przed zalogowaniem
 
 1. Okno główne:
-- zaloguj/zarejestruj
+[D]- zaloguj/zarejestruj
 - about(w osobnej zakładce lub bezpośrednio na stronie głównej)
 - czy można zobaczyæ profile innych nie bêdąc zalogowanym?
 
-x. Po klikniêciu zarejestruj jakie informacje wymagane? 
-Najpierw pewnie trzeba by było podać nik, hasło, mail i opcjonalnie wiek i region (coś jeszcze?)
+Po klikniêciu zarejestruj jakie informacje wymagane? 
+[D]Najpierw pewnie trzeba by było podać nik, hasło, mail i opcjonalnie wiek i region (coś jeszcze?)
 
-Trzeba jeszcze poprosiæ użytkownika o weryfikacje maila.
-
+-Trzeba jeszcze poprosiæ użytkownika o weryfikacje maila.
 
 DODATKI:
 Opcja zaloguj przez facebooka\gmail
@@ -60,18 +60,16 @@ Opcja zaloguj przez facebooka\gmail
 
 Po zalogowaniu
 
-proponowane zakładki: 1. Moja galeria,  2. Przeglądaj inne galerie,  3. Ulubione galerie?,  4. opcje,   
+[D]proponowane zakładki: 1. Moja galeria,  2. Przeglądaj inne galerie,  3. Ulubione galerie?,  4. opcje,   
 
 1. Moja Galeria
-- tu wyświetlałaby się galeria
-
+[D]- tu wyświetlałaby się galeria
 - do każdego elementu opcje(edytuj/usuń)
-
 - najlepiej jakby do każdego elementu dało siê dodaæ jakiœ w³asny komentarz/opis.
 
-- dodaj nowy element - (nowa zak³adka/czy mo¿e ma³e okienko?) dobrze jak oprócz elementu trzeba by by³o sprecyzowaæ
- kategoriê do której nale¿y (ksi¹¿ka/ film/ sport itd.) 
- Mo¿e jeszcze jakieœ dok³adniejsze kategorie (ksi¹¿ka: krymina³\fantastyka itd..)
+[D]- dodaj nowy element - (nowa zak³adka/czy mo¿e ma³e okienko?) 
+ -dobrze jak oprócz elementu trzeba by by³o sprecyzowaæ kategoriê do której nale¿y (ksi¹¿ka/ film/ sport itd.) 
+ -Mo¿e jeszcze jakieœ dok³adniejsze kategorie (ksi¹¿ka: krymina³\fantastyka itd..)
 
 - informacje o w³aœcicielu profilu (imiê/wiek/miasto itd)
 
@@ -125,7 +123,4 @@ w jego galeriê. Powinna byæ jakaś lista znajomych
 _____________________________________________________________________________________________________________
 
 
-Galeria DB
--tablica kategorii, tj stringow z opisem kategorii, uzytkownik wybiera kilka, nastepne moze odblokowac
--2wymiarowa tablica z elementami, dla kazdej kategorii?
 

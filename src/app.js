@@ -41,7 +41,6 @@ app.use(pagesRouter)  //MUSI BYC NA KONCU, BO MA *
 
 
 
-
 //starts a server, makes it listen on a specific port
 // its waiting for requests
 app.listen(port, ()=>{

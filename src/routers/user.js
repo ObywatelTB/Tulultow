@@ -1,6 +1,6 @@
 const express = require('express')
-const User = require('../models/user') //<==============
-const {spawn} = require('child_process');
+const User = require('../models/user')
+const {spawn} = require('child_process')  //<==============
 const router = express.Router()
 const auth = require('../middleware/auth')
 const Gallery = require('../models/gallery')
@@ -40,7 +40,7 @@ router.get('/users/me', auth, async (req,res)=>{
 })
 
 router.post('/users/recommended', auth, async(req,res)=>{
-	//req.user.recommended_galleries.push({ recommended_gallery: req.body })
+	req.user.recommended_galleries.push({ recommended_gallery: req.body })
 	req.user.recommended_galleries.push( req.body )
 	await req.user.save()
 	try{
