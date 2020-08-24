@@ -1,8 +1,14 @@
 import math
 import json
 import sys
-sys.path.append('C:/Users/Mateusz/Anaconda3/envs/tulultow/Lib/site-packages')
+import os
+os.environ["SETTINGS_MODULE"] = 'settings'
 from mongoengine import *
+from python_settings import settings
+
+sys.path.append(settings.SECRET_KEY)
+
+
 
 print("a")
 
@@ -74,11 +80,8 @@ class Galleries (DynamicDocument):
 userList = Users.objects()
 galleries = Galleries.objects()
 
-#john = userList[3]
-#print(sys.argv[1])
-
-#john=Users.objects.get(email=sys.argv[1])
-john=Users.objects.get(email="Username@gmail.com")
+john=Users.objects.get(email=sys.argv[1])
+#john=Users.objects.get(email="Username@gmail.com")
 
 print(john.name)
 
@@ -135,7 +138,7 @@ for i, element in enumerate(top5):
 
 
 #john.recommended_galleries = listToShowToJohnWithGalleries
-john.update()
+#john.update()
 
 
 
