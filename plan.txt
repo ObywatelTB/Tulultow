@@ -7,19 +7,27 @@
   [D]-tworzenie galerii
   [D]-podczepienie pod uzytkownika listy z punktowanymi galeriami (id+int z punktacja)
   [D]-stworzenie kolekcji 'exhibits' czyli eksponatow
-  -zalatwic se Pythona
+  [D]-zrobic environment variables i dac je do folderu config, wylaczyc ten folder z gita 
+  [D]-ogarnij Heroku
+  -zalatwic se Pythona!
   -DB dot Reakcji (czy Likes)
   -przegladanie czyjejs galerii z obsluga Reakcji
+  -napisac skrypty do testowania kodu
   -naprawic bugi logowania i rejestracji w innych przegladarkach
-  -ogarnij Heroku
   -naprawic bugi: tworzenie duplikatow kategorii(jak sie da unique, to nie dziala dla 1 uzytkownika a ponadto blokuje tworzenie nowych uzytkownikow), etc
   -naprawic estetyke strony, zadbac o spojnosc, raczej minimalizm, nowoczesnosc, popularny obecnie styl
   -[dodatkowe]wrzucanie profilowki, wyswietlanej pewnie pozniej jako podglad galerii
-  -[dodatkowe]wysylanie maila (z weryfikacja?) podczas rejestracji uzytkownika	
-  -zrobic environment variables i dac je do folderu config, wylaczyc ten folder z gita 
+  -[dodatkowe]wysylanie maila (z weryfikacja?) podczas rejestracji uzytkownika
+  -[dodatkowe]napisac chat miedzy uzytkownikami
  Morawiec:
   [D]-algorytm proponowania galerii
-  -zmienne srodowiskowe w pythonie
+  [D]-zmienne srodowiskowe w pythonie
+  [D]-zrobic mobilna wersje strony
+  -algorytm proponowania galerii VOL2. rozszerzenie o wagi
+  -testowanie sprawnosci dzialania Algorytmu
+  -Heroku -obsluga Pythona
+  -znalezienie brakujacej funkcjonalnosci - patrzac na Tulultow jako na produkt, na narzedzie do szukania ludzi
+  
   -1. zrobienie skryptu python, ktory sprawdza czy admin istnieje, jak nie to go dodaje, z pliku json
    2. zrobienie skryptu python do wypelniania DB wybrana iloscia uzytkownikow.
    3. zrobienie skryptu python do usuwania calego DB za	wyjatkiem rekordu admina

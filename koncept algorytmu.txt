@@ -1,0 +1,65 @@
+﻿__ALGORYTM REKOMENDOWANIA CUDZYCH GALERII_______________________________________________
+
+-Zasady dzialania, definicje:
+
+"Reakcje" - dodawane lajki, komentarze
+"Punktacja" - wartosc dokonania pewnego autora galerii, wynika bezposrednio z ilosci "Reakcji"
+"Waga" - wiarygodnosc opinii danego uzytkownika nt innych galerii (nie wartosc jego dokonania, tylko sensownosc jego ocen). 
+	Wiarygodnosc rozumiemy jako zbieznosc jego ocen z Twoimi ocenami
+"Rekure" - algorytm rekurencyjny, trzon rekomendowania. Program sprawdza autorow galerii, ktore nam sie spodobaly.
+	Ci autorzy takze maja swoje preferowane galerie i tak dalej. Lubione galerie sa ustawiane w kolejnosci, wedle Punktacji, ktora im nadano.
+	Algorytm chodzac po galeriach sumuje te punktacje, przemnazajac je przez wagi oceniajacych (na poczatku Waga=1).
+
+ALGORYTM: Najpierw jest Inicjalizacja czyli wywolanie Rekure z wagami rownymi 1. Rozpatrywani uzytkownicy sa zapisywani w Liscie.
+	Nastepnie jest Kalibracja, to znaczy porownanie twoich ocen galerii z ocenami tych samych galerii przez uzytkownikow z Listy; w ten sposob
+	znajdujemy wagi (wiarygodnosc oceny) tych uzytkownikow. Trzeci krok to Propozycja, czyli finalne wywolanie Rekure, z naniesionymi wagami.
+
+1."Inicjalizacja" - pierwsze wywolanie rekure 
+2."Kalibracja" - ustalanie wag
+3."Propozycja" - ponowne wywolanie rekure
+
+
+Wywolywanie kalibracji, optymalizacja:
+Nie mowie ze przy kazdej pojedynczej reakcji bedziemy to odpalac, moze byc ze po 100 reakcjach albo po 1000. I ze tworzymy stos z Algorytmami 
+(tak nazwijmy nasza funkcje) do wykonania w tle i ze priorytetowani beda Ci ktorzy maja najmniej pewne rekomendacje i ci ktorzy dodali najwiecej 
+nowych reakcji. oto i optymalizacja
+
+O dodaniu do listy 'popularnych opinii':
+Popatrz to jak w zyciu. Masz 200 znajomych. Plus jakies kolejne zrodla (radio, strona). A daje Ci to wglad we wszystkie popularne (lub mniej popularne) 
+utwory na swiecie. To rodzi pytanie czy zaimplementowac "radio,strone" czyli dobierac do listy uzytkownikow, ktorzy ciesza sie duza reputacja, 
+szczypta populizmu xd
+
+DODAC WAGE DOT WARSTWY - KAZDA WARSTWA REKURE JEST MNIEJ WIARYGODNA
+
+
+To rodzi pytanie czy zaimplementowac "radio,strone" czyli dobierac do listy uzytkownikow, ktorzy ciesza sie duza reputacja, szczypta populizmu xd
+
+
+
+-Schemat algorytmu:
+
+User - uzytkownik dla którego robiona jest lista rekomendacji
+i - poiom rekurencji
+Lista - lista do pokazania Userowi
+Waga - mówi o tym jak bardzo User ceni zdanie danego użytkownika (nie wiem czy User czy UżytkownikN)
+UżytkownikN - zmienna z funkcji rekurencyjnej. Jest to użytkownik którego galeria znajdowała się na liście ulubiony galerii w poprzednim cyklu rekurencji
+
+WykonajRekurencję(Użytkownik_N, i)
+	Jeśli (i < 1):
+     	   Zakończ
+   	W przeciwnym razie:
+		Dla każdej Galerii w Ulubione_Galerie_Użytkownika_N
+			obliczPunktację(Użytkownika_N, Użytkownik_Wlasciciel_Galerii, i)
+
+			Jesli Galerii nie ma na Liście 
+				dodaj do listy z wyznaczoną punktacją
+			W przecienym razie
+				 do elementu w Liście dodaj punktację do danej Galerii
+	
+			WykonajRekurencję(Użytkownik_Wlasciciel_Galerii, i-1)
+
+
+
+
+obliczPunktację(Użytkownika_N, Użytkownik_Wlasciciel_Galerii, i)
+	return waga*punktyZaLajki*i

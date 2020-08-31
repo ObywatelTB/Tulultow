@@ -4,7 +4,7 @@ const User = require('../models/user')
 const router = express.Router()
 const auth = require('../middleware/auth')
 
-//create a gallery - rather to be deleted
+//create a gallery - prolly gotta be deleted
 router.post('/galleries', auth, async(req,res)=>{
 	/* const gallery = new Gallery({
 		categories: [{category: "Song"}, {category: "Film"}],
@@ -18,9 +18,19 @@ router.post('/galleries', auth, async(req,res)=>{
 	} */
 })
 
-//show a particular gallery (yours or not)
+//show a YOUR gallery
 router.get('/galleries/me', auth, async(req,res)=>{
 	const gallery = await Gallery.find({owner: req.user._id})
+	try{
+		res.send(gallery)
+	}catch(e){
+		res.status(500).send(e)
+	}
+})
+
+//show a particular gallery (yours or not) given galleries id
+router.get('/galleries/:id', auth, async(req,res)=>{
+	const gallery = await Gallery.findById(req.params.id)
 	try{
 		res.send(gallery)
 	}catch(e){
