@@ -40,7 +40,6 @@ router.get('/users/me', auth, async (req,res)=>{
 })
 
 router.post('/users/recommended', auth, async(req,res)=>{
-	req.user.recommended_galleries.push({ recommended_gallery: req.body })
 	req.user.recommended_galleries.push( req.body )
 	await req.user.save()
 	try{
@@ -52,9 +51,9 @@ router.post('/users/recommended', auth, async(req,res)=>{
 
 //login
 router.post('/users/login', async(req,res)=>{
+	user = {}
 	try{
-	    const user = await User.findByCredentials(req.body.email, req.body.password)
-	    //const python = spawn(process.env.PYTHON_LIBRARIES, ['src/python/CreateListOfRecommended.py', user.email]); //<==============	
+		user = await User.findByCredentials(req.body.email, req.body.password)
 		const token = await user.generateAuthToken()
 		await res.cookie('auth',token)
 		res.send({user}) //{user,token}) //wywala blad, bo chyba nie moze byc po res.cookie()
@@ -63,6 +62,17 @@ router.post('/users/login', async(req,res)=>{
 		//location.reload()
 	}catch(e){
 		res.status(400).send(e)
+	}
+	try{
+		const pypath = 'src/python/CreateListOfRecommended.py'
+		//const pypath = 'src/python/printa.py'
+		const python = spawn(process.env.PYTHON_ENV,[pypath, user.email]); //<==============	
+	
+		python.on('close', (code) => {
+			console.log(`Child process close all stdio with code ${code}`);
+		})
+	}catch(e){
+		console.log(e)
 	}
 })
 //logout

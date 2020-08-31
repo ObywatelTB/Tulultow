@@ -50,6 +50,23 @@ router.get('/exhibits/:room', auth, async(req,res)=>{
 	}
 })
 
+//pokaz wszystkie eksponaty w WYBRANEJ galerii
+router.get('/exhibits/:id/:room', auth, async(req,res)=>{
+	const gallery = await Gallery.findById(req.params.id)
+	var exhibits = {}
+	if(gallery.rooms[req.params.room]){
+		exhibits_ids = gallery.rooms[req.params.room].room.exhibits
+		exhibits = await Exhibit.find({'_id': { $in : exhibits_ids }})
+	}else{
+		console.log('get exhibits. nie ma tej kategorii')
+	}
+	try{
+		res.send(exhibits)
+	}catch(e){
+		res.status(500).send(e)
+	}
+})
+
 //DELETE AN EXHIBIT
 router.delete('/exhibits/:id', auth, async(req,res)=>{
 	const gallery = await Gallery.findOne({owner: req.user._id})
