@@ -1,5 +1,6 @@
-body {
-	color: #333333;
+@media only screen and (max-width: 6000px) {
+  body {
+	background-color: lightblue;
 	font-family: arial;
 	width: 600px;//
 	//max-width: 1100px; //650px;
@@ -9,8 +10,52 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
+  }
+
+  input{
+	border: 1px solid #cccccc;
+	padding: 8px;
 }
 
+button{
+	cursor: pointer;
+	min-width: 300px;
+	max-width: 500px;
+	border: 1px solid #888888;
+	background: #888888;
+	color: black;
+	padding: 8px; 
+}
+
+
+}
+
+
+@media only screen and (min-width: 6000px) {
+	body {
+		color: #333333;
+		font-family: arial;
+		width: 600px;
+		// //max-width: 1100px;
+		//650px;
+		margin: 0 auto;
+		padding: 0 16px;
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+
+	button{
+	cursor: pointer;
+	min-width: 60px;
+	max-width: 100px;
+	border: 1px solid #888888;
+	background: #888888;
+	color: white;
+	padding: 8px; 
+}
+}
 .weather-content{
 	flex-grow: 1;
 }
@@ -48,15 +93,7 @@ input{
 	padding: 8px;
 }
 
-button{
-	cursor: pointer;
-	min-width: 60px;
-	max-width: 100px;
-	border: 1px solid #888888;
-	background: #888888;
-	color: white;
-	padding: 8px; 
-}
+
 
 
 
