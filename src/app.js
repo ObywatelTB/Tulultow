@@ -10,13 +10,12 @@ const exhibitRouter = require('./routers/exhibit')
 const reactionRouter = require('./routers/reaction')
 const fetch = require("node-fetch") //na potrzeby testow w funkcji main()
 
-const app = express()
-const port = process.env.PORT
-
 //Define paths for Express config
 const publicDirectoryPath = path.join(__dirname, '../public')
 const viewsPath = path.join(__dirname, '../templates/views')
 const partialsPath = path.join(__dirname, '../templates/partials')
+
+const app = express()
 
 //Setup handlebars engine and views location
 app.set('view engine', 'hbs')
@@ -35,19 +34,4 @@ app.use(reactionRouter)
 app.use(pagesRouter)  //MUSI BYC NA KONCU, BO MA *
 
 
-
-
-
-
-
-
-//starts a server, makes it listen on a specific port
-// its waiting for requests
-app.listen(port, ()=>{
-	//WONT display in the browser
-	console.log("Server is up on port "+port)
-}) 
-
-
-
-//main()
+module.exports = app

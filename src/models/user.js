@@ -47,6 +47,9 @@ const userSchema = new mongoose.Schema({
 		required: false,
 		default: "so where is it?"
 	},
+	avatar:{
+		type: Buffer
+	},
 	favourite_galleries: [{
 		gallery: {
 			type: mongoose.Schema.Types.ObjectId,

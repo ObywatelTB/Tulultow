@@ -9,9 +9,9 @@
   [D]-stworzenie kolekcji 'exhibits' czyli eksponatow
   [D]-zrobic environment variables i dac je do folderu config, wylaczyc ten folder z gita 
   [D]-ogarnij Heroku
+  [D]-przegladanie czyjejs galerii (Browse)
   -zalatwic se Pythona!
-  -DB dot Reakcji (czy Likes)
-  -przegladanie czyjejs galerii z obsluga Reakcji
+  -DB dot Reakcji, dodac obsluge Reakcji do Browse 
   -napisac skrypty do testowania kodu
   -naprawic bugi logowania i rejestracji w innych przegladarkach
   -naprawic bugi: tworzenie duplikatow kategorii(jak sie da unique, to nie dziala dla 1 uzytkownika a ponadto blokuje tworzenie nowych uzytkownikow), etc
@@ -39,6 +39,8 @@ OGOLNA KONCEPCJA: (luzne pomysly)
  -Mogłoby istniec ~15 kategorii "półek" w galerii, z których użytkownik by sobie kilka wybrał.
    W ten sposób jeśli kogoś interesują bardziej auta, marki ubrań zamiast książek, to w ten sposób
    szukał by swoich kompanów.
+ -POMYSL: Zeby zarabiac na stronie trzeba gdzies umiescic reklamy. Reklamodawca tworzylby swoja wlasna galerie,
+ 	moze nawet przyjemna do ogladania. Uzytkownik czasem z zaskoczenia ladowalby w galerii reklamodawcy.
 
 KONCEPCJA DB REAKCJI:
 - nowa DB dla reakcji. kazdy json to tablica reakcji dla konkretnej galerii, ktora je otrzymala.

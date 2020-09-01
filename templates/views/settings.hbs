@@ -5,6 +5,7 @@
 	<title>{{title}}</title>
 	<link rel="icon" href="/img/logo.png">
 	<link rel="stylesheet" href="/css/styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -12,9 +13,26 @@
 		{{>header}} 
 		<h3> Hello, {{name}}! </h3>
 		<p>This is your profile </p>
-		<img class="portrait" src="/img/user.jpg"></img>
+		<img id="avatar" class="portrait" src="/img/user.jpg" onmouseover="" style="cursor: pointer;"></img>
 	</div>
+	
+	
+	<!-- The Modal -->
+	<div id="myModal" class="modal">
+
+	  <!-- Modal content -->
+	  <div class="modal-content">
+		<span class="close">&times;</span>
+		<p id="modal_p">Lets add a new avatar.</p>
+
+		<button id="modal_button">Add !</button>
+
+	  </div>
+
+	</div>
+	
 
 	{{>footer}}
+	<script src="/js/settings.js"></script>
 	<script type="text/javascript" src="/js/logout.js"></script>
 </body>

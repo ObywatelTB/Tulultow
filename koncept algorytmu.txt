@@ -20,19 +20,8 @@ ALGORYTM: Najpierw jest Inicjalizacja czyli wywolanie Rekure z wagami rownymi 1.
 
 
 Wywolywanie kalibracji, optymalizacja:
-Nie mowie ze przy kazdej pojedynczej reakcji bedziemy to odpalac, moze byc ze po 100 reakcjach albo po 1000. I ze tworzymy stos z Algorytmami 
-(tak nazwijmy nasza funkcje) do wykonania w tle i ze priorytetowani beda Ci ktorzy maja najmniej pewne rekomendacje i ci ktorzy dodali najwiecej 
-nowych reakcji. oto i optymalizacja
-
-O dodaniu do listy 'popularnych opinii':
-Popatrz to jak w zyciu. Masz 200 znajomych. Plus jakies kolejne zrodla (radio, strona). A daje Ci to wglad we wszystkie popularne (lub mniej popularne) 
-utwory na swiecie. To rodzi pytanie czy zaimplementowac "radio,strone" czyli dobierac do listy uzytkownikow, ktorzy ciesza sie duza reputacja, 
-szczypta populizmu xd
-
-DODAC WAGE DOT WARSTWY - KAZDA WARSTWA REKURE JEST MNIEJ WIARYGODNA
-
-
-To rodzi pytanie czy zaimplementowac "radio,strone" czyli dobierac do listy uzytkownikow, ktorzy ciesza sie duza reputacja, szczypta populizmu xd
+Moze byc ze po 100 reakcjach albo po 1000. I tworzymy stos z Algorytmami do wykonania w tle i priorytetowani beda Ci ktorzy maja najmniej pewne
+rekomendacje i ci ktorzy dodali najwiecej nowych reakcji.
 
 
 
@@ -41,7 +30,7 @@ To rodzi pytanie czy zaimplementowac "radio,strone" czyli dobierac do listy uzyt
 User - uzytkownik dla którego robiona jest lista rekomendacji
 i - poiom rekurencji
 Lista - lista do pokazania Userowi
-Waga - mówi o tym jak bardzo User ceni zdanie danego użytkownika (nie wiem czy User czy UżytkownikN)
+Waga - mówi o tym jak bardzo User ceni zdanie danego użytkownika [na pewno User, nie UzytkownikN]
 UżytkownikN - zmienna z funkcji rekurencyjnej. Jest to użytkownik którego galeria znajdowała się na liście ulubiony galerii w poprzednim cyklu rekurencji
 
 WykonajRekurencję(Użytkownik_N, i)
@@ -49,7 +38,7 @@ WykonajRekurencję(Użytkownik_N, i)
      	   Zakończ
    	W przeciwnym razie:
 		Dla każdej Galerii w Ulubione_Galerie_Użytkownika_N
-			obliczPunktację(Użytkownika_N, Użytkownik_Wlasciciel_Galerii, i)
+			obliczWynik(Użytkownika_N, Użytkownik_Wlasciciel_Galerii, i)
 
 			Jesli Galerii nie ma na Liście 
 				dodaj do listy z wyznaczoną punktacją
@@ -61,5 +50,5 @@ WykonajRekurencję(Użytkownik_N, i)
 
 
 
-obliczPunktację(Użytkownika_N, Użytkownik_Wlasciciel_Galerii, i)
-	return waga*punktyZaLajki*i
+obliczWynik(Użytkownika_N, Użytkownik_Wlasciciel_Galerii, i)
+	return waga*Punktacja*i

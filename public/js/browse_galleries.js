@@ -1,16 +1,16 @@
 //drawing the user's gallery
 $(document).ready(function(){
 
-const gal_info = document.querySelector("#browse_info")
-const elements_nr = 5  //number of previews visible in one line!
-const max_lines_nr = 3 //maximum nr of lines of recommended galleries
+const gal_info = $('#browse_info')
+const elements_nr = 3  //number of previews visible in one line!
+const max_lines_nr = 4 //maximum nr of lines of recommended galleries
 var recommended_galleries = []	
 var recommended_nr = 0
 var users = []  //array of owners of the recommended galleries
 var the_chosen_gall = '' //mongodb id of the chosen gallery
 var categories = []
 
-//RECOMMENDED
+//PREVIEWS OF RECOMMENDED
 getting_galleries = async()=>{
 	//getting the recommended galleries:
 	await fetch('/users/me',{method: 'GET'}).then(async(response)=>{
@@ -44,41 +44,58 @@ getting_user = async(gallery_id)=>{
 	return new_user
 }
 
-
 draw_line = (iter,r)=>{
-	var line = document.createElement('div')
-	line.setAttribute('class','room');
+	var line = $('<div></div>').attr('class','previews_line')
 	
 	for(var p=0; p<elements_nr; p++){		//GALLERIES' PREVIEWS
 		if(recommended_galleries[iter]){
-			div1 =  draw_preview(iter,p,r)
+			div =  draw_preview(iter,p,r)
+			line.append(div);
 		}
 		iter++;
-		line.appendChild(div1);
 	}
 
 	return line
 }
 
 draw_preview = (iter,c,r)=>{  			//c-column; r-row
-	var p1 = document.createElement('p');
-	p1.appendChild(document.createTextNode(users[iter].name))	
-	var p2 = document.createElement('p');
-	p2.appendChild(document.createTextNode(users[iter].city))
+	var p1 = $('<p></p>').text(users[iter].name)
+	var p2 = $('<p></p>').text(users[iter].city)
 	
+	//var buffer = await get_avatar(recommended_galleries[iter].gallery)
+	var img = $('<img></img>').attr("src","/img/user_r.png");
+	img.attr('class','portrait')
 	
-	var div1 = document.createElement('div');
-	div1.setAttribute('class','exhibit');
-	div1.setAttribute('id', 'prev_'+r+c);
-	div1.appendChild(p1);
-	div1.appendChild(p2);
-	
-	return div1
+	var div = $('<div></div>').attr('class','preview')
+	div.attr('id', 'prev_'+r+c)
+	div.append(img, p1, p2);	
+
+	return div
 }
 
+get_avatar = async(preview_gal_id)=>{
+	//data={}
+	const user = await getting_user(preview_gal_id)
+	const url = '/users/'+user._id+'/avatar'
+	console.log(url)
+	await fetch(url,{method: 'GET'}).then( async(response)=>{
+			response.json().then((data)=>{
+				//console.log(data)
+				if(data.error){
+					//gal_info.textContent = data.error
+					console.log(data.error)
+				}else{
+					console.log('he ',data)
+				}
+			})
+		}).catch((e)=>{
+			console.log('blad wewnatrz funkcji get avatar', e)
+		})
+	//return data
+}
 
 previews = async()=>{
-	gal_info.textContent = 'Take a look at these ones:'
+	gal_info.text('Take a look at these ones:')
 	$('#browse_butt').hide()
 	await getting_galleries()
 	
@@ -96,7 +113,7 @@ previews = async()=>{
 	for(l = 0; l<=lines_nr; l++){
 		const line = draw_line(iter,l);
 		iter += elements_nr;
-		document.getElementById('previews').appendChild(line);
+		$('#previews').append(line);
 	}
 }
 
@@ -114,7 +131,7 @@ draw_gallery = async()=>{
 					gal_info.textContent = data.error
 				}else{
 					room = await draw_room(data,r);
-					document.getElementById('rooms').appendChild(room);
+					$('#rooms').append(room);
 				}
 			})
 		}).catch((e)=>{
@@ -138,39 +155,31 @@ get_categories = async()=>{
 }
 
 draw_room = (data,r)=>{
-	var room = document.createElement('div')
-	room.setAttribute('class','room');
-
-	var t1 = document.createTextNode(categories[r])
-	var e1 = document.createElement('h2');	//name of the room, category
-	e1.appendChild(t1) 
-	room.appendChild(e1);
+	var room = $('<div></div>').attr('class','room')
+	var title = $('<h2></h2>').text(categories[r]) //name of the room - category
+	room.append(title);
 	
 	for(var e=0; e<data.length; e++){	//EXHIBITS
-		div1 = draw_exhibit(data,r,e)
-		room.appendChild(div1);
+		div = draw_exhibit(data,r,e)
+		room.append(div);
 	}
 	return room
 }
 
 draw_exhibit = (data, r,e)=>{
-	var p1 = document.createElement('p');
-	p1.appendChild(document.createTextNode(data[e].title))	
-	var p2 = document.createElement('p');
-	p2.appendChild(document.createTextNode(data[e].content))
+	var p1 = $('<p></p>').text(data[e].title)
+	var p2 = $('<p></p>').text(data[e].content)
+	var div = $('<div></div>').attr('class','exhibit')
+	//div.attr('id','exhibit_'+r+e)
 	
-	var div1 = document.createElement('div');
-	div1.setAttribute('class','exhibit');
-	//div1.setAttribute('id','exhibit_'+r+e)
-	div1.appendChild(p1);
-	div1.appendChild(p2);
+	div.append(p1, p2);	
 	
-	return div1
+	return div
 }
 
 
 display_gallery = ()=>{
-	$('.exhibit').hover(function (){  	//mouse enters
+	$('.preview').hover(function (){  	//mouse enters
 		const prev_id = $(this).attr('id')
 		const row = parseInt(prev_id.slice(-2,-1))
 		const col = parseInt(prev_id.slice(-1))
