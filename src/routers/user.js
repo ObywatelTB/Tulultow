@@ -27,12 +27,12 @@ router.post('/users', async (req,res)=>{
 //login
 router.post('/users/login', async(req,res)=>{
 	user = {}
-	
+	//const python = spawn(process.env.PYTHON_LIBRARIES, ['src/python/CreateListOfRecommended.py', user.email]); //<==============
 	try{
 		user = await User.findByCredentials(req.body.email, req.body.password)
 		const token = await user.generateAuthToken()
 		await res.cookie('auth',token)
-		res.send({user}) //{user,token}) //wywala blad, bo chyba nie moze byc po res.cookie()
+		res.send({user,token}) //wywala blad, bo chyba nie moze byc po res.cookie()
 
 		//res.redirect('/settings')
 		//location.reload()

@@ -44,12 +44,12 @@ getting_user = async(gallery_id)=>{
 	return new_user
 }
 
-draw_line = (iter,r)=>{
+draw_line = async(iter,r)=>{
 	var line = $('<div></div>').attr('class','previews_line')
 	
 	for(var p=0; p<elements_nr; p++){		//GALLERIES' PREVIEWS
 		if(recommended_galleries[iter]){
-			div =  draw_preview(iter,p,r)
+			div = await draw_preview(iter,p,r)
 			line.append(div);
 		}
 		iter++;
@@ -58,12 +58,13 @@ draw_line = (iter,r)=>{
 	return line
 }
 
-draw_preview = (iter,c,r)=>{  			//c-column; r-row
+draw_preview = async(iter,c,r)=>{  			//c-column; r-row
 	var p1 = $('<p></p>').text(users[iter].name)
 	var p2 = $('<p></p>').text(users[iter].city)
 	
-	//var buffer = await get_avatar(recommended_galleries[iter].gallery)
-	var img = $('<img></img>').attr("src","/img/user_r.png");
+	var buffer = await get_avatar(recommended_galleries[iter].gallery)
+	//var img = $('<img></img>').attr("src","/img/user_r.png");
+	var img = $('<img></img>').attr("src",buffer)
 	img.attr('class','portrait')
 	
 	var div = $('<div></div>').attr('class','preview')
@@ -74,24 +75,28 @@ draw_preview = (iter,c,r)=>{  			//c-column; r-row
 }
 
 get_avatar = async(preview_gal_id)=>{
-	//data={}
+	buff={}
 	const user = await getting_user(preview_gal_id)
 	const url = '/users/'+user._id+'/avatar'
-	console.log(url)
+	 //console.log(url)
 	await fetch(url,{method: 'GET'}).then( async(response)=>{
-			response.json().then((data)=>{
-				//console.log(data)
+			//await response.json().then((data)=>{
+			await response.blob().then((data)=>{
 				if(data.error){
 					//gal_info.textContent = data.error
 					console.log(data.error)
 				}else{
-					console.log('he ',data)
+					//buff = new Uint8Array( data)
+					var urlCreator = window.URL || window.webkitURL;
+					// var buff = urlCreator.createObjectURL( data );
+					var buff = URL.createObjectURL( data );
+					console.log('he ',buff)
 				}
 			})
 		}).catch((e)=>{
 			console.log('blad wewnatrz funkcji get avatar', e)
 		})
-	//return data
+	return buff
 }
 
 previews = async()=>{
@@ -111,7 +116,7 @@ previews = async()=>{
 
 	iter = 0
 	for(l = 0; l<=lines_nr; l++){
-		const line = draw_line(iter,l);
+		const line = await draw_line(iter,l);
 		iter += elements_nr;
 		$('#previews').append(line);
 	}
