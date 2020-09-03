@@ -8,11 +8,13 @@ from python_settings import settings
 
 sys.path.append(settings.SECRET_KEY)
 
-
-
-print("a")
-
 connect("tulultow-api")
+
+class Struct:
+    def __init__(self, **entries):
+        self.__dict__.update(entries)
+
+
 
 def column(matrix, i):
     return [row[i] for row in matrix]
@@ -80,70 +82,137 @@ class Galleries (DynamicDocument):
 userList = Users.objects()
 galleries = Galleries.objects()
 
-john=Users.objects.get(email=sys.argv[1])
-#john=Users.objects.get(email="Username@gmail.com")
+user0=Users.objects.get(email=sys.argv[1])
+#user0=Users.objects.get(email="Username@gmail.com")
 
-print(john.name)
-
-listToShowToJohn = []
-listToShowToJohnTemp = []
+#print(user0.name)
 
 
-tempTabWithIndexes = []
-tempTabWithPoints = []
+def createListOfRecommendedForGivenUser_Recursion(john):
 
-def geLikedPoints(favourite_galleriesOfUser, i):
-    if(i < 1):
-        return 1
-    else:
-        counter = 0
-        for galleries in favourite_galleriesOfUser:
-            tempTabWithIndexes.append(galleries[0].name[5:])
-            if galleries[0] not in listToShowToJohnTemp:
-                listToShowToJohn.append([galleries[0], galleries[1]])
-                listToShowToJohnTemp.append(galleries[0])
-            else:
-                for n, j in enumerate(listToShowToJohn):
-                    if j[0] == galleries[0]:
-                        listToShowToJohn[n] = [galleries[0], j[1]+galleries[1]]
+    listToShowToJohn = []
+    listToShowToJohnTemp = []
 
-            likedGalleriesOfUserFriends = galleries[0].favourite_galleries
-            geLikedPoints(likedGalleriesOfUserFriends, i-1)
-            counter = counter+1
+    def geLikedPoints(favourite_galleriesOfUser, i):
+        if (i < 1):
+            return 1
+        else:
+            counter = 0
+            for galleriesC in favourite_galleriesOfUser:
+                s = Struct(**galleriesC)
+                if s.user not in listToShowToJohnTemp:
+                    listToShowToJohn.append([s.user, s.points])
+                    listToShowToJohnTemp.append(s.user)
+                else:
+                    for n, j in enumerate(listToShowToJohn):
+                        if j[0] == s.user:
+                            listToShowToJohn[n] = [s.user, j[1] + s.points]
 
+                uj = Users.objects(_id=s.user).get()
+                likedGalleriesOfUserFriends = uj.favourite_galleries
+                geLikedPoints(likedGalleriesOfUserFriends, i - 1)
+                counter = counter + 1
 
-geLikedPoints(john.favourite_galleries, 3)
+    geLikedPoints(john.favourite_galleries, 3)
 
+    listToShowToJohn.sort(key=lambda x: x[1], reverse=True)
 
-listToShowToJohn.sort(key=lambda x:x[1],reverse=True)
+    top5 = listToShowToJohn[:5]
 
+    i = 1
+    while len(top5) < 4:
+        top5.append([userList[i]._id, 0])
+        i += 1
 
-top5 = listToShowToJohn[:5]
+    listToShowToJohnWithGalleries = []
+    john.recommended_galleries = listToShowToJohnWithGalleries
 
-i=1
-while len(top5)<4:
-    top5.append([userList[i], 0])
-    i += 1
+    tabOb = column(top5, 0)
+    tabVal = column(top5, 1)
 
-listToShowToJohnWithGalleries = []
-john.recommended_galleries = listToShowToJohnWithGalleries
-
-tabOb=column(top5,0)
-tabVal=column(top5,1)
-for i, element in enumerate(top5):
-    gal = Galleries.objects.get(owner=tabOb[i]._id)
-    john.recommended_galleries.append({"points": tabVal[i], "gallery": gal._id})
-
+    for i, element in enumerate(top5):
+        gal = Galleries.objects(owner=tabOb[i]).get()
+        john.recommended_galleries.append({"points": tabVal[i], "gallery": gal._id})
+        Users.objects(_id=john._id).update(set__recommended_galleries=john.recommended_galleries)
 
 
 
-#john.recommended_galleries = listToShowToJohnWithGalleries
-#john.update()
 
 
 
-for i in listToShowToJohn:
-    print(i[0].name + ' ' + str(i[1]))
+def calibrationForGivenUsers(john, johnFriend):
+    wagaTemp=0.1
+    for user2 in johnFriend.favourite_galleries:
+        for user3 in john.favourite_galleries:
+            s1 = Struct(**user2)
+            s2 = Struct(**user3)
+            if s1 == s2:
+                waga=waga+0.1
+
+    return wagaTemp
 
 
-	
+
+
+def createFinalList_Recursion(john):
+
+    listToShowToJohn = []
+    listToShowToJohnTemp = []
+
+    def geLikedPoints(favourite_galleriesOfUser, i):
+        if (i < 1):
+            return 1
+        else:
+            counter = 0
+            for galleriesC in favourite_galleriesOfUser:
+                s = Struct(**galleriesC)
+                pointCalc= s.points * calibrationForGivenUsers(john,  Users.objects(_id=s.user).get())*i
+                if s.user not in listToShowToJohnTemp:
+                    listToShowToJohn.append([s.user, pointCalc])
+                    listToShowToJohnTemp.append(s.user)
+                else:
+                    for n, j in enumerate(listToShowToJohn):
+                        if j[0] == s.user:
+                            listToShowToJohn[n] = [s.user, j[1] + pointCalc]
+
+                uj = Users.objects(_id=s.user).get()
+                likedGalleriesOfUserFriends = uj.favourite_galleries
+                geLikedPoints(likedGalleriesOfUserFriends, i - 1)
+                counter = counter + 1
+
+    geLikedPoints(john.favourite_galleries, 3)
+
+    listToShowToJohn.sort(key=lambda x: x[1], reverse=True)
+
+    top5 = listToShowToJohn[:5]
+
+    i = 1
+    while len(top5) < 4:
+        top5.append([userList[i]._id, 0])
+        i += 1
+
+    return top5
+
+
+def createFinalList(john):
+    tp = createFinalList_Recursion(john)
+    john.recommended_galleries = []
+    for i, element in enumerate(tp):
+        gal = Galleries.objects(owner=column(tp, 0)[i]).get()
+        john.recommended_galleries.append({"points": column(tp, 1)[i], "gallery": gal._id})
+        Users.objects(_id=john._id).update(set__recommended_galleries=john.recommended_galleries)
+
+
+
+
+
+
+
+
+#Inicjalizacja dla wszystkich użytkowników
+createListOfRecommendedForGivenUser_Recursion(user0)
+
+#kalibracja i propozycja
+createFinalList(user0)
+
+
