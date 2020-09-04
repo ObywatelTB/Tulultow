@@ -12,7 +12,7 @@
 	<div class="main-content">
 		{{>header}} 
 		<h3> Hello, {{name}}! </h3>
-		<p>This is your profile </p>
+		<p>Click on the avatar to change it </p>
 		<img id="avatar" class="portrait" src="/img/user.jpg" onmouseover="" style="cursor: pointer;"></img>
 	</div>
 	
@@ -20,14 +20,18 @@
 	<!-- The Modal -->
 	<div id="myModal" class="modal">
 
-	  <!-- Modal content -->
-	  <div class="modal-content">
-		<span class="close">&times;</span>
-		<p id="modal_p">Lets add a new avatar.</p>
+		<!-- Modal content -->
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<p id="modal_p">Lets add a new avatar.</p>
 
-		<button id="modal_button">Add !</button>
+			<div id="drop_zone">
+			  <p>Drag an image file here</p>
+			</div>
 
-	  </div>
+			<!-- <button id="modal_button">Add !</button> -->
+
+		</div>
 
 	</div>
 	

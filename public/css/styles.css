@@ -102,8 +102,8 @@ button.exhibit{
 }
 
 .preview{
-	//color: red;
 	//display:block;
+	position: relative;
 	float: left;
 	text-align: center;
 	width: 30%; //18%;
@@ -115,6 +115,7 @@ button.exhibit{
 	//line-height: 1.5;
 	 vertical-align: middle;
 }
+
 
 
 
@@ -203,6 +204,22 @@ tr:hover{ background-color: #f5f5f5;}
 	color: black;
 	text-decoration: none;
 	cursor: pointer;
+}
+
+
+#drop_zone {
+  text-align: center;
+  border: 2px solid;
+  border-radius: 5px;
+  padding: 5px;
+  width:  90%;
+  height: 100px;
+}
+#drop_zone,
+#modal_button {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 

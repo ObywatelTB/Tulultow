@@ -63,7 +63,6 @@ draw_preview = async(iter,c,r)=>{  			//c-column; r-row
 	var p2 = $('<p></p>').text(users[iter].city)
 	
 	var buffer = await get_avatar(recommended_galleries[iter].gallery)
-	//var img = $('<img></img>').attr("src","/img/user_r.png");
 	var img = $('<img></img>').attr("src",buffer)
 	img.attr('class','portrait')
 	
@@ -78,25 +77,33 @@ get_avatar = async(preview_gal_id)=>{
 	buff={}
 	const user = await getting_user(preview_gal_id)
 	const url = '/users/'+user._id+'/avatar'
-	 //console.log(url)
+	
 	await fetch(url,{method: 'GET'}).then( async(response)=>{
-			//await response.json().then((data)=>{
-			await response.blob().then((data)=>{
+			await response.arrayBuffer().then((data)=>{
 				if(data.error){
 					//gal_info.textContent = data.error
 					console.log(data.error)
 				}else{
 					//buff = new Uint8Array( data)
-					var urlCreator = window.URL || window.webkitURL;
-					// var buff = urlCreator.createObjectURL( data );
-					var buff = URL.createObjectURL( data );
-					console.log('he ',buff)
+					//var urlCreator = window.URL || window.webkitURL;
+					//var buff = urlCreator.createObjectURL( data );
+					buff = URL.createObjectURL( new Blob( [data], {type:'image/png'}) );
 				}
 			})
 		}).catch((e)=>{
 			console.log('blad wewnatrz funkcji get avatar', e)
 		})
 	return buff
+}
+
+preview_style = ()=>{
+	$('.preview > p').css({
+		'position':'absolute',
+		'width': '100%',
+		'bottom':  '0',
+		'margin-left': 'auto',
+		'margin-right': 'auto'
+	})
 }
 
 previews = async()=>{
@@ -120,6 +127,7 @@ previews = async()=>{
 		iter += elements_nr;
 		$('#previews').append(line);
 	}
+	preview_style()
 }
 
 

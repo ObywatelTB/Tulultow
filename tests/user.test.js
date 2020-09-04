@@ -50,7 +50,7 @@ test('Should not login nonexistent user',async()=>{
 })
  */
 test('Should get profile for user',async()=>{
-	await request(app)
+	await requvvvest(app)
 		.get('/users/me')
 		.set('Authorization', `Bearer ${userOne.tokens[0].token}`)
 		.send()

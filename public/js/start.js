@@ -14,10 +14,11 @@ const message = document.querySelector('#message')
 
 message.textContent = ''
 
-upload_avatar = ()=>{
-	fetch('/users/me/avatar_init',{method: 'POST', headers: {'Content-Type': 'application/json'}
-		}).then((response)=>{
-			response.json().then((data)=>{
+
+upload_avatar = async()=>{
+	await fetch('/users/me/avatar_init',{method: 'POST', headers: {'Content-Type': 'application/json'}
+		}).then(async(response)=>{
+			await response.json().then((data)=>{
 				if(data.error){
 					console.log(data.error)
 				}else{
@@ -29,7 +30,6 @@ upload_avatar = ()=>{
 			console.log('wewnatrz funkcji button modal, new avatar',e)
 		}) 	
 }
-
 
 
 //signup
@@ -45,7 +45,7 @@ signupForm.addEventListener('submit',async(e)=>{ //e - event
 	message.textContent = 'loading'
 	console.log('signing')
 	
-	await fetch('/users',{method: 'POST',headers: {'Content-Type': 'application/json'},
+	fetch('/users',{method: 'POST',headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify({
 			name,
 			email,
@@ -54,8 +54,8 @@ signupForm.addEventListener('submit',async(e)=>{ //e - event
 			city,
 			country
 		})
-	}).then(async(response)=>{
-		await response.json().then((data)=>{
+	}).then((response)=>{
+		response.json().then((data)=>{
 			if(data.error){
 				message.textContent = data.error
 			}else{
@@ -67,7 +67,8 @@ signupForm.addEventListener('submit',async(e)=>{ //e - event
 		console.log('wewnatrz funkcji signup w skrypcie start',e)
 	})
 	
-	upload_avatar()
+	//await upload_avatar()
+	
 	
 })
 

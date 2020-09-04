@@ -13,6 +13,12 @@ const Gallery = require('../models/gallery')
 //signup
 router.post('/users', async (req,res)=>{
 	const user = new User(req.body)
+	
+	const f_path = await path.join(__dirname, '../../public/img/user_b.png')
+	var buffer0 = await fs.readFileSync(f_path)
+	const buffer = await sharp(buffer0).resize({width:250, height: 300}).png().toBuffer()
+
+	user.avatar = buffer
 	try{
 		await user.save()
 		const gallery = await user.createGallery()
@@ -141,7 +147,7 @@ const upload = multer({
 })
 
 router.post('/users/me/avatar', auth, upload.single('avatar'), async(req,res)=>{
-	const buffer = await sharp(req.file.buffer).resize({width:250, height: 250}).png().toBuffer()
+	const buffer = await sharp(req.file.buffer).resize({width:250, height: 300}).png().toBuffer()
 	req.user.avatar = buffer
 	await req.user.save()
 	res.status(200).send()
@@ -153,7 +159,6 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async(req,res)=>{
 router.post('/users/me/avatar_init', auth, upload.single('avatar'), async(req,res)=>{
 	const f_path = path.join(__dirname, '../../public/img/user_b.png')
 	var buffer0 = fs.readFileSync(f_path)
-
 	const buffer = await sharp(buffer0).resize({width:250, height: 250}).png().toBuffer()
 	req.user.avatar = buffer
 	await req.user.save()
