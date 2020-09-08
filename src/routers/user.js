@@ -17,8 +17,10 @@ router.post('/users', async (req,res)=>{
 	const f_path = await path.join(__dirname, '../../public/img/user_b.png')
 	var buffer0 = await fs.readFileSync(f_path)
 	const buffer = await sharp(buffer0).resize({width:250, height: 300}).png().toBuffer()
-
 	user.avatar = buffer
+	
+	const python = spawn(process.env.PYTHON_ENV, 
+		['src/python/recommend_galleries.py', user.email]);
 	try{
 		await user.save()
 		const gallery = await user.createGallery()
@@ -33,8 +35,8 @@ router.post('/users', async (req,res)=>{
 //login
 router.post('/users/login', async(req,res)=>{
 	user = {}
-	//const python = spawn(process.env.PYTHON_ENV, 
-		//['src/python/CreateListOfRecommended.py', user.email]); //<==============
+	const python = spawn(process.env.PYTHON_ENV, 
+		['src/python/recommend_galleries.py', user.email]);
 	try{
 		user = await User.findByCredentials(req.body.email, req.body.password)
 		const token = await user.generateAuthToken()
@@ -130,7 +132,16 @@ router.get('/users/db_name', auth, async (req,res)=>{
 router.get('/users/clear_db', auth, async (req,res)=>{
 	try{
 		const python = spawn(process.env.PYTHON_ENV, 
-			['src/python/CreateListOfRecommended.py', user.email]);
+			['', ]);
+	}catch(e){
+		res.status(500).send(e)
+	}
+})
+
+router.get('/users/fill_db', auth, async (req,res)=>{
+	try{
+		const python = spawn(process.env.PYTHON_ENV, 
+			['', ]);
 	}catch(e){
 		res.status(500).send(e)
 	}

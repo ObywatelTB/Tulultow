@@ -1,6 +1,5 @@
 from mongoengine import *
 import json
-import turtle
 import random
 import datetime
 from PIL import Image
