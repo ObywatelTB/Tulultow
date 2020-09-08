@@ -39,8 +39,8 @@ signupForm.addEventListener('submit',async(e)=>{ //e - event
 	const name = signupInputName.value
 	const email = signupInputEmail.value
 	const password = signupInputPass.value
-	const city = signupIputCity.value
-	const country = signupInputCountry.value
+	const city = signupIputCity.value ? signupIputCity.value : undefined
+	const country = signupInputCountry.value ? signupInputCountry.value : undefined
 	
 	message.textContent = 'loading'
 	console.log('signing')

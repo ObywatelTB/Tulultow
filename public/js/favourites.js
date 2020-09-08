@@ -1,24 +1,19 @@
-//client-side java script, loggin in
-
-var table = document.getElementById('table');
-
-draw_raw = (data,r)=>{
-	var tr = document.createElement('tr');   
-
-	var td1 = document.createElement('td');
-	var td2 = document.createElement('td');
-	var td3 = document.createElement('td');
+$(document).ready(function(){
 	
-	var text1 = document.createTextNode(data[r].name);
-	var text2 = document.createTextNode(data[r].city +', '+data[r].country);
-	var text3 = document.createTextNode(data[r].createdAt);
-	td1.appendChild(text1);
-	td2.appendChild(text2);
-	td3.appendChild(text3);
-	tr.appendChild(td1);
-	tr.appendChild(td2);
-	tr.appendChild(td3);
-	table.appendChild(tr);
+// var table = document.getElementById('table');
+var table = $('#table')
+
+draw_row = (data,r)=>{
+	var tr = $('<tr></tr>')
+	var td1 = $('<td></td>').text(data[r].name)
+	var td2 = $('<td></td>').text(data[r].city +', '+data[r].country)
+	var td3 = $('<td></td>')
+	
+	var butt = $('<button></button>').text('Open').attr('class','button_table')
+	td3.append(butt)
+	
+	tr.append(td1, td2, td3)
+	table.append(tr);
 }
 
 draw_table = async()=>{
@@ -28,9 +23,8 @@ draw_table = async()=>{
 				message.textContent = data.error
 			}else{
 				for (var r = 0; r<data.length; r++){
-					draw_raw(data,r)
+					draw_row(data,r)
 				}
-				document.getElementById('divi').appendChild(table);
 			}
 		})
 	}).catch((e)=>{
@@ -44,3 +38,5 @@ main = async()=>{
 }
 
 main()
+
+})

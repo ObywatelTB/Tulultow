@@ -49,8 +49,8 @@ draw_line = async(iter,r)=>{
 	
 	for(var p=0; p<elements_nr; p++){		//GALLERIES' PREVIEWS
 		if(recommended_galleries[iter]){
-			div = await draw_preview(iter,p,r)
-			line.append(div);
+			div_prev = await draw_preview(iter,p,r)
+			line.append(div_prev);
 		}
 		iter++;
 	}
@@ -61,16 +61,18 @@ draw_line = async(iter,r)=>{
 draw_preview = async(iter,c,r)=>{  			//c-column; r-row
 	var p1 = $('<p></p>').text(users[iter].name)
 	var p2 = $('<p></p>').text(users[iter].city)
+	var div_bottom = $('<div></div>')
+	div_bottom.append(p1,p2)	
 	
 	var buffer = await get_avatar(recommended_galleries[iter].gallery)
 	var img = $('<img></img>').attr("src",buffer)
 	img.attr('class','portrait')
 	
-	var div = $('<div></div>').attr('class','preview')
-	div.attr('id', 'prev_'+r+c)
-	div.append(img, p1, p2);	
+	var div_prev = $('<div></div>').attr('class','preview')
+	div_prev.attr('id', 'prev_'+r+c)
+	div_prev.append(img, div_bottom);	
 
-	return div
+	return div_prev
 }
 
 get_avatar = async(preview_gal_id)=>{
@@ -97,9 +99,9 @@ get_avatar = async(preview_gal_id)=>{
 }
 
 preview_style = ()=>{
-	$('.preview > p').css({
+	$('.preview > div').css({
 		'position':'absolute',
-		'width': '100%',
+		'width': '95%',
 		'bottom':  '0',
 		'margin-left': 'auto',
 		'margin-right': 'auto'
@@ -107,7 +109,7 @@ preview_style = ()=>{
 }
 
 previews = async()=>{
-	gal_info.text('Take a look at these ones:')
+	gal_info.text('Take a look at these galleries:')
 	$('#browse_butt').hide()
 	await getting_galleries()
 	

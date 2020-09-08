@@ -10,20 +10,22 @@
   [D]-zrobic environment variables i dac je do folderu config, wylaczyc ten folder z gita 
   [D]-ogarnij Heroku
   [D]-przegladanie czyjejs galerii (Browse)
+  [D]-wrzucanie profilowki, wyswietlanej pozniej jako podglad galerii
+  -zrobienie admina, ktory ma przycisk do zapelniania testowa baza danych (potrzebna obsluga pythona)
   -zalatwic se Pythona!
+  -wprowadzic nowe, nowoczesne wyswietlanie galerii
   -DB dot Reakcji, dodac obsluge Reakcji do Browse 
   -napisac skrypty do testowania kodu
   -naprawic bugi logowania i rejestracji w innych przegladarkach
   -naprawic bugi: tworzenie duplikatow kategorii(jak sie da unique, to nie dziala dla 1 uzytkownika a ponadto blokuje tworzenie nowych uzytkownikow), etc
   -naprawic estetyke strony, zadbac o spojnosc, raczej minimalizm, nowoczesnosc, popularny obecnie styl
-  -[dodatkowe]wrzucanie profilowki, wyswietlanej pewnie pozniej jako podglad galerii
   -[dodatkowe]wysylanie maila (z weryfikacja?) podczas rejestracji uzytkownika
   -[dodatkowe]napisac chat miedzy uzytkownikami
  Morawiec:
   [D]-algorytm proponowania galerii
   [D]-zmienne srodowiskowe w pythonie
   [D]-zrobic mobilna wersje strony
-  -algorytm proponowania galerii VOL2. rozszerzenie o wagi
+  [D]-algorytm proponowania galerii VOL2. rozszerzenie o wagi
   -testowanie sprawnosci dzialania Algorytmu
   -Heroku -obsluga Pythona
   -znalezienie brakujacej funkcjonalnosci - patrzac na Tulultow jako na produkt, na narzedzie do szukania ludzi
@@ -35,6 +37,9 @@
   -zintegrowanie elementow galerii z (zewnetrznymi bazami danych?, obrazkami?) elementami z sieci, ktore
    pozwola na proponowanie uzytkownikowi pozycji oraz zilustrowanie elementow grafika. ma byc legalne
 
+
+
+__________________________________________________________________________________________________
 OGOLNA KONCEPCJA: (luzne pomysly)
  -Mogłoby istniec ~15 kategorii "półek" w galerii, z których użytkownik by sobie kilka wybrał.
    W ten sposób jeśli kogoś interesują bardziej auta, marki ubrań zamiast książek, to w ten sposób

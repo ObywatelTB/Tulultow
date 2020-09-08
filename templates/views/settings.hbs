@@ -9,11 +9,29 @@
 </head>
 
 <body>
-	<div class="main-content">
-		{{>header}} 
-		<h3> Hello, {{name}}! </h3>
+	{{>header}} 
+	<div id="main-content">
+		<h2> Hello, {{name}}! </h2>
 		<p>Click on the avatar to change it </p>
 		<img id="avatar" class="portrait" src="/img/user.jpg" onmouseover="" style="cursor: pointer;"></img>
+	</div>
+	
+	<!-- ADMIN. Ponizsze domyslnie jest ukryte -->
+	<div id="admin-page" style="display:none">
+		<h3> Administrator page </h3>
+		<div id="db">
+			<p>The database name is: <span id="db_name"> . </span>. </p>
+			<p>Hence you <span id="db_access" style="font-weight: bold;"> . </span> modify it completely.</p>
+			<br/>
+			<h4>Modify the DB</h4>
+			<div id="db_modify">
+				Click here to clear all the DB, except for the admin user record:
+				<button id="clear_butt" class="button_small"> Clear All </button>
+				<br/>
+				Click here to fill the DB with the test data:
+				<button id="fill_butt" class="button_small"> Fill DB </button>
+			</div>
+		</div>
 	</div>
 	
 	
@@ -38,5 +56,6 @@
 
 	{{>footer}}
 	<script src="/js/settings.js"></script>
+	<script src="/js/admin.js"></script>
 	<script type="text/javascript" src="/js/logout.js"></script>
 </body>

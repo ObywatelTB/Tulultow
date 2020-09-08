@@ -33,7 +33,8 @@ router.post('/users', async (req,res)=>{
 //login
 router.post('/users/login', async(req,res)=>{
 	user = {}
-	//const python = spawn(process.env.PYTHON_LIBRARIES, ['src/python/CreateListOfRecommended.py', user.email]); //<==============
+	//const python = spawn(process.env.PYTHON_ENV, 
+		//['src/python/CreateListOfRecommended.py', user.email]); //<==============
 	try{
 		user = await User.findByCredentials(req.body.email, req.body.password)
 		const token = await user.generateAuthToken()
@@ -104,8 +105,6 @@ router.post('/users/recommended', auth, async(req,res)=>{
 	}
 })
 
-
-
 //dodawanie punktowanych galerii - sprawdzic czy dziala
 router.post('/users/favourite', auth, async(req,res)=>{
 	req.user.favourite_galleries.push({ favourite_gallery: req.body })
@@ -117,6 +116,29 @@ router.post('/users/favourite', auth, async(req,res)=>{
 	}
 })
 
+router.get('/users/db_name', auth, async (req,res)=>{
+	try{
+		db_name =  User.db.name
+		res.send({name: db_name})
+	}catch(e){
+		res.status(500).send(e)
+	}
+})
+
+
+//modyfikacje do BAZY DANYCH
+router.get('/users/clear_db', auth, async (req,res)=>{
+	try{
+		const python = spawn(process.env.PYTHON_ENV, 
+			['src/python/CreateListOfRecommended.py', user.email]);
+	}catch(e){
+		res.status(500).send(e)
+	}
+})
+
+
+
+//ponizszy request musi byc PO innych 'users/x' !!
 router.get('/users/:id', auth, async(req,res)=>{
 	const _id = req.params.id
 	try{
@@ -129,6 +151,7 @@ router.get('/users/:id', auth, async(req,res)=>{
 		
 	}
 })
+
 
 
 //AVATAR. image upload
@@ -188,6 +211,7 @@ router.get('/users/:id/avatar', async (req,res)=>{
 		res.status(400).send()
 	}
 })
+
 
 
 module.exports = router
