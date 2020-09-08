@@ -1,16 +1,23 @@
 from mongoengine import *
 import json
-import turtle
+import sys
 import random
 import datetime
 from PIL import Image
 from io import BytesIO
 import base64
+import os
 from os import path
-# from flask import Flask
-# from flask.ext.bcrypt import Bcrypt
-from collections import namedtuple
+from python_settings import settings
 
+#ss="dev"
+#if ss== "dev":
+if sys.argv[1] == "dev":
+    os.environ["SETTINGS_MODULE"] = 'settings'
+else:
+    os.environ["SETTINGS_MODULE"] = 'settings_test'
+
+sys.path.append(settings.SECRET_KEY)
 
 class Struct:
     def __init__(self, **entries):
@@ -24,8 +31,7 @@ def im_2_b64(image):
     return img_str
 
 
-db = connect("tulultow-api")
-db.drop_database("tulultow-api")
+db = connect(settings.MONGO_DATABASE_NAME)
 
 img = Image.new("RGB", (100, 100), color=(73, 109, 137))
 img_b64 = im_2_b64(img)
@@ -99,23 +105,24 @@ class Galleries(DynamicDocument):
     }
 
 
+def clearDatabaseAndCreateAdmin():
+    db.drop_database(settings.MONGO_DATABASE_NAME)
+    basepath = path.dirname(__file__)
+    filepath = path.abspath(path.join(basepath, "..", "..", "config/admin.json"))
+    with open(filepath) as f:
+        d = json.load(f)
 
-'''basepath = path.dirname(__file__)
-filepath = path.abspath(path.join(basepath, "..", "..", "config/admin.json"))
-with open(filepath) as f:
-    d = json.load(f)
-
-user1 = Users(
-    administrator=True,
-    name=d.get('name'),
-    email=d.get('email'),
-    password=d.get('password'),
-).save()'''
+    user1 = Users(
+        administrator=True,
+        name=d.get('name'),
+        email=d.get('email'),
+        password=d.get('password'),
+    ).save()
 
 
 # tworzenie bazy urzytkonwnikow
-def createUserAndGalleriesDatabase():
-    for x in range(50):
+def createUserAndGalleriesDatabase(n):
+    for x in range(n):
         user1 = Users(
             city="Krakow",
             country="Russia",
@@ -131,7 +138,7 @@ def createUserAndGalleriesDatabase():
 
     userList_local = Users.objects()
 
-    for x in range(50):
+    for x in range(n):
         gal1 = Galleries(
             owner=userList_local[x]._id,
             createdAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
@@ -224,7 +231,6 @@ def calibrationForGivenUsers(john, johnFriend):
             s2 = Struct(**user3)
             if s1 == s2:
                 waga = waga + 0.1
-
     return wagaTemp
 
 
@@ -237,17 +243,24 @@ def createFinalList(john):
         Users.objects(_id=john._id).update(set__recommended_galleries=john.recommended_galleries)
 
 
-createUserAndGalleriesDatabase()
-
 userList = Users.objects()
 galleriesList = Galleries.objects()
 
-createLinksBetweenUsers(userList)
 
-# Inicjalizacja dla wszystkich użytkowników
-for x in range(50):
-    createRecommendedForAllUsers(userList[x])
+if sys.argv[2] == "clear db":
+    clearDatabaseAndCreateAdmin()
+elif sys.argv[2] == "fill db":
+    createUserAndGalleriesDatabase(sys.argv[3])
+    userList = Users.objects()
+    galleriesList = Galleries.objects()
+    createLinksBetweenUsers(userList)
+elif sys.argv[2] == "recommended initialisation":
+    for x in range(len(userList)):
+        createRecommendedForAllUsers(userList[x])
+elif sys.argv[2] == "recommended final":
+    for x in range(len(userList)):
+        createFinalList(userList[0])
 
-# kalibracja i propozycja
-for x in range(50):
-    createFinalList(userList[0])
+
+
+
