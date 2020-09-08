@@ -80,7 +80,7 @@ class Galleries (DynamicDocument):
     }
 
 userList = Users.objects()
-galleries = Galleries.objects()
+galleriesList = Galleries.objects()
 
 user0=Users.objects.get(email=sys.argv[1])
 #user0=Users.objects.get(email="Username@gmail.com")
@@ -88,54 +88,73 @@ user0=Users.objects.get(email=sys.argv[1])
 #print(user0.name)
 
 
-def createListOfRecommendedForGivenUser_Recursion(john):
 
+
+
+
+def Recursion(john, callibrationBool):
     listToShowToJohn = []
     listToShowToJohnTemp = []
 
-    def geLikedPoints(favourite_galleriesOfUser, i):
+    def geLikedPoints(favourite_galleriesOfUser, i, callibrationBool2):
         if (i < 1):
             return 1
         else:
             counter = 0
             for galleriesC in favourite_galleriesOfUser:
                 s = Struct(**galleriesC)
-                if s.user not in listToShowToJohnTemp:
-                    listToShowToJohn.append([s.user, s.points])
-                    listToShowToJohnTemp.append(s.user)
+                gal = Galleries.objects(_id=s.gallery).first()
+                galOwner = Users.objects(_id=gal.owner).first()
+                if callibrationBool2 == 1:
+                    pointCalc = s.points * calibrationForGivenUsers(john, galOwner) * i
+                else:
+                    pointCalc = s.points
+
+                if gal not in listToShowToJohnTemp:
+                    listToShowToJohn.append([s.gallery, pointCalc])
+                    listToShowToJohnTemp.append(s.gallery)
                 else:
                     for n, j in enumerate(listToShowToJohn):
-                        if j[0] == s.user:
-                            listToShowToJohn[n] = [s.user, j[1] + s.points]
+                        if j[0] == gal:
+                            listToShowToJohn[n] = [s.gallery, j[1] + pointCalc]
 
-                uj = Users.objects(_id=s.user).get()
-                likedGalleriesOfUserFriends = uj.favourite_galleries
-                geLikedPoints(likedGalleriesOfUserFriends, i - 1)
+                likedGalleriesOfUserFriends = galOwner.favourite_galleries
+                geLikedPoints(likedGalleriesOfUserFriends, i - 1, callibrationBool2)
                 counter = counter + 1
 
-    geLikedPoints(john.favourite_galleries, 3)
+    geLikedPoints(john.favourite_galleries, 3, callibrationBool)
 
     listToShowToJohn.sort(key=lambda x: x[1], reverse=True)
 
-    top5 = listToShowToJohn[:5]
+    top20 = listToShowToJohn[:20]
 
     i = 1
-    while len(top5) < 4:
-        top5.append([userList[i]._id, 0])
+    while len(top20) < 20:
+        top20.append([galleriesList[i]._id, 0])
         i += 1
 
+    return top20
+
+
+
+
+
+
+
+
+def createListOfRecommendedForGivenUser_Recursion(john):
+    userTemp2 = john
+    tp = Recursion(userTemp2, 0)
+
     listToShowToJohnWithGalleries = []
-    john.recommended_galleries = listToShowToJohnWithGalleries
+    userTemp2.recommended_galleries = listToShowToJohnWithGalleries
 
-    tabOb = column(top5, 0)
-    tabVal = column(top5, 1)
+    tabOb = column(tp, 0)
+    tabVal = column(tp, 1)
 
-    for i, element in enumerate(top5):
-        gal = Galleries.objects(owner=tabOb[i]).get()
-        john.recommended_galleries.append({"points": tabVal[i], "gallery": gal._id})
-        Users.objects(_id=john._id).update(set__recommended_galleries=john.recommended_galleries)
-
-
+    for i, element in enumerate(tp):
+        userTemp2.recommended_galleries.append({"points": tabVal[i], "gallery": tabOb[i]})
+        Users.objects(_id=john._id).update(set__recommended_galleries=userTemp2.recommended_galleries)
 
 
 
@@ -154,60 +173,13 @@ def calibrationForGivenUsers(john, johnFriend):
 
 
 
-def createFinalList_Recursion(john):
-
-    listToShowToJohn = []
-    listToShowToJohnTemp = []
-
-    def geLikedPoints(favourite_galleriesOfUser, i):
-        if (i < 1):
-            return 1
-        else:
-            counter = 0
-            for galleriesC in favourite_galleriesOfUser:
-                s = Struct(**galleriesC)
-                pointCalc= s.points * calibrationForGivenUsers(john,  Users.objects(_id=s.user).get())*i
-                if s.user not in listToShowToJohnTemp:
-                    listToShowToJohn.append([s.user, pointCalc])
-                    listToShowToJohnTemp.append(s.user)
-                else:
-                    for n, j in enumerate(listToShowToJohn):
-                        if j[0] == s.user:
-                            listToShowToJohn[n] = [s.user, j[1] + pointCalc]
-
-                uj = Users.objects(_id=s.user).get()
-                likedGalleriesOfUserFriends = uj.favourite_galleries
-                geLikedPoints(likedGalleriesOfUserFriends, i - 1)
-                counter = counter + 1
-
-    geLikedPoints(john.favourite_galleries, 3)
-
-    listToShowToJohn.sort(key=lambda x: x[1], reverse=True)
-
-    top5 = listToShowToJohn[:5]
-
-    i = 1
-    while len(top5) < 4:
-        top5.append([userList[i]._id, 0])
-        i += 1
-
-    return top5
-
 
 def createFinalList(john):
-    tp = createFinalList_Recursion(john)
-    john.recommended_galleries = []
+    tp = Recursion(john, 1)
+
     for i, element in enumerate(tp):
-        gal = Galleries.objects(owner=column(tp, 0)[i]).get()
-        john.recommended_galleries.append({"points": column(tp, 1)[i], "gallery": gal._id})
+        john.recommended_galleries.append({"points": column(tp, 1)[i], "gallery": column(tp, 0)[i]})
         Users.objects(_id=john._id).update(set__recommended_galleries=john.recommended_galleries)
-
-
-
-
-
-
-
 
 #Inicjalizacja dla wszystkich użytkowników
 createListOfRecommendedForGivenUser_Recursion(user0)

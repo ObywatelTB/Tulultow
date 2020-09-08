@@ -3,21 +3,39 @@ import json
 import turtle
 import random
 import datetime
+from PIL import Image
+from io import BytesIO
+import base64
+from os import path
+# from flask import Flask
+# from flask.ext.bcrypt import Bcrypt
 from collections import namedtuple
+
 
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
 
 
-connect("z")
+def im_2_b64(image):
+    buff = BytesIO()
+    image.save(buff, format="PNG")
+    img_str = base64.b64encode(buff.getvalue())
+    return img_str
+
+
+db = connect("tulultow-api")
+db.drop_database("tulultow-api")
+
+img = Image.new("RGB", (100, 100), color=(73, 109, 137))
+img_b64 = im_2_b64(img)
 
 
 def column(matrix, i):
     return [row[i] for row in matrix]
 
 
-class Users (DynamicDocument):
+class Users(DynamicDocument):
     _id = ObjectIdField()
     city = StringField()
     country = StringField()
@@ -29,12 +47,13 @@ class Users (DynamicDocument):
     favourite_galleries = ListField()
     recommended_galleries = ListField()
     tokens = ListField()
+    avatar = BinaryField()
     createdAt = DateField()
     updatedAt = DateField()
 
     def json(self):
         user_dict = {
-            "_id": self._id,
+            "_id": str(self.pk),
             "city": self.city,
             "country": self.country,
             "name": self.name,
@@ -45,6 +64,7 @@ class Users (DynamicDocument):
             "favourite_galleries": self.favourite_galleries,
             "recommended_galleries": self.recommended_galleries,
             "tokens": self.tokens,
+            "avatar": self.avatar,
             "createdAt": self.createdAt,
             "updatedAt": self.updatedAt
         }
@@ -55,7 +75,7 @@ class Users (DynamicDocument):
     }
 
 
-class Galleries (DynamicDocument):
+class Galleries(DynamicDocument):
     _id = ObjectIdField()
     categories = ListField()
     rooms = ListField()
@@ -65,7 +85,7 @@ class Galleries (DynamicDocument):
 
     def json(self):
         user_dict = {
-            "_id": self._id,
+            "_id": str(self.pk),
             "categories": self.city,
             "rooms": self.country,
             "owner": self.owner,
@@ -78,7 +98,22 @@ class Galleries (DynamicDocument):
         "indexes": ["email"]
     }
 
-#tworzenie bazy urzytkonwnikow
+
+
+'''basepath = path.dirname(__file__)
+filepath = path.abspath(path.join(basepath, "..", "..", "config/admin.json"))
+with open(filepath) as f:
+    d = json.load(f)
+
+user1 = Users(
+    administrator=True,
+    name=d.get('name'),
+    email=d.get('email'),
+    password=d.get('password'),
+).save()'''
+
+
+# tworzenie bazy urzytkonwnikow
 def createUserAndGalleriesDatabase():
     for x in range(50):
         user1 = Users(
@@ -86,9 +121,10 @@ def createUserAndGalleriesDatabase():
             country="Russia",
             administrator=False,
             date_of_birth=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
-            name="user " + str(x),
-            email="user "+str(x),
-            password="a",
+            name="userRR " + str(x),
+            email="userR" + str(x) + "@gmail.com",
+            password="$2a$08$Md0BP6ApyYmZd/SLdIgb6eBmOTOAE1XQZZ4iNP6To8EqmTuoE4aFe",
+            avatar=base64.decodebytes(img_b64),
             createdAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
             updatedAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764)
         ).save()
@@ -100,9 +136,9 @@ def createUserAndGalleriesDatabase():
             owner=userList_local[x]._id,
             createdAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
             updatedAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764)
-         ).save()
+        ).save()
     galleriesList_local = Galleries.objects()
-    return[userList_local, galleriesList_local]
+    return [userList_local, galleriesList_local]
 
 
 def createLinksBetweenUsers(userList_local):
@@ -114,130 +150,90 @@ def createLinksBetweenUsers(userList_local):
                 if a == 0:
                     print(x)
                     userTemp = userList_local[x]
-                    userTemp.favourite_galleries.append({"points": random.randint(1, 10), "user": userList_local[y]._id})
+                    gal = Galleries.objects(owner=userList_local[y]._id).get()
+                    userTemp.favourite_galleries.append({"points": random.randint(1, 10), "gallery": gal._id})
                     userTemp.save()
 
 
-def createListOfRecommendedForGivenUser_Recursion(john):
-
+def Recursion(john, callibrationBool):
     listToShowToJohn = []
     listToShowToJohnTemp = []
 
-    def geLikedPoints(favourite_galleriesOfUser, i):
+    def geLikedPoints(favourite_galleriesOfUser, i, callibrationBool2):
         if (i < 1):
             return 1
         else:
             counter = 0
             for galleriesC in favourite_galleriesOfUser:
                 s = Struct(**galleriesC)
-                if s.user not in listToShowToJohnTemp:
-                    listToShowToJohn.append([s.user, s.points])
-                    listToShowToJohnTemp.append(s.user)
+                gal = Galleries.objects(_id=s.gallery).first()
+                galOwner = Users.objects(_id=gal.owner).first()
+                if callibrationBool2 == 1:
+                    pointCalc = s.points * calibrationForGivenUsers(john, galOwner) * i
+                else:
+                    pointCalc = s.points
+
+                if gal not in listToShowToJohnTemp:
+                    listToShowToJohn.append([s.gallery, pointCalc])
+                    listToShowToJohnTemp.append(s.gallery)
                 else:
                     for n, j in enumerate(listToShowToJohn):
-                        if j[0] == s.user:
-                            listToShowToJohn[n] = [s.user, j[1] + s.points]
+                        if j[0] == gal:
+                            listToShowToJohn[n] = [s.gallery, j[1] + pointCalc]
 
-                uj = Users.objects(_id=s.user).get()
-                likedGalleriesOfUserFriends = uj.favourite_galleries
-                geLikedPoints(likedGalleriesOfUserFriends, i - 1)
+                likedGalleriesOfUserFriends = galOwner.favourite_galleries
+                geLikedPoints(likedGalleriesOfUserFriends, i - 1, callibrationBool2)
                 counter = counter + 1
 
-    geLikedPoints(john.favourite_galleries, 3)
+    geLikedPoints(john.favourite_galleries, 3, callibrationBool)
 
     listToShowToJohn.sort(key=lambda x: x[1], reverse=True)
 
-    top5 = listToShowToJohn[:5]
+    top20 = listToShowToJohn[:20]
 
     i = 1
-    while len(top5) < 4:
-        top5.append([userList[i]._id, 0])
+    while len(top20) < 20:
+        top20.append([galleriesList[i]._id, 0])
         i += 1
 
-    return top5
+    return top20
 
 
+def createRecommendedForAllUsers(john):
+    userTemp2 = john
+    tp = Recursion(userTemp2, 0)
 
+    listToShowToJohnWithGalleries = []
+    userTemp2.recommended_galleries = listToShowToJohnWithGalleries
 
-def createRecommendedForAllUsers():
-    for x in range(50):
-        userTemp2 = userList[x]
-        print(x)
-        tp = createListOfRecommendedForGivenUser_Recursion(userTemp2)
+    tabOb = column(tp, 0)
+    tabVal = column(tp, 1)
 
-        listToShowToJohnWithGalleries = []
-        userTemp2.recommended_galleries = listToShowToJohnWithGalleries
+    for i, element in enumerate(tp):
+        userTemp2.recommended_galleries.append({"points": tabVal[i], "gallery": tabOb[i]})
+        Users.objects(_id=userList[x]._id).update(set__recommended_galleries=userTemp2.recommended_galleries)
 
-        tabOb = column(tp, 0)
-        tabVal = column(tp, 1)
-
-        for i, element in enumerate(tp):
-            gal = Galleries.objects(owner=tabOb[i]).get()
-            userTemp2.recommended_galleries.append({"points": tabVal[i], "gallery": gal._id})
-            Users.objects(_id=userList[x]._id).update(set__recommended_galleries=userTemp2.recommended_galleries)
 
 
 
 def calibrationForGivenUsers(john, johnFriend):
-    wagaTemp=0.1
+    wagaTemp = 0.1
     for user2 in johnFriend.favourite_galleries:
         for user3 in john.favourite_galleries:
             s1 = Struct(**user2)
             s2 = Struct(**user3)
             if s1 == s2:
-                waga=waga+0.1
+                waga = waga + 0.1
 
     return wagaTemp
 
 
-
-
-def createFinalList_Recursion(john):
-
-    listToShowToJohn = []
-    listToShowToJohnTemp = []
-
-    def geLikedPoints(favourite_galleriesOfUser, i):
-        if (i < 1):
-            return 1
-        else:
-            counter = 0
-            for galleriesC in favourite_galleriesOfUser:
-                s = Struct(**galleriesC)
-                pointCalc= s.points * calibrationForGivenUsers(john,  Users.objects(_id=s.user).get())*i
-                if s.user not in listToShowToJohnTemp:
-                    listToShowToJohn.append([s.user, pointCalc])
-                    listToShowToJohnTemp.append(s.user)
-                else:
-                    for n, j in enumerate(listToShowToJohn):
-                        if j[0] == s.user:
-                            listToShowToJohn[n] = [s.user, j[1] + pointCalc]
-
-                uj = Users.objects(_id=s.user).get()
-                likedGalleriesOfUserFriends = uj.favourite_galleries
-                geLikedPoints(likedGalleriesOfUserFriends, i - 1)
-                counter = counter + 1
-
-    geLikedPoints(john.favourite_galleries, 3)
-
-    listToShowToJohn.sort(key=lambda x: x[1], reverse=True)
-
-    top5 = listToShowToJohn[:5]
-
-    i = 1
-    while len(top5) < 4:
-        top5.append([userList[i]._id, 0])
-        i += 1
-
-    return top5
-
-
 def createFinalList(john):
-    tp = createFinalList_Recursion(john)
+    tp = Recursion(john, 1)
     john.recommended_galleries = []
     for i, element in enumerate(tp):
-        gal = Galleries.objects(owner=column(tp, 0)[i]).get()
-        john.recommended_galleries.append({"points": column(tp, 1)[i], "gallery": gal._id})
+
+        john.recommended_galleries.append({"points": column(tp, 1)[i], "gallery": column(tp, 0)[i]})
         Users.objects(_id=john._id).update(set__recommended_galleries=john.recommended_galleries)
 
 
@@ -246,18 +242,12 @@ createUserAndGalleriesDatabase()
 userList = Users.objects()
 galleriesList = Galleries.objects()
 
-
 createLinksBetweenUsers(userList)
 
-#Inicjalizacja dla wszystkich użytkowników
-#createRecommendedForAllUsers()
+# Inicjalizacja dla wszystkich użytkowników
+for x in range(50):
+    createRecommendedForAllUsers(userList[x])
 
-#kalibracja i propozycja
-createFinalList(userList[0])
-
-
-
-
-
-
-
+# kalibracja i propozycja
+for x in range(50):
+    createFinalList(userList[0])
