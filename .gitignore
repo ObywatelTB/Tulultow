@@ -1,4 +1,4 @@
 node_modules/
 src/python/.idea/
 config/
-src/python/__pycache__
+src/python/__pycache__/
