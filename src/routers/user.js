@@ -1,6 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
-const {spawn} = require('child_process')  //<==============
+const {spawn} = require('child_process') 
 const router = express.Router()
 const auth = require('../middleware/auth')
 const multer = require('multer')
@@ -35,8 +35,12 @@ router.post('/users', async (req,res)=>{
 //login
 router.post('/users/login', async(req,res)=>{
 	user = {}
+<<<<<<< HEAD
 	const python = spawn(process.env.PYTHON_ENV, 
 		['src/python/recommend_galleries.py', user.email]);
+=======
+	
+>>>>>>> 29eb025f2d793cc501ceaf62f8f6b0a344b4e49c
 	try{
 		user = await User.findByCredentials(req.body.email, req.body.password)
 		const token = await user.generateAuthToken()
@@ -50,9 +54,8 @@ router.post('/users/login', async(req,res)=>{
 	}
 	
 	try{
-		const pypath = 'src/python/CreateListOfRecommended.py'
-		//const pypath = 'src/python/printa.py'
-		const python = spawn(process.env.PYTHON_ENV,[pypath, user.email]); //<==============	
+	    const pypath = 'src/python/recommend_galleries.py'
+		const python = spawn(process.env.PYTHON_ENV,[pypath,'dev', user.email]); //<==============	
 	
 		python.on('close', (code) => {
 			console.log(`Child process close all stdio with code ${code}`);
@@ -132,6 +135,7 @@ router.get('/users/db_name', auth, async (req,res)=>{
 router.get('/users/clear_db', auth, async (req,res)=>{
 	try{
 		const python = spawn(process.env.PYTHON_ENV, 
+<<<<<<< HEAD
 			['', ]);
 	}catch(e){
 		res.status(500).send(e)
@@ -142,11 +146,22 @@ router.get('/users/fill_db', auth, async (req,res)=>{
 	try{
 		const python = spawn(process.env.PYTHON_ENV, 
 			['', ]);
+=======
+			['src/python/create_db.py', 'dev', 'clear db']);
+>>>>>>> 29eb025f2d793cc501ceaf62f8f6b0a344b4e49c
 	}catch(e){
 		res.status(500).send(e)
 	}
 })
 
+router.get('/users/fill_db', auth, async (req,res)=>{
+    try{
+        const python = spawn(process.env.PYTHON_ENV, 
+			['src/python/create_db.py', 'dev', 'fill db', 25]);
+    }catch(e){
+        res.status(500).send(e)
+    }
+})
 
 
 //ponizszy request musi byc PO innych 'users/x' !!

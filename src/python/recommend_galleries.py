@@ -1,23 +1,27 @@
-import math
 import json
 import sys
 import os
-os.environ["SETTINGS_MODULE"] = 'settings'
 from mongoengine import *
 from python_settings import settings
 
+if sys.argv[1] == "dev":
+    os.environ["SETTINGS_MODULE"] = 'settings'
+else:
+    os.environ["SETTINGS_MODULE"] = 'settings_test'
+
 sys.path.append(settings.SECRET_KEY)
 
-connect("tulultow-api")
+connect(settings.MONGO_DATABASE_NAME)
+
 
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
 
 
-
 def column(matrix, i):
     return [row[i] for row in matrix]
+
 
 class Users (DynamicDocument):
     _id = ObjectIdField()
@@ -56,6 +60,7 @@ class Users (DynamicDocument):
         "indexes": ["email"]
     }
 
+
 class Galleries (DynamicDocument):
     _id = ObjectIdField()
     categories = ListField()
@@ -79,20 +84,15 @@ class Galleries (DynamicDocument):
         "indexes": ["email"]
     }
 
+
 userList = Users.objects()
 galleriesList = Galleries.objects()
 
-user0=Users.objects.get(email=sys.argv[1])
+user0=Users.objects.get(email=sys.argv[2])
 #user0=Users.objects.get(email="Username@gmail.com")
 
-#print(user0.name)
 
-
-
-
-
-
-def Recursion(john, callibrationBool):
+def recursion(john, callibrationBool):
     listToShowToJohn = []
     listToShowToJohnTemp = []
 
@@ -129,22 +129,21 @@ def Recursion(john, callibrationBool):
     top20 = listToShowToJohn[:20]
 
     i = 1
-    while len(top20) < 20:
-        top20.append([galleriesList[i]._id, 0])
-        i += 1
+    sizeOfList=20
+    if  len(userList)<20:
+        sizeOfList=len(userList)-1
+
+    while (len(top20) < sizeOfList) :
+        if galleriesList[i].owner != john._id:
+            top20.append([galleriesList[i]._id, 0])
+            i += 1
 
     return top20
 
 
-
-
-
-
-
-
 def createListOfRecommendedForGivenUser_Recursion(john):
     userTemp2 = john
-    tp = Recursion(userTemp2, 0)
+    tp = recursion(userTemp2, 0)
 
     listToShowToJohnWithGalleries = []
     userTemp2.recommended_galleries = listToShowToJohnWithGalleries
@@ -155,8 +154,6 @@ def createListOfRecommendedForGivenUser_Recursion(john):
     for i, element in enumerate(tp):
         userTemp2.recommended_galleries.append({"points": tabVal[i], "gallery": tabOb[i]})
         Users.objects(_id=john._id).update(set__recommended_galleries=userTemp2.recommended_galleries)
-
-
 
 
 def calibrationForGivenUsers(john, johnFriend):
@@ -171,15 +168,13 @@ def calibrationForGivenUsers(john, johnFriend):
     return wagaTemp
 
 
-
-
-
 def createFinalList(john):
-    tp = Recursion(john, 1)
-
+    tp = recursion(john, 1)
+    john.recommended_galleries = []
     for i, element in enumerate(tp):
         john.recommended_galleries.append({"points": column(tp, 1)[i], "gallery": column(tp, 0)[i]})
         Users.objects(_id=john._id).update(set__recommended_galleries=john.recommended_galleries)
+
 
 #Inicjalizacja dla wszystkich użytkowników
 createListOfRecommendedForGivenUser_Recursion(user0)
