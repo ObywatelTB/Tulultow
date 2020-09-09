@@ -23,8 +23,8 @@ const auth = async(req,res,next)=>{
 			title: "Welcome to the Gallery",
 			name: "logged out name"
 		})
-		// console.log('Brak autoryzacji', e)
-		// res.status(401).send({error:'Please authenticate:',e})
+		console.log('Brak autoryzacji', e)
+		res.status(401)//.send({error:'Please authenticate:',e})
 		
 	}
 }

@@ -63,11 +63,31 @@ handle_buttons = ()=>{
 }
 
 clear_db = ()=>{
-	//albo odpalenie requesta ze skryptem pythona, albo odpalenie skryptu
+	fetch('/users/clear_db',{method: 'GET'}).then( (response)=>{
+		response.json().then((data)=>{
+			if(data.error){
+				console.log(data.error)
+			}else{
+				console.log(data)
+			}
+		})
+	}).catch((e)=>{
+		console.log('blad wewnatrz funkcji get db_name', e)
+	})
 }
 
 fill_db = ()=>{
-	//albo odpalenie requesta ze skryptem pythona, albo odpalenie skryptu
+	fetch('/users/fill_db',{method: 'GET'}).then( (response)=>{
+		response.json().then((data)=>{
+			if(data.error){
+				console.log(data.error)
+			}else{
+				console.log(data)
+			}
+		})
+	}).catch((e)=>{
+		console.log('blad wewnatrz funkcji get db_name', e)
+	})
 }
 	
 main = async()=>{

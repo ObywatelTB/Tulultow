@@ -15,6 +15,7 @@
   -zalatwic se Pythona!
   -wprowadzic nowe, nowoczesne wyswietlanie galerii
   -DB dot Reakcji, dodac obsluge Reakcji do Browse 
+  -dodac obsluge bledow - komunikaty na stronie, w formie tekstu, ze cos poszlo nie tak (nie mozna zalogowac etc)
   -napisac skrypty do testowania kodu
   -naprawic bugi logowania i rejestracji w innych przegladarkach
   -naprawic bugi: tworzenie duplikatow kategorii(jak sie da unique, to nie dziala dla 1 uzytkownika a ponadto blokuje tworzenie nowych uzytkownikow), etc

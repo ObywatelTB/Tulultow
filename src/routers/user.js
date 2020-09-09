@@ -9,6 +9,22 @@ const fs = require('fs')
 const path  = require('path')
 const Gallery = require('../models/gallery')
 
+run_python_script = (argums)=>{
+	try{
+		const python = spawn(process.env.PYTHON_ENV, argums);
+	
+		python.stdout.on('data',function(chunk){
+			var textChunk = chunk.toString('utf8')
+			console.log('output from python: ',textChunk)
+		})
+		python.stderr.on('data',function(data){
+			console.log('ERRORS FROM PYTHON!!',data.toString())
+		})
+	}catch(e){
+		console.log(e)
+	}
+}
+
 
 //signup
 router.post('/users', async (req,res)=>{
@@ -19,8 +35,7 @@ router.post('/users', async (req,res)=>{
 	const buffer = await sharp(buffer0).resize({width:250, height: 300}).png().toBuffer()
 	user.avatar = buffer
 	
-	const python = spawn(process.env.PYTHON_ENV, 
-		['src/python/recommend_galleries.py', user.email]);
+	run_python_script(['src/python/recommend_galleries.py', user.email])
 	try{
 		await user.save()
 		const gallery = await user.createGallery()
@@ -35,12 +50,7 @@ router.post('/users', async (req,res)=>{
 //login
 router.post('/users/login', async(req,res)=>{
 	user = {}
-<<<<<<< HEAD
-	const python = spawn(process.env.PYTHON_ENV, 
-		['src/python/recommend_galleries.py', user.email]);
-=======
-	
->>>>>>> 29eb025f2d793cc501ceaf62f8f6b0a344b4e49c
+	run_python_script(['src/python/recommend_galleries.py', user.email])
 	try{
 		user = await User.findByCredentials(req.body.email, req.body.password)
 		const token = await user.generateAuthToken()
@@ -52,18 +62,6 @@ router.post('/users/login', async(req,res)=>{
 	}catch(e){
 		res.status(400).send(e)
 	}
-	
-	try{
-	    const pypath = 'src/python/recommend_galleries.py'
-		const python = spawn(process.env.PYTHON_ENV,[pypath,'dev', user.email]); //<==============	
-	
-		python.on('close', (code) => {
-			console.log(`Child process close all stdio with code ${code}`);
-		})
-	}catch(e){
-		console.log(e)
-	}
-	
 })
 
 //logout
@@ -134,21 +132,9 @@ router.get('/users/db_name', auth, async (req,res)=>{
 //modyfikacje do BAZY DANYCH
 router.get('/users/clear_db', auth, async (req,res)=>{
 	try{
-		const python = spawn(process.env.PYTHON_ENV, 
-<<<<<<< HEAD
-			['', ]);
-	}catch(e){
-		res.status(500).send(e)
-	}
-})
-
-router.get('/users/fill_db', auth, async (req,res)=>{
-	try{
-		const python = spawn(process.env.PYTHON_ENV, 
-			['', ]);
-=======
-			['src/python/create_db.py', 'dev', 'clear db']);
->>>>>>> 29eb025f2d793cc501ceaf62f8f6b0a344b4e49c
+		run_python_script(['src/python/create_db.py', 'dev', 'clear_db'])
+		
+		res.send({"python script": "done"})
 	}catch(e){
 		res.status(500).send(e)
 	}
@@ -156,8 +142,9 @@ router.get('/users/fill_db', auth, async (req,res)=>{
 
 router.get('/users/fill_db', auth, async (req,res)=>{
     try{
-        const python = spawn(process.env.PYTHON_ENV, 
-			['src/python/create_db.py', 'dev', 'fill db', 25]);
+        run_python_script(['src/python/create_db.py', 'dev', 'fill_db', 25])
+		
+		res.send({"python script": "done"})
     }catch(e){
         res.status(500).send(e)
     }

@@ -247,13 +247,14 @@ userList = Users.objects()
 galleriesList = Galleries.objects()
 
 
-if sys.argv[2] == "clear db":
-    clearDatabaseAndCreateAdmin()
-elif sys.argv[2] == "fill db":
-    createUserAndGalleriesDatabase(sys.argv[3])
-    userList = Users.objects()
-    galleriesList = Galleries.objects()
-    createLinksBetweenUsers(userList)
+if sys.argv[2] == "clear_db":
+	print('elko')
+	clearDatabaseAndCreateAdmin()
+elif sys.argv[2] == "fill_db":
+	createUserAndGalleriesDatabase(int(sys.argv[3]))
+	userList = Users.objects()
+	galleriesList = Galleries.objects()
+	createLinksBetweenUsers(userList)
 elif sys.argv[2] == "recommended initialisation":
     for x in range(len(userList)):
         createRecommendedForAllUsers(userList[x])
