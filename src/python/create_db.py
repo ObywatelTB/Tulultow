@@ -10,8 +10,7 @@ import os
 from os import path
 from python_settings import settings
 
-#ss="dev"
-#if ss== "dev":
+
 if sys.argv[1] == "dev":
     os.environ["SETTINGS_MODULE"] = 'settings'
 else:
@@ -36,13 +35,19 @@ db = connect(settings.MONGO_DATABASE_NAME)
 img = Image.new("RGB", (100, 100), color=(73, 109, 137))
 img_b64 = im_2_b64(img)
 
+basepath = path.dirname(__file__)
+filepath = path.abspath(path.join(basepath, "..", "..", "config/admin.json"))
+with open(filepath) as f:
+    adminData = json.load(f)
+
+
 
 def column(matrix, i):
     return [row[i] for row in matrix]
 
 
 class Users(DynamicDocument):
-    _id = ObjectIdField()
+    _id = ObjectIdField(primary_key=True)
     city = StringField()
     country = StringField()
     name = StringField()
@@ -82,7 +87,7 @@ class Users(DynamicDocument):
 
 
 class Galleries(DynamicDocument):
-    _id = ObjectIdField()
+    _id = ObjectIdField(primary_key=True)
     categories = ListField()
     rooms = ListField()
     owner = ObjectIdField()
@@ -106,24 +111,48 @@ class Galleries(DynamicDocument):
 
 
 def clearDatabaseAndCreateAdmin():
-    db.drop_database(settings.MONGO_DATABASE_NAME)
     basepath = path.dirname(__file__)
     filepath = path.abspath(path.join(basepath, "..", "..", "config/admin.json"))
     with open(filepath) as f:
         d = json.load(f)
+    #db.drop_database(settings.MONGO_DATABASE_NAME
 
-    user1 = Users(
-        administrator=True,
-        name=d.get('name'),
-        email=d.get('email'),
-        password=d.get('password'),
-    ).save()
+    for i, x in enumerate(userList):
+        if x.email != d.get('email'):
+            lunch = x
+            lunch.delete()
+
+    for i, x in enumerate(galleriesList):
+        if x.owner != d.get('_id'):
+            lunch = x
+            lunch.delete()
+
+
+
 
 
 # tworzenie bazy urzytkonwnikow
 def createUserAndGalleriesDatabase(n):
-    for x in range(n):
+    doesAdminExist = 0
+    if len(userList)>0:
+        for x in userList:
+            if  x.email == adminData.get('email'):
+                doesAdminExist=1
+
+    if doesAdminExist == 0:
         user1 = Users(
+            _id=adminData.get('_id'),
+            administrator=True,
+            name=adminData.get('name'),
+            email=adminData.get('email'),
+            password=adminData.get('password'),
+        ).save()
+
+
+    for x in range(n):
+        tempId = (str(x+1)).zfill(24)
+        user1 = Users(
+            _id=tempId,
             city="Krakow",
             country="Russia",
             administrator=False,
@@ -139,8 +168,10 @@ def createUserAndGalleriesDatabase(n):
     userList_local = Users.objects()
 
     for x in range(n):
+        tempId = '1'+ (str(x + 1)).zfill(23)
         gal1 = Galleries(
-            owner=userList_local[x]._id,
+            _id=tempId,
+            owner=userList_local[x+1]._id,
             createdAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
             updatedAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764)
         ).save()
@@ -148,18 +179,20 @@ def createUserAndGalleriesDatabase(n):
     return [userList_local, galleriesList_local]
 
 
+
 def createLinksBetweenUsers(userList_local):
-    for x in range(50):
-        tabTemp = []
-        for y in range(50):
-            if userList_local[x].email != userList_local[y].email:
-                a = random.randint(0, 15)
-                if a == 0:
-                    print(x)
-                    userTemp = userList_local[x]
-                    gal = Galleries.objects(owner=userList_local[y]._id).get()
-                    userTemp.favourite_galleries.append({"points": random.randint(1, 10), "gallery": gal._id})
-                    userTemp.save()
+
+    for x in range(len(userList_local)):
+        randList = random.sample(range(len(userList_local)), 5)
+        randPoints =  random.sample(range(10), 5)
+        for i in range(len(randList)):
+            if userList_local[x].email != userList_local[randList[i]].email and userList_local[x].email != adminData.get('email')  and userList_local[randList[i]].email != adminData.get('email'):
+                print(x)
+                userTemp = userList_local[x]
+                gal = Galleries.objects(owner=userList_local[randList[i]]._id).get()
+                userTemp.favourite_galleries.append({"points": randPoints[i], "gallery": gal._id})
+                userTemp.save()
+
 
 
 def Recursion(john, callibrationBool):
@@ -243,8 +276,10 @@ def createFinalList(john):
         Users.objects(_id=john._id).update(set__recommended_galleries=john.recommended_galleries)
 
 
+
 userList = Users.objects()
 galleriesList = Galleries.objects()
+
 
 
 if sys.argv[2] == "clear_db":
@@ -261,6 +296,7 @@ elif sys.argv[2] == "recommended initialisation":
 elif sys.argv[2] == "recommended final":
     for x in range(len(userList)):
         createFinalList(userList[0])
+
 
 
 
