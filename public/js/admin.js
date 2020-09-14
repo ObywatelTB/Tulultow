@@ -43,7 +43,7 @@ visibility = (user, db_name)=>{
 	
 	if(db_name === 'tulultow-api'){ 			//Normalna DB
 		$('#db_access').text('can\'t').css('color','red')
-		$('#db_modify').replaceWith($('<p>Can\t modify the main database!</p>').css('color','red') )
+		$('#db_modify').replaceWith($('<p>Can\'t modify the main database!</p>').css('color','red') )
 	}else if(db_name === 'tulultow-api-test'){ 	//Testowa DB
 		$('#db_access').text('can').css('color','green')
 	}else{

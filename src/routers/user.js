@@ -35,7 +35,7 @@ router.post('/users', async (req,res)=>{
 	const buffer = await sharp(buffer0).resize({width:250, height: 300}).png().toBuffer()
 	user.avatar = buffer
 	
-	run_python_script(['src/python/recommend_galleries.py', user.email])
+	run_python_script(['src/python/recommend_galleries.py', user.db.name, req.body.email])
 	try{
 		await user.save()
 		const gallery = await user.createGallery()
@@ -50,7 +50,7 @@ router.post('/users', async (req,res)=>{
 //login
 router.post('/users/login', async(req,res)=>{
 	user = {}
-	run_python_script(['src/python/recommend_galleries.py', req.body.email])
+	run_python_script(['src/python/recommend_galleries.py', user.db.name, req.body.email])
 	try{
 		user = await User.findByCredentials(req.body.email, req.body.password)
 		const token = await user.generateAuthToken()
