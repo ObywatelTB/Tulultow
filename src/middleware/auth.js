@@ -3,10 +3,12 @@ const User = require('../models/user')
 
 const auth = async(req,res,next)=>{
 	try{
-		if(req.header('Authorization'))
+		if(req.header('Authorization')){
 			token = req.header('Authorization').replace('Bearer ','')
-		if(req.cookies.auth)  //nadpisanie tokena, gdy korzysta sie z przegladarki
+		}
+		if(req.cookies.auth){  //nadpisanie tokena, gdy korzysta sie z przegladarki
 			token = req.cookies.auth
+		}
 		//console.log('autentyk!',token)
 		
 		const decoded = jwt.verify(token, process.env.TOKEN_SECRET) //zwraca token

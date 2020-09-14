@@ -11,8 +11,8 @@
   [D]-ogarnij Heroku
   [D]-przegladanie czyjejs galerii (Browse)
   [D]-wrzucanie profilowki, wyswietlanej pozniej jako podglad galerii
-  -zrobienie admina, ktory ma przycisk do zapelniania testowa baza danych (potrzebna obsluga pythona)
-  -zalatwic se Pythona!
+  [D]-zrobienie admina, ktory ma przycisk do zapelniania testowa baza danych (potrzebna obsluga pythona)
+  [D]-zalatwic se Pythona!
   -wprowadzic nowe, nowoczesne wyswietlanie galerii
   -DB dot Reakcji, dodac obsluge Reakcji do Browse 
   -dodac obsluge bledow - komunikaty na stronie, w formie tekstu, ze cos poszlo nie tak (nie mozna zalogowac etc)
