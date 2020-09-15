@@ -17,12 +17,6 @@
 	
 	<p id="gal_info"> </p>
 	
-	<!-- test: -->
-	<!-- <div style=" width: 100%; text-align: center; background-color: red"> yolo  </div> -->
-	<!-- <div style="  background-color: green"> -->
-		<!-- <div class="room" style=" display:block; position: relative; background-color: yellow"> -->
-		<!-- </div> -->
-	<!-- </div> -->
 
 	<div id="rooms" class="rooms">
 	</div>
@@ -37,7 +31,7 @@
 
 	  <!-- Modal content -->
 	  <div class="modal-content">
-		<span class="close">&times;</span>
+		<span class="close" id="close_modal">&times;</span>
 		<p id="modal_p">Some text in the Modal..</p>
 		<form id="form_modal">
 			<input id="input_title" placeholder="Title">
@@ -48,23 +42,21 @@
 
 	</div>
 	
-<!-- 	<div class="room">
-		<div class="exhibit">
-		Know your Enemy Please Know your enemy
+	<!-- Mustache Template -->
+	<script id="exhibit-template" type="text/html">
+		<div class="exhibit" id="[[exhibit_id]]">
+			<span class="delete_exhibit" id="[[span_id]]">×</span>
+			<img src="[[img_src]]"></img>
+			<div class="exhibit_bottom">
+				<h5>[[prev_title]]</h5>
+				<h6>[[prev_title2]]</h6>
+			</div>
 		</div>
-		<div class="exhibit">
-		b
-		</div>
-		<div class="exhibit">
-		c
-		</div>
-		<button class="exhibit">
-		butt
-		</button>
-	</div> -->
+	</script>
+	
 	
 	{{>footer}}
-	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
 	<script src="/js/display_my_gallery.js"></script>
 	<script src="/js/logout.js"></script>
 </body>

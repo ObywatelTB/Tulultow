@@ -80,14 +80,14 @@ header a{
 
 .exhibit{
 	//color: red;
-	//display:block;
+	position: relative;
 	float: left;
 	text-align: center;
 	width: 17%; //18%;
 	height: 80%;
 	padding: 5px;
 	margin: 1px;
-	border: 2px solid;
+	border: 1px solid;
 	border-radius: 0px;//8px;
 	//line-height: 1.5;
 	 vertical-align: middle;
@@ -97,6 +97,23 @@ button.exhibit{
 	height: 90%;
 }
 
+.exhibit img{
+	width: 60px;
+	//height: 40px;
+}
+
+.exhibit_bottom{
+	position: absolute;
+	width: 95%;
+	bottom:  0;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.exhibit_bottom h5, h6{
+	margin: 0;
+	padding: 0;
+}
 
 /* Displaying galleries' previews */
 .previews_line{
@@ -124,9 +141,31 @@ button.exhibit{
 	 vertical-align: middle;
 }
 
+.preview_bottom{
+	position: absolute;
+	width: 95%;
+	bottom:  0;
+	margin-left: auto;
+	margin-right: auto;
+}
 
+.delete_exhibit{
+	color: #aaa;
+	display: none;
+	position: absolute;
+	transform: translate(240%, -30%);
+	font-size: 28px;
+	font-weight: bold;
+}
 
-
+.close:hover,
+.close:focus,
+.delete_exhibit:hover,
+.delete_exhibit:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
 
 
 /* 3 pozycje z kursu:  */
@@ -216,14 +255,6 @@ tr:hover{ background-color: #f5f5f5;}
 	font-weight: bold;
 }
 
-.close:hover,
-.close:focus,
-.delete:hover,
-.delete:focus {
-	color: black;
-	text-decoration: none;
-	cursor: pointer;
-}
 
 
 #drop_zone {

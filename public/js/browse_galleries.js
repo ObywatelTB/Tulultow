@@ -10,6 +10,11 @@ var users = []  //array of owners of the recommended galleries
 var the_chosen_gall = '' //mongodb id of the chosen gallery
 var categories = []
 
+//Templates
+prev_template = $('#preview-template').html()
+exhibit_template = $('#exhibit-template').html()
+
+
 //PREVIEWS OF RECOMMENDED
 getting_galleries = async()=>{
 	//getting the recommended galleries:
@@ -45,34 +50,31 @@ getting_user = async(gallery_id)=>{
 }
 
 draw_line = async(iter,r)=>{
-	var line = $('<div></div>').attr('class','previews_line')
+	var $line = $('<div></div>').attr('class','previews_line')
 	
 	for(var p=0; p<elements_nr; p++){		//GALLERIES' PREVIEWS
 		if(recommended_galleries[iter]){
 			div_prev = await draw_preview(iter,p,r)
-			line.append(div_prev);
+			$line.append(div_prev)
+			//$line.html(div_prev)
 		}
 		iter++;
 	}
 
-	return line
+	return $line
 }
 
 draw_preview = async(iter,c,r)=>{  			//c-column; r-row
-	var p1 = $('<p></p>').text(users[iter].name)
-	var p2 = $('<p></p>').text(users[iter].city)
-	var div_bottom = $('<div></div>')
-	div_bottom.append(p1,p2)	
-	
 	var buffer = await get_avatar(recommended_galleries[iter].gallery)
-	var img = $('<img></img>').attr("src",buffer)
-	img.attr('class','portrait')
 	
-	var div_prev = $('<div></div>').attr('class','preview')
-	div_prev.attr('id', 'prev_'+r+c)
-	div_prev.append(img, div_bottom);	
+	html = Mustache.render(prev_template,{
+		prev_id: 	'prev_' + r + c,
+		img_src: 	buffer,
+		prev_title: users[iter].name,
+		prev_title2:users[iter].city
+	})
 
-	return div_prev
+	return html
 }
 
 get_avatar = async(preview_gal_id)=>{
@@ -86,9 +88,6 @@ get_avatar = async(preview_gal_id)=>{
 					//gal_info.textContent = data.error
 					console.log(data.error)
 				}else{
-					//buff = new Uint8Array( data)
-					//var urlCreator = window.URL || window.webkitURL;
-					//var buff = urlCreator.createObjectURL( data );
 					buff = URL.createObjectURL( new Blob( [data], {type:'image/png'}) );
 				}
 			})
@@ -98,15 +97,6 @@ get_avatar = async(preview_gal_id)=>{
 	return buff
 }
 
-preview_style = ()=>{
-	$('.preview > div').css({
-		'position':'absolute',
-		'width': '95%',
-		'bottom':  '0',
-		'margin-left': 'auto',
-		'margin-right': 'auto'
-	})
-}
 
 previews = async()=>{
 	gal_info.text('Take a look at these galleries:')
@@ -125,11 +115,10 @@ previews = async()=>{
 
 	iter = 0
 	for(l = 0; l<=lines_nr; l++){
-		const line = await draw_line(iter,l);
+		line = await draw_line(iter,l);
 		iter += elements_nr;
 		$('#previews').append(line);
 	}
-	preview_style()
 }
 
 
@@ -182,16 +171,26 @@ draw_room = (data,r)=>{
 }
 
 draw_exhibit = (data, r,e)=>{
-	var p1 = $('<p></p>').text(data[e].title)
-	var p2 = $('<p></p>').text(data[e].content)
-	var div = $('<div></div>').attr('class','exhibit')
-	//div.attr('id','exhibit_'+r+e)
 	
-	div.append(p1, p2);	
+	const ex = Mustache.render(exhibit_template,{
+		img_src:		process_img_buffer(data[e].picture),
+		prev_title: 	data[e].title,
+		prev_title2:	data[e].content
+	})
 	
-	return div
+	return ex
 }
 
+process_img_buffer = (pic)=>{
+	source = ''
+	if(pic){
+		b64 = btoa(
+			pic.data.reduce((data,byte)=> data+ String.fromCharCode(byte),'')
+		)
+		source = 'data:image/png;base64,' + b64
+	}
+	return source
+}
 
 display_gallery = ()=>{
 	$('.preview').hover(function (){  	//mouse enters
@@ -218,10 +217,10 @@ display_gallery = ()=>{
 }
 
 
-
-
 //=====main function
 main =  async ()=>{
+	Mustache.tags = ["[[", "]]"];
+	
 	//DEALING WITH THE RECOMMENDED LIST
 	await previews()
 	

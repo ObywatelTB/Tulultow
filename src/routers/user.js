@@ -35,7 +35,7 @@ router.post('/users', async (req,res)=>{
 	const buffer = await sharp(buffer0).resize({width:250, height: 300}).png().toBuffer()
 	user.avatar = buffer
 	
-	run_python_script(['src/python/recommend_galleries.py', user.db.name, req.body.email])
+	run_python_script(['src/python/recommend_galleries.py', User.db.name, req.body.email])
 	try{
 		await user.save()
 		const gallery = await user.createGallery()
@@ -50,7 +50,7 @@ router.post('/users', async (req,res)=>{
 //login
 router.post('/users/login', async(req,res)=>{
 	user = {}
-	run_python_script(['src/python/recommend_galleries.py', user.db.name, req.body.email])
+	run_python_script(['src/python/recommend_galleries.py', User.db.name, req.body.email])
 	try{
 		user = await User.findByCredentials(req.body.email, req.body.password)
 		const token = await user.generateAuthToken()
@@ -132,7 +132,7 @@ router.get('/users/db_name', auth, async (req,res)=>{
 //modyfikacje do BAZY DANYCH
 router.get('/users/clear_db', auth, async (req,res)=>{
 	try{
-		run_python_script(['src/python/create_db.py', 'dev', 'clear_db'])
+		run_python_script(['src/python/create_db.py', User.db.name, 'clear_db'])
 		
 		res.send({"python script": "done"})
 	}catch(e){
@@ -142,7 +142,7 @@ router.get('/users/clear_db', auth, async (req,res)=>{
 
 router.get('/users/fill_db', auth, async (req,res)=>{
     try{
-        run_python_script(['src/python/create_db.py', 'dev', 'fill_db', 25])
+        run_python_script(['src/python/create_db.py', User.db.name, 'fill_db', 25])
 		
 		res.send({"python script": "done"})
     }catch(e){

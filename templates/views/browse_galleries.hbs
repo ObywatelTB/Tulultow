@@ -26,8 +26,38 @@
 	
 	<button id="browse_butt" style="transform: translate(7%, 0%);"> Browse others </button>
 	
+	<div id="testowy"></div>
+	
+	<!-- Mustache Templates -->
+	<script id="preview-template" type="text/html">
+		<div class="preview" id="[[prev_id]]">
+			<img class="portrait" src="[[img_src]]"></img>
+			<div class="preview_bottom">
+				<h5>[[prev_title]]</h5>
+				<h5>[[prev_title2]]</h5>
+			</div>
+		</div>
+		<!-- <ul class="users"> -->
+			<!-- {{#users}} -->
+				<!-- <li>{{username}}</li> -->
+			<!-- {{/users}} -->
+		<!-- </ul> -->
+	</script>
+	
+	<script id="exhibit-template" type="text/html">
+		<div class="exhibit">
+			<img src="[[img_src]]"></img>
+			<div class="exhibit_bottom">
+				<h5>[[prev_title]]</h5>
+				<h6>[[prev_title2]]</h6>
+			</div>
+		</div>
+	</script>
+		
+	
 	
 	{{>footer}}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
 	<script type="text/javascript" src="/js/logout.js"></script>
 	<script type="text/javascript" src="/js/browse_galleries.js"></script>
 </body>

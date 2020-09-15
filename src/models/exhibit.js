@@ -18,8 +18,8 @@ const exhibitSchema = mongoose.Schema({
 		required: true,
 		enum:  ['Song', 'Film', 'Book', 'Game', 'Quote', 'Place', 'Person', 'Dish', 'Perfume', 'Invention']
 	},
-	picture:{ //na razie string, ale potem sie ustawi
-		type:String
+	picture:{
+		type:Buffer
 	},
 	owner:{
 		type: mongoose.Schema.Types.ObjectId, //czyli chyba _id galerii

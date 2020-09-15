@@ -13,8 +13,8 @@
   [D]-wrzucanie profilowki, wyswietlanej pozniej jako podglad galerii
   [D]-zrobienie admina, ktory ma przycisk do zapelniania testowa baza danych (potrzebna obsluga pythona)
   [D]-zalatwic se Pythona!
-  -wprowadzic nowe, nowoczesne wyswietlanie galerii
-  -DB dot Reakcji, dodac obsluge Reakcji do Browse 
+  -DB dot Reakcji, dodac obsluge Reakcji do Browse
+  -poprawic wylogowywanie, zeby byl zerowany adres; i logowanie
   -dodac obsluge bledow - komunikaty na stronie, w formie tekstu, ze cos poszlo nie tak (nie mozna zalogowac etc)
   -napisac skrypty do testowania kodu
   -naprawic bugi logowania i rejestracji w innych przegladarkach
@@ -27,6 +27,7 @@
   [D]-zmienne srodowiskowe w pythonie
   [D]-zrobic mobilna wersje strony
   [D]-algorytm proponowania galerii VOL2. rozszerzenie o wagi
+  -wprowadzic nowe, nowoczesne wyswietlanie galerii
   -testowanie sprawnosci dzialania Algorytmu
   -Heroku -obsluga Pythona
   -znalezienie brakujacej funkcjonalnosci - patrzac na Tulultow jako na produkt, na narzedzie do szukania ludzi
