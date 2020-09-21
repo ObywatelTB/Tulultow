@@ -192,6 +192,22 @@ process_img_buffer = (pic)=>{
 	return source
 }
 
+exhibit_hover = ()=>{
+	$('.exhibit').hover(function(){  	//mouse enters
+		// const ex_id = $(this).attr('id')
+		// const room_nr = 	ex_id.slice(-2,-1)
+		// const exhibit_nr =  ex_id.slice(-1)
+		// var del_id = '#delete_'+room_nr+exhibit_nr
+		// $(del_id).css( "display", "inline" )
+	}, function(){						//mouse leaves
+		// const ex_id = $(this).attr('id')
+		// const room_nr = 	ex_id.slice(-2,-1)
+		// const exhibit_nr =  ex_id.slice(-1)
+		// var del_id = '#delete_'+room_nr+exhibit_nr
+		// $(del_id).css( "display", "none" )
+	})
+}
+
 display_gallery = ()=>{
 	$('.preview').hover(function (){  	//mouse enters
 		const prev_id = $(this).attr('id')
@@ -204,6 +220,7 @@ display_gallery = ()=>{
 		$(this).unbind().click(async function(){
 			$('#previews').hide()
 			await draw_gallery()
+			exhibit_hover()
 			
 			const user = await getting_user(the_chosen_gall)
 			gal_info.textContent = 'The gallery of '+user.name

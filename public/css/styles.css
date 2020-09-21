@@ -167,6 +167,18 @@ button.exhibit{
 	cursor: pointer;
 }
 
+.comment{
+	position: absolute;
+	transform: translate(-200%, 100%);
+	width: 40%;
+	//height: 10px;
+}
+
+.like{
+	width: 5px;
+	//height: 10px;
+}
+
 
 /* 3 pozycje z kursu:  */
 .weather_link{
