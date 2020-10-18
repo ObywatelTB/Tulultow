@@ -2,3 +2,4 @@ node_modules/
 src/python/.idea/
 config/
 src/python/__pycache__/
+moje_notki.txt

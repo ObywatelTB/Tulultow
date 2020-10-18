@@ -1,38 +1,32 @@
 const express = require('express')
 const Gallery = require('../models/gallery')
-//const Exhibit = require('../models/exhibit')
+const Exhibit = require('../models/exhibit')
 const Reaction = require('../models/reaction')
 const router = express.Router()
 const auth = require('../middleware/auth')
 
 //create a reaction - tworzone przy kliknieciu przycisku
 router.post('/reactions', auth, async(req,res)=>{
-	const gallery = await Gallery.findOne({owner: req.user._id})
-	const reaction = new Reaction({...req.body, owner: gallery._id})
-	/* 
-	gal_rooms_cats = gallery.rooms.map((r)=>{ //to bedzie zamienione na prostsze, sprawdzanie categories
-		return r.room.category
-	})
-	if(gal_rooms_cats.includes(req.body.category)){ //juz istnieje taki pokoj
-		ponizsze nadpisuje gallery!
-		gallery.rooms.map((r)=>{
-			if(r.room.category === req.body.category)
-				r.room.exhibits.push( exhibit._id )
-			return r
-		})
-	}else{		//jeszcze nie istnieje taki pokoj
-		gallery.rooms.push({room:{category: req.body.category, exhibits:[ exhibit._id ]  }})
-		gallery.categories.push( req.body.category )
-		//DODAC WPIS DO categories
+	const exhibit = await Exhibit.findById(req.body.exhibit)
+	const reactions = new Reaction({ gallery:req.body.gallery})
+	const react_data = {
+		exhibit: req.body.exhibit,
+		author: req.user._id, 
+		comment: req.body.comment, 
+		like: req.body.like
 	}
-	await gallery.save()
-	try{
+	reactions.reactions.push( react_data )
+	if(req.body.like){
+		exhibit.likes = exhibit.likes + 1
 		await exhibit.save()
-		res.send(exhibit)
+	}
+	console.log(exhibit)
+	await reactions.save()
+	try{
+		res.send(reactions)
 	}catch(e){
 		res.status(500).send(e)
 	}
-	 */
 }) 
 
 /* 
