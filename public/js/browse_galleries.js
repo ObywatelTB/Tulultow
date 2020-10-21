@@ -177,7 +177,8 @@ draw_exhibit = (data, r,e)=>{
 		prev_title: 	data[e].title,
 		prev_title2:	data[e].content
 	})
-	
+	handle_like()
+
 	return ex
 }
 
@@ -190,6 +191,13 @@ process_img_buffer = (pic)=>{
 		source = 'data:image/png;base64,' + b64
 	}
 	return source
+}
+
+handle_like = ()=>{
+	$('.exhibit_like').click(function(){
+		$(this).css('cursor', 'pointer');
+		console.log('like')
+	})
 }
 
 exhibit_hover = ()=>{
