@@ -110,7 +110,7 @@ button.exhibit{
 	margin-right: auto;
 }
 
-#exhibit_like{
+.exhibit_like{
 	position: absolute;
 	width: 25px;
 	bottom:  0;
@@ -118,7 +118,7 @@ button.exhibit{
 	
 }
 
-#exhibit_comment{
+.exhibit_comment{
 	position: absolute;
 	width: 25px;
 	bottom:  0;
@@ -127,7 +127,7 @@ button.exhibit{
 }
 
 
-#exhibit_reaction{
+.exhibit_reaction{
      font-size: 12px;	
     position: absolute;
 	bottom:  0;

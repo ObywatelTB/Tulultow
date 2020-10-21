@@ -12,7 +12,12 @@ const reactionSchema = mongoose.Schema({
 			required: true,
 			ref: 'Exhibit'
 		},
-		conment:{
+		author:{
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: 'User'
+		},
+		comment:{
 			type: String,
 			required: false
 		},
@@ -21,8 +26,9 @@ const reactionSchema = mongoose.Schema({
 			required: false
 		}
 	}],
-	owner:{
-		type: mongoose.Schema.Types.ObjectId, //czyli _id galerii
+	gallery:{
+		//type: mongoose.Schema.Types.ObjectId, //czyli _id galerii
+		type: String,
 		required: true,
 		ref: 'Gallery'
 	}

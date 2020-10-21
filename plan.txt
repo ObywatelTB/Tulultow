@@ -27,6 +27,7 @@
   [D]-zmienne srodowiskowe w pythonie
   [D]-zrobic mobilna wersje strony
   [D]-algorytm proponowania galerii VOL2. rozszerzenie o wagi
+  -frontend reakcji
   -wprowadzic nowe, nowoczesne wyswietlanie galerii
   -testowanie sprawnosci dzialania Algorytmu
   -Heroku -obsluga Pythona

@@ -95,6 +95,7 @@ loginForm.addEventListener('submit',(e)=>{ //e - event
 			if(data.error){
 				message.textContent = data.error
 			}else{
+				console.log('no eloo',data)
 				message.textContent = 'Logowanko! '+data.user.name
 				location.reload(true) 
 			}

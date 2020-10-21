@@ -21,6 +21,10 @@ const exhibitSchema = mongoose.Schema({
 	picture:{
 		type:Buffer
 	},
+	likes:{
+		type: Number,
+		default: 0
+	},
 	owner:{
 		type: mongoose.Schema.Types.ObjectId, //czyli chyba _id galerii
 		required: true,
