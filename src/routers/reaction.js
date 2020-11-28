@@ -6,21 +6,49 @@ const router = express.Router()
 const auth = require('../middleware/auth')
 
 //create a reaction - tworzone przy kliknieciu przycisku
-router.post('/reactions', auth, async(req,res)=>{
+router.post('/reactions/like', auth, async(req,res)=>{
 	const exhibit = await Exhibit.findById(req.body.exhibit)
+	reactions = await Reaction.findOne({gallery: req.body.gallery})
+	if(!reactions){
+		reactions = new Reaction({ gallery:req.body.gallery})
+	}
+	const react_data = {
+		exhibit: req.body.exhibit,
+		author: req.user._id, 
+		like: req.body.like
+	}
+
+	if(req.body.like){
+		reactions.reactions.push( react_data )
+		exhibit.likes = exhibit.likes + 1
+		await exhibit.save()
+	}else{ //czyli ktos odlajkowal
+		//tu skasowac te reakcje z listy reactions
+		exhibit.likes = exhibit.likes - 1
+		await exhibit.save()
+	}
+	//console.log(exhibit)
+	await reactions.save()
+	
+	try{
+		res.send(reactions)
+	}catch(e){
+		res.status(500).send(e)
+	}
+	
+}) 
+
+router.post('/reactions/comment', auth, async(req,res)=>{
+	//const exhibit = await Exhibit.findById(req.body.exhibit)
 	const reactions = new Reaction({ gallery:req.body.gallery})
 	const react_data = {
 		exhibit: req.body.exhibit,
 		author: req.user._id, 
-		comment: req.body.comment, 
-		like: req.body.like
+		comment: req.body.comment,
 	}
 	reactions.reactions.push( react_data )
-	if(req.body.like){
-		exhibit.likes = exhibit.likes + 1
-		await exhibit.save()
-	}
-	console.log(exhibit)
+
+	//console.log(exhibit)
 	await reactions.save()
 	try{
 		res.send(reactions)

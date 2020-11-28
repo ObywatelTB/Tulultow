@@ -194,9 +194,26 @@ process_img_buffer = (pic)=>{
 }
 
 handle_like = ()=>{
-	$('.exhibit_like').click(function(){
+	$('.exhibit_like').click(async function (){
 		$(this).css('cursor', 'pointer');
-		console.log('like')
+		console.log('like/unlike')
+		await fetch('/reactions/like',{ method: 'POST', headers: {'Content-Type': 'application/json'},
+		body: JSON.stringify({
+			exhibit: '5f8c383d40724f55f8f5211a',
+			gallery: '100000000000000000000002',
+			like: 'true'
+		})
+		}).then( async(response)=>{
+			await response.json().then((data)=>{
+				if(data.error){
+					console.log(data.error)
+				}else{
+					categories = data.categories
+				}
+			}).catch((e)=>{
+				console.log('wewnatrz funkcji login',e)
+			})
+		})
 	})
 }
 
@@ -231,7 +248,7 @@ display_gallery = ()=>{
 			exhibit_hover()
 			
 			const user = await getting_user(the_chosen_gall)
-			gal_info.textContent = 'The gallery of '+user.name
+			gal_info.textContent = 'The gallery of '//+user.name
 			$('#browse_butt').show()
 		})
 	})
