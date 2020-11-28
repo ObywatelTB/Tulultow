@@ -167,6 +167,7 @@ draw_room = (data,r)=>{
 		div = draw_exhibit(data,r,e)
 		room.append(div);
 	}
+	
 	return room
 }
 
@@ -177,7 +178,7 @@ draw_exhibit = (data, r,e)=>{
 		prev_title: 	data[e].title,
 		prev_title2:	data[e].content
 	})
-	handle_like()
+	
 
 	return ex
 }
@@ -194,7 +195,7 @@ process_img_buffer = (pic)=>{
 }
 
 handle_like = ()=>{
-	$('.exhibit_like').click(function(){
+	$('.exhibit_comment').hover(function(){
 		$(this).css('cursor', 'pointer');
 		console.log('like')
 	})
@@ -216,6 +217,37 @@ exhibit_hover = ()=>{
 	})
 }
 
+
+
+//=====modal (adding exhibit)
+create_modal = async()=>{
+	const span = $("#close_modal")
+		
+	//opening the modal	
+	$('.exhibit_comment').on('click', function(){
+		console.log('modal')
+
+		$("#myModal").css("display", "block");		
+	})	
+	
+	//closing the modal
+	span.on('click', function() {
+		$("#myModal").css("display", "none");
+	})
+	
+	//troche slabo bo 2 konwencje, jQuery i ponizsza. ale wazne ze dziala!
+	var myM = document.querySelector('#myModal')
+	window.onclick = function(event) {
+		if (event.target == myM) {
+			myM.style.display = "none" ;
+		}
+	}
+}
+
+
+
+
+
 display_gallery = ()=>{
 	$('.preview').hover(function (){  	//mouse enters
 		const prev_id = $(this).attr('id')
@@ -229,7 +261,7 @@ display_gallery = ()=>{
 			$('#previews').hide()
 			await draw_gallery()
 			exhibit_hover()
-			
+			handle_like()
 			const user = await getting_user(the_chosen_gall)
 			gal_info.textContent = 'The gallery of '+user.name
 			$('#browse_butt').show()
@@ -251,6 +283,10 @@ main =  async ()=>{
 	
 	//DISPLAYING ACTUAL GALLERY
 	display_gallery()
+
+	await previews()
+	//draw and use modals:
+	create_modal()
 }
 
 main()

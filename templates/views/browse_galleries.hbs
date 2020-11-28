@@ -24,6 +24,32 @@
 	<div id="rooms" class="rooms">
 	</div>
 	
+
+<!-- The Modal -->
+	<div id="myModal" class="modal_comments">
+
+	  <!-- Modal content -->
+	  <div class="modal_comments-content">
+		<span class="close" id="close_modal">&times;</span>
+		<p id="modal_p">Comments</p>
+			<div class="scrollmenu">
+ 				<p class="scrollmenu_p">komentarz nr 1</p>
+  				<p class="scrollmenu_p">bardzodlugi komentarznie nie mieszczacy sie w jednej linijce kwijjnnc ejncjne ihyh gy ygy g y yg  gyccjnece</p>
+  				<p class="scrollmenu_p">vfv</p>
+ 				<p class="scrollmenu_p">fff</p>
+				<p class="scrollmenu_p">Homcdcsdce</p>
+			</div> 
+
+		<form id="form_modal">
+			<input id="input_title_modal_comment" placeholder="Write comment">
+			<button>Add !</button>
+		</form>
+	  </div>
+
+	</div>
+
+
+
 	<button id="browse_butt" style="transform: translate(7%, 0%);"> Browse others </button>
 	
 	<div id="testowy"></div>
@@ -46,7 +72,7 @@
 	
 	<script id="exhibit-template" type="text/html">
 		<div class="exhibit">
-			<img src="[[img_src]]"></img>
+			<img src="[[img_src]]" class="exhibit_category_image"></img>
 			<div class="exhibit_bottom">
 				<h5>[[prev_title]]</h5>
 				<h6>[[prev_title2]]</h6>
