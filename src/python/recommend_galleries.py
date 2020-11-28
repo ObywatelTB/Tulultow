@@ -1,4 +1,4 @@
-import json
+﻿import json
 import sys
 import os
 from mongoengine import *
@@ -133,7 +133,7 @@ def recursion(john, callibrationBool):
     if  len(userList)<20:
         sizeOfList=len(userList)-1
 
-    while (len(top20) < sizeOfList) :
+    while (len(top20) < sizeOfList-1) :
         if galleriesList[i].owner != john._id:
             top20.append([galleriesList[i]._id, 0])
             i += 1
