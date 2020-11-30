@@ -52,7 +52,7 @@ OGOLNA KONCEPCJA: (luzne pomysly)
 
 KONCEPCJA DB REAKCJI:
 - nowa DB dla reakcji. kazdy json to tablica reakcji dla konkretnej galerii, ktora je otrzymala.
-  (reakcje pewnie moga miec rozna forme, komentarza lub lajka)
+  (wlasciwie kazdy json ma 2 arraye - dla lajkow i commentow).
 -ponad to kazdy exhibit zapisuje sobie liczbe reakcji/punktacje
 -punktacja polaczen juz istnieje w uzytkowniku (favourite_galleries)
 -wyswietlanie swoich reakcji w danej galerii to znalezienie reakcji dla danej galerii, a potem odfiltrowanie wlasnych

@@ -179,7 +179,7 @@ draw_exhibit = (data, r,e)=>{
 		prev_title2:	data[e].content
 	})
 	
-
+	//handle_comment()
 	return ex
 }
 
@@ -194,19 +194,14 @@ process_img_buffer = (pic)=>{
 	return source
 }
 
-handle_like = ()=>{
-<<<<<<< HEAD
-	$('.exhibit_like').click(async function (){
-=======
-	$('.exhibit_comment').hover(function(){
->>>>>>> 937376e9526e15d9e4ba6271dc7ae2bc8fdb8eaf
+handle_comment = ()=>{
+	$('.exhibit_comment').hover(async function(){
 		$(this).css('cursor', 'pointer');
 		console.log('like/unlike')
 		await fetch('/reactions/like',{ method: 'POST', headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify({
 			exhibit: '5f8c383d40724f55f8f5211a',
-			gallery: '100000000000000000000002',
-			like: 'true'
+			gallery: '100000000000000000000002'
 		})
 		}).then( async(response)=>{
 			await response.json().then((data)=>{
@@ -282,7 +277,7 @@ display_gallery = ()=>{
 			$('#previews').hide()
 			await draw_gallery()
 			exhibit_hover()
-			handle_like()
+			//handle_like()
 			const user = await getting_user(the_chosen_gall)
 			gal_info.textContent = 'The gallery of '//+user.name
 			$('#browse_butt').show()

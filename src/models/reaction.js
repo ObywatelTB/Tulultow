@@ -6,27 +6,35 @@ const validator = require('validator')
 
 //an array of reactions for a particular gallery
 const reactionSchema = mongoose.Schema({
-	reactions: [{
-		exhibit:{
+	likes: [{	//if there's a record it means the author (of reaction) gave a like
+		exhibit_id:{
 			type: mongoose.Schema.Types.ObjectId,
 			required: true,
 			ref: 'Exhibit'
 		},
-		author:{
+		author_id:{
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: 'User'
+		}
+	}],
+	comments: [{
+		exhibit_id:{
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: 'Exhibit'
+		},
+		author_id:{
 			type: mongoose.Schema.Types.ObjectId,
 			required: true,
 			ref: 'User'
 		},
 		comment:{
 			type: String,
-			required: false
-		},
-		like:{
-			type: Boolean,
-			required: false
+			required: true
 		}
 	}],
-	gallery:{
+	gallery_id:{
 		//type: mongoose.Schema.Types.ObjectId, //czyli _id galerii
 		type: String,
 		required: true,
