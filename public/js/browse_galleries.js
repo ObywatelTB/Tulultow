@@ -12,6 +12,7 @@ var categories = []
 var new_ex_form = document.querySelector('#form_modal')
 var input_content = document.querySelector('#input_comment')
 var modal_return_id = 0
+var like_click_id = 0
 
 //Templates
 prev_template = $('#preview-template').html()
@@ -140,6 +141,7 @@ draw_gallery = async()=>{
 					room = await draw_room(data,r);
 					$('#rooms').append(room);
 					handle_comment();
+					handle_like();
 				}
 			})
 		}).catch((e)=>{
@@ -175,12 +177,14 @@ draw_room = (data,r)=>{
 	return room
 }
 
+var temp_like=1
 draw_exhibit = (data, r,e)=>{
 	const ex = Mustache.render(exhibit_template,{
 		img_src:		process_img_buffer(data[e].picture),
 		prev_title: 	data[e].title,
 		prev_title2:	data[e].content,
-		prev_id:		data[e]._id
+		exhibit_id:		'exhibit_'+r+e,
+		like_nr:		temp_like
 	})
 	return ex
 }
@@ -222,16 +226,39 @@ handle_comment = ()=>{
 
 
 handle_modal_button = async()=>{
-	//this function joins both new exhibit and new category, cz. both use the same modal
-		new_ex_form.addEventListener('submit',(e)=>{ //po wcisnieciu buttona w modalu
-			e.preventDefault()
-			content = input_content.value
-			id = modal_return_id 
-			console.log(id)
-			$("#myModal2").css("display", "none");
-		})	
-	}
+//this function joins both new exhibit and new category, cz. both use the same modal
+	new_ex_form.addEventListener('submit',(e)=>{ //po wcisnieciu buttona w modalu
+		e.preventDefault()
+		content = input_content.value
+		id = modal_return_id 
 
+		var row = id.charAt(8);
+		var column = id.charAt(9);
+		console.log('row: ',row)
+		console.log('column: ',column)
+
+		$("#myModal2").css("display", "none");
+	})	
+}
+
+
+
+handle_like = ()=>{
+	$('.exhibit_like').hover(function(){
+		$(this).css('cursor', 'pointer');
+		console.log('like')
+	})
+
+	 $('.exhibit_like').on('click', function(){
+	  	document.getElementById(this.id).like_nr=3
+		 temp_like=temp_like+1;
+		 document.getElementById(this.id).innerHTML = document.getElementById(this.id).like_nr;
+	 	//like_click_id=this.id;
+	 	console.log(this.id)
+		
+	 })	
+	
+}
 
 
 
@@ -253,8 +280,6 @@ exhibit_hover = ()=>{
 		// $(del_id).css( "display", "none" )
 	})
 }
-
-
 
 
 display_gallery = () =>{
