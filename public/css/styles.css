@@ -97,21 +97,6 @@ button.exhibit{
 	height: 90%;
 }
 
-.exhibit_browse{
-	//color: red;
-	position: relative;
-	float: left;
-	text-align: center;
-	width: 17%; //18%;
-	height: 80%;
-	padding: 5px;
-	margin: 1px;
-	border: 1px solid;
-	border-radius: 0px;//8px;
-	//line-height: 1.5;
-	 vertical-align: middle;
-}
-
 
 .exhibit_category_image{
 	width: 60px;
@@ -195,7 +180,7 @@ button.exhibit{
 	color: #aaa;
 	display: none;
 	position: absolute;
-	transform: translate(240%, -30%);
+	transform: translate(400%, -30%);
 	font-size: 28px;
 	font-weight: bold;
 }
