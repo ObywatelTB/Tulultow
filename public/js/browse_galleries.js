@@ -9,6 +9,9 @@ var recommended_nr = 0
 var users = []  //array of owners of the recommended galleries
 var the_chosen_gall = '' //mongodb id of the chosen gallery
 var categories = []
+var new_ex_form = document.querySelector('#form_modal')
+var input_content = document.querySelector('#input_comment')
+var modal_return_id = 0
 
 //Templates
 prev_template = $('#preview-template').html()
@@ -136,6 +139,7 @@ draw_gallery = async()=>{
 				}else{
 					room = await draw_room(data,r);
 					$('#rooms').append(room);
+					handle_comment();
 				}
 			})
 		}).catch((e)=>{
@@ -172,14 +176,12 @@ draw_room = (data,r)=>{
 }
 
 draw_exhibit = (data, r,e)=>{
-	
 	const ex = Mustache.render(exhibit_template,{
 		img_src:		process_img_buffer(data[e].picture),
 		prev_title: 	data[e].title,
-		prev_title2:	data[e].content
+		prev_title2:	data[e].content,
+		prev_id:		data[e]._id
 	})
-	
-
 	return ex
 }
 
@@ -194,12 +196,47 @@ process_img_buffer = (pic)=>{
 	return source
 }
 
-handle_like = ()=>{
+
+
+handle_comment = ()=>{
 	$('.exhibit_comment').hover(function(){
 		$(this).css('cursor', 'pointer');
-		console.log('like')
+		console.log('comment')
+
 	})
+	const span = $("#close_modal")
+		
+	$('.exhibit_comment').on('click', function(){
+		modal_return_id=this.id;
+		console.log(modal_return_id)
+		$("#myModal2").css("display", "block");		
+	})	
+	
+	//closing the modal
+	span.on('click', function() {
+		$("#myModal2").css("display", "none");
+	})
+	
+	handle_modal_button()
 }
+
+
+handle_modal_button = async()=>{
+	//this function joins both new exhibit and new category, cz. both use the same modal
+		new_ex_form.addEventListener('submit',(e)=>{ //po wcisnieciu buttona w modalu
+			e.preventDefault()
+			content = input_content.value
+			id = modal_return_id 
+			console.log(id)
+			$("#myModal2").css("display", "none");
+		})	
+	}
+
+
+
+
+
+
 
 exhibit_hover = ()=>{
 	$('.exhibit').hover(function(){  	//mouse enters
@@ -219,36 +256,8 @@ exhibit_hover = ()=>{
 
 
 
-//=====modal (adding exhibit)
-create_modal = async()=>{
-	const span = $("#close_modal")
-		
-	//opening the modal	
-	$('.exhibit_comment').on('click', function(){
-		console.log('modal')
 
-		$("#myModal").css("display", "block");		
-	})	
-	
-	//closing the modal
-	span.on('click', function() {
-		$("#myModal").css("display", "none");
-	})
-	
-	//troche slabo bo 2 konwencje, jQuery i ponizsza. ale wazne ze dziala!
-	var myM = document.querySelector('#myModal')
-	window.onclick = function(event) {
-		if (event.target == myM) {
-			myM.style.display = "none" ;
-		}
-	}
-}
-
-
-
-
-
-display_gallery = ()=>{
+display_gallery = () =>{
 	$('.preview').hover(function (){  	//mouse enters
 		const prev_id = $(this).attr('id')
 		const row = parseInt(prev_id.slice(-2,-1))
@@ -261,7 +270,6 @@ display_gallery = ()=>{
 			$('#previews').hide()
 			await draw_gallery()
 			exhibit_hover()
-			handle_like()
 			const user = await getting_user(the_chosen_gall)
 			gal_info.textContent = 'The gallery of '+user.name
 			$('#browse_butt').show()
@@ -283,10 +291,10 @@ main =  async ()=>{
 	
 	//DISPLAYING ACTUAL GALLERY
 	display_gallery()
-
-	await previews()
+	
+	//await previews()
 	//draw and use modals:
-	create_modal()
+	
 }
 
 main()
