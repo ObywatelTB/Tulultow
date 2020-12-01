@@ -271,7 +271,7 @@ display_gallery = () =>{
 			await draw_gallery()
 			exhibit_hover()
 			const user = await getting_user(the_chosen_gall)
-			gal_info.textContent = 'The gallery of '+user.name
+			gal_info.textContent = 'The gallery of '//+user.name
 			$('#browse_butt').show()
 		})
 	})
