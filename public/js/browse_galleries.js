@@ -13,9 +13,10 @@ var new_ex_form = document.querySelector('#form_modal')
 var input_content = document.querySelector('#input_comment')
 var modal_return_id = 0
 
-//Templates
+//Mustache templates
 prev_template = $('#preview-template').html()
 exhibit_template = $('#exhibit-template').html()
+modal_inner_template = $('#modal-inner-template').html()
 
 
 //PREVIEWS OF RECOMMENDED
@@ -176,7 +177,7 @@ draw_room = (data,r)=>{
 }
 
 draw_exhibit = (data, r,e)=>{
-	const ex = Mustache.render(exhibit_template,{
+	const ex = Mustache.render(exhibit_template, {
 		img_src:		process_img_buffer(data[e].picture),
 		prev_title: 	data[e].title,
 		prev_title2:	data[e].content,
@@ -206,10 +207,24 @@ handle_comment = ()=>{
 	})
 	const span = $("#close_modal")
 		
-	$('.exhibit_comment').on('click', function(){
+	$('.exhibit_comment').on('click', async function(){ //opening comment modal
 		modal_return_id=this.id;
 		console.log(modal_return_id)
-		$("#myModal2").css("display", "block");		
+		$("#myModal2").css("display", "block");
+		gallery_id = '100000000000000000000003'
+		exhibit_id = '5f8c384340724f55f8f5211b'
+		comments_ar = await get_comments(gallery_id,exhibit_id)
+		const in_mod = Mustache.render(modal_inner_template, {
+			comments: comments_ar
+			// "comments": [
+			//   { "comment_content": "resque" },
+			//   { "comment_content": "hub" },
+			//   { "comment_content": "rip" },
+			//   { "comment_content": "4" },
+			//   { "comment_content": "555555" }
+			// ]
+		  })
+		$("#scroll_obj").append(in_mod)
 	})	
 	
 	//closing the modal
@@ -220,25 +235,39 @@ handle_comment = ()=>{
 	handle_modal_button()
 }
 
+get_comments = async(gallery_id,exhibit_id)=>{
+	//getting the comments of an exhibit:
+	comments = []
+	await fetch('/reactions/'+gallery_id+'/'+exhibit_id,{method: 'GET'}).then(async(response)=>{
+		await response.json().then((data)=>{
+			if(data.error){
+				console.log(data.error)
+			}else{
+				comments = data
+			}
+		})
+		}).catch((e)=>{
+			console.log('blad wewnatrz funkcji get comments', e)
+		})
+	return comments
+}
 
 handle_modal_button = async()=>{
 	//this function joins both new exhibit and new category, cz. both use the same modal
-		new_ex_form.addEventListener('submit',(e)=>{ //po wcisnieciu buttona w modalu
-			e.preventDefault()
-			content = input_content.value
-			id = modal_return_id 
-			console.log(id)
-			$("#myModal2").css("display", "none");
-		})	
-	}
+	new_ex_form.addEventListener('submit',(e)=>{ //po wcisnieciu buttona w modalu
+		e.preventDefault()
+		$("#myModal2").css("display", "none");
+
+		content = input_content.value
+		id = modal_return_id 
+		console.log(id)
+		
+		
+	})	
+}
 
 
-
-
-
-
-
-exhibit_hover = ()=>{
+exhibit_hover = ()=>{ //can be used to display like and comment icons
 	$('.exhibit').hover(function(){  	//mouse enters
 		// const ex_id = $(this).attr('id')
 		// const room_nr = 	ex_id.slice(-2,-1)
@@ -253,7 +282,6 @@ exhibit_hover = ()=>{
 		// $(del_id).css( "display", "none" )
 	})
 }
-
 
 
 

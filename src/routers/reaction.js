@@ -5,22 +5,25 @@ const Reaction = require('../models/reaction')
 const router = express.Router()
 const auth = require('../middleware/auth')
 
+
+
+
 //switches like reaction (like/dislike)  - executed when clicking the like button
 router.post('/reactions/switch_like', auth, async(req,res)=>{
 	exhibit = await Exhibit.findById(req.body.exhibit_id)
 	reactions = await Reaction.findOne({gallery_id: req.body.gallery_id})
 	excerpt = {} 		//the like reaction for our user
 	like_state = true	//(user gives a like by default)
-	if(!reactions){ //its the first like in the gallery
-		reactions = new Reaction({ gallery_id: req.body.gallery_id})
+	if(!reactions){ //its the first like/comment in the gallery
+		reactions = await new Reaction({ gallery_id: req.body.gallery_id})
 		console.log('Created a reactions record (with a like) for a new gallery!')
 	}
 
 	arr = reactions.likes
 	if (arr.lenght != 0){	//there are already some likes in the gallery
+		//looking for the previous like reaction of this specific user and exhibit
 		filterBy = await {exhibit_id: req.body.exhibit_id,
 			author_id:  req.user._id }
-	
 		excerpts = arr.filter(function(record){
 			return Object.keys(filterBy).every(function(k){
 				return String(record[k]) == String(filterBy[k])
@@ -67,16 +70,41 @@ router.post('/reactions/switch_like', auth, async(req,res)=>{
 	}
 }) 
 
-//wykonywane przy wyslaniu komentarza
-router.post('/reactions/comment', auth, async(req,res)=>{
-	//const exhibit = await Exhibit.findById(req.body.exhibit)
-	const reactions = new Reaction({ gallery:req.body.gallery})
-	const react_data = {
-		exhibit: req.body.exhibit,
-		author: req.user._id, 
-		comment: req.body.comment,
+
+//gives all the comments from a given exhibit in a given gallery
+router.get('/reactions/:gal/:ex', auth, async(req,res)=>{
+	//const gallery = await Gallery.findById(req.params.gal)
+	//const exhibit = await Exhibit.findById(req.params.ex)
+	const reactions = await Reaction.findOne({gallery_id: req.params.gal})
+	//console.log(reactions.comments)
+	all_comments = reactions.comments
+	chosen_comments = all_comments.filter(c=>{
+		return c.exhibit_id == req.params.ex
+	})
+	//console.log('wybrane: ',chosen_comments)
+
+	try{
+		res.send(chosen_comments)
+	}catch(e){
+		res.status(500).send(e)
 	}
-	reactions.reactions.push( react_data )
+})
+
+
+//executed when submitting a comment
+router.post('/reactions/submit_comment', auth, async(req,res)=>{
+	reactions = await Reaction.findOne({gallery_id: req.body.gallery_id})
+	if(!reactions){ //its the first like/comment in the gallery
+		reactions = await new Reaction({ gallery_id: req.body.gallery_id})
+		console.log('Created a reactions record (with a like) for a new gallery!')
+	}
+
+	const reaction_data = {
+		exhibit_id: req.body.exhibit_id,
+		author_id: req.user._id,
+		comment_content: req.body.comment_content
+	}
+	reactions.comments.push( reaction_data )
 
 	//console.log(exhibit)
 	await reactions.save()
@@ -86,6 +114,31 @@ router.post('/reactions/comment', auth, async(req,res)=>{
 		res.status(500).send(e)
 	}
 }) 
+
+//executed when deleting a comment
+router.post('/reactions/delete_comment', auth, async(req,res)=>{
+	reactions = await Reaction.findOne({gallery_id: req.body.gallery_id})
+
+	const reaction_data = {
+		exhibit_id: req.body.exhibit_id,
+		author_id: req.user._id,
+		comment_id: req.body.comment
+	}
+	reactions.comments.push( reaction_data )
+
+	//console.log(exhibit)
+	await reactions.save()
+	try{
+		res.send(reactions)
+	}catch(e){
+		res.status(500).send(e)
+	}
+}) 
+
+
+
+
+
 
 /* 
 //pokaz wszystkie reakcje w galerii zalogowanego uzytkownika

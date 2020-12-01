@@ -32,14 +32,9 @@
 	  <div class="modal_comments-content">
 		<span class="close" id="close_modal">&times;</span>
 		<p id="modal_p">Comments</p>
-			<div class="scrollmenu">
- 				<p class="scrollmenu_p">komentarz nr 1</p>
-  				<p class="scrollmenu_p">bardzodlugi komentarznie nie mieszczacy sie w jednej linijce kwijjnnc ejncjne ihyh gy ygy g y yg  gyccjnece</p>
-  				<p class="scrollmenu_p">vfv</p>
- 				<p class="scrollmenu_p">fff</p>
-				<p class="scrollmenu_p">Homcdcsdce</p>
-			</div> 
-
+			<div class="scrollmenu" id="scroll_obj">
+			<!-- A place for the modal Mustache template -->
+			</div>
 		<form id="form_modal">
 			<input id="input_comment" placeholder="Write comment">
 			<button>Add !</button>
@@ -48,13 +43,14 @@
 
 	</div>
 
-
-
 	<button id="browse_butt" style="transform: translate(7%, 0%);"> Browse others </button>
 	
+
+
 	<div id="testowy"></div>
 	
-	<!-- Mustache Templates -->
+	<!-- Mustache Templates ________________________________________________ -->
+	<!-- Mustache template example: -->
 	<script id="preview-template" type="text/html">
 		<div class="preview" id="[[prev_id]]">
 			<img class="portrait" src="[[img_src]]"></img>
@@ -63,13 +59,9 @@
 				<h5>[[prev_title2]]</h5>
 			</div>
 		</div>
-		<!-- <ul class="users"> -->
-			<!-- {{#users}} -->
-				<!-- <li>{{username}}</li> -->
-			<!-- {{/users}} -->
-		<!-- </ul> -->
 	</script>
-	
+
+	<!-- Mustache exhibit template: -->
 	<script id="exhibit-template" type="text/html">
 		<div class="exhibit">
 			<img src="[[img_src]]" class="exhibit_category_image"></img>
@@ -79,11 +71,19 @@
 			</div>
 			<div class="exhibit_reaction"> 44 </div>
             <img src="/img/points.png" class="exhibit_like"></img>
-            <img src="/img/comment.png" class="exhibit_comment" id=[[prev_id]]></img>		
+            <img src="/img/comment.png" class="exhibit_comment" id = [[ prev_id ]] > </img>		
 		</div>
  
 	</script>
 		
+	<!-- Mustache template: -->
+	<script id="modal-inner-template" type="text/html">
+		<ul>
+			[[#comments]]
+				<li><p class="scrollmenu_p">[[comment_content]]</p></li>
+			[[/comments]]
+		</ul>
+	</script>
 	
 	
 	{{>footer}}
