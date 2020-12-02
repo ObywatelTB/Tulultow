@@ -189,7 +189,7 @@ draw_exhibit = (data, r,e)=>{
 		prev_title: 	data[e].title,
 		prev_title2:	data[e].content,
 		exhibit_id:		'exhibit_'+r+e,
-		like_nr:		'lel'
+		like_nr:		data[e].likes
 	})
 	return ex
 }
@@ -280,7 +280,7 @@ get_comments = async(gallery_id, exhibit_id)=>{
 }
 
 submit_comment = (comment_txt, exhibit_id)=>{
-	fetch('/reactions/submit_comment',{method: 'POST',headers: {'Content-Type': 'application/json'},
+	fetch('/reactions/comment',{method: 'POST',headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify({
 			gallery_id: the_chosen_gall,
 			exhibit_id: exhibit_id,
@@ -300,23 +300,68 @@ submit_comment = (comment_txt, exhibit_id)=>{
 		console.log('ERROR in the funciton Submit comment',e)
 	})
 }
+
+delete_comment = (gallery_id, comment_id)=>{
+	fetch('/reactions/comment/'+ gallery_id + '/' + comment_id, {method: 'DELETE'}).then((response)=>{
+		response.json().then((data)=>{
+			if(data.error){
+				//gal_info.textContent = data.error
+			}else{
+				//gal_info.textContent = 'New element! '
+				console.log('Comment deleted')
+				//location.reload(true) 
+			}
+		})
+	}).catch((e)=>{
+		console.log('ERROR in the comment deletion fetch function (delete_comment)',e)
+	})
+}
 //___________________________________________________________
 
 handle_like = ()=>{
 	$('.exhibit_like').hover(function(){
 		$(this).css('cursor', 'pointer');
-		console.log('like')
 	})
 
-	 $('.exhibit_like').on('click', function(){
-	  	document.getElementById(this.id).like_nr=3
-		 temp_like=temp_like+1;
-		 document.getElementById(this.id).innerHTML = document.getElementById(this.id).like_nr;
-	 	//like_click_id=this.id;
-	 	console.log(this.id)
+	 $('.exhibit_like').unbind('click').on('click', async function(){
+		const room_nr = 	this.id.slice(-2,-1)
+		const exhibit_nr =  this.id.slice(-1)
+		const exhibit_id = exhibits_ids[room_nr][exhibit_nr]
+
+		likes_count = await submit_like(exhibit_id)
+
+		//$('this')
+		//TUTAJ MA BYC ZMIANA WYSWIETLANIA IKONY I LICZBY
+	  	document.getElementById(this.id).like_nr = likes_count
+		document.getElementById(this.id).innerHTML = document.getElementById(this.id).like_nr;
+
 	 })
 }
 
+//BACKEND_(likes)____________________________________________
+submit_like = async(exhibit_id)=>{
+	likes_count = 0
+	await fetch('/reactions/switch_like',{method: 'POST',headers: {'Content-Type': 'application/json'},
+		body: JSON.stringify({
+			gallery_id: the_chosen_gall,
+			exhibit_id: exhibit_id
+		})
+	}).then(async(response)=>{
+		await response.json().then((data)=>{
+			if(data.error){
+				//gal_info.textContent = data.error
+			}else{
+				//gal_info.textContent = 'New element! '
+				console.log('Switched like! nr:', data.likes)
+				likes_count = data.likes
+			}
+		})
+	}).catch((e)=>{
+		console.log('ERROR in the funciton Submit comment',e)
+	})
+	return likes_count
+}
+//___________________________________________________________
 
 exhibit_hover = ()=>{ //can be used to display like and comment icons
 	$('.exhibit').hover(function(){  	//mouse enters
@@ -350,7 +395,7 @@ display_gallery = () =>{
 			await draw_gallery()
 			exhibit_hover()
 			const user = await getting_user(the_chosen_gall)
-			gal_info.textContent = 'The gallery of '//+user.name
+			gal_info.text( 'The gallery of ' +user.name )
 			$('#browse_butt').show()
 		})
 	})
