@@ -73,15 +73,14 @@ router.post('/reactions/switch_like', auth, async(req,res)=>{
 
 //gives all the comments from a given exhibit in a given gallery
 router.get('/reactions/:gal/:ex', auth, async(req,res)=>{
-	//const gallery = await Gallery.findById(req.params.gal)
-	//const exhibit = await Exhibit.findById(req.params.ex)
-	const reactions = await Reaction.findOne({gallery_id: req.params.gal})
-	//console.log(reactions.comments)
-	all_comments = reactions.comments
-	chosen_comments = all_comments.filter(c=>{
-		return c.exhibit_id == req.params.ex
-	})
-	//console.log('wybrane: ',chosen_comments)
+	reactions = await Reaction.findOne({gallery_id: req.body.gallery_id})
+	chosen_comments = {}
+	if(reactions){ //there were no reactions yet
+		all_comments = reactions.comments
+		chosen_comments = all_comments.filter(c=>{
+			return c.exhibit_id == req.params.ex
+		})
+	}
 
 	try{
 		res.send(chosen_comments)
@@ -101,8 +100,8 @@ router.post('/reactions/submit_comment', auth, async(req,res)=>{
 
 	const reaction_data = {
 		exhibit_id: req.body.exhibit_id,
-		author_id: req.user._id,
-		comment_content: req.body.comment_content
+		comment_content: req.body.comment_content,
+		author_id: req.user._id
 	}
 	reactions.comments.push( reaction_data )
 

@@ -63,15 +63,15 @@
 
 	<!-- Mustache exhibit template: -->
 	<script id="exhibit-template" type="text/html">
-		<div class="exhibit">
+		<div class="exhibit_browse">
 			<img src="[[img_src]]" class="exhibit_category_image"></img>
 			<div class="exhibit_bottom">
 				<h5>[[prev_title]]</h5>
 				<h6>[[prev_title2]]</h6>
 			</div>
-			<div class="exhibit_reaction"> 44 </div>
-            <img src="/img/points.png" class="exhibit_like"></img>
-            <img src="/img/comment.png" class="exhibit_comment" id = [[ prev_id ]] > </img>		
+			<div class="exhibit_reaction" id=[[exhibit_id]]> [[like_nr]] </div>
+            <img src="/img/points.png" class="exhibit_like" id=[[exhibit_id]] ></img>
+            <img src="/img/comment.png" class="exhibit_comment" id=[[exhibit_id]]></img>		
 		</div>
  
 	</script>

@@ -12,6 +12,8 @@ var categories = []
 var new_ex_form = document.querySelector('#form_modal')
 var input_content = document.querySelector('#input_comment')
 var modal_return_id = 0
+var like_click_id = 0 //?
+var exhibits_ids = []
 
 //Mustache templates
 prev_template = $('#preview-template').html()
@@ -141,6 +143,7 @@ draw_gallery = async()=>{
 					room = await draw_room(data,r);
 					$('#rooms').append(room);
 					handle_comment();
+					handle_like();
 				}
 			})
 		}).catch((e)=>{
@@ -168,11 +171,16 @@ draw_room = (data,r)=>{
 	var title = $('<h2></h2>').text(categories[r]) //name of the room - category
 	room.append(title);
 	
+	var ex_ids_row = []
 	for(var e=0; e<data.length; e++){	//EXHIBITS
+		ex_ids_row.push(data[e]._id)
+		//exhibits_ids[r].push(data[e]._id) 
+
 		div = draw_exhibit(data,r,e)
 		room.append(div);
 	}
-	
+	exhibits_ids[r] = ex_ids_row
+
 	return room
 }
 
@@ -181,7 +189,8 @@ draw_exhibit = (data, r,e)=>{
 		img_src:		process_img_buffer(data[e].picture),
 		prev_title: 	data[e].title,
 		prev_title2:	data[e].content,
-		prev_id:		data[e]._id
+		exhibit_id:		'exhibit_'+r+e,
+		like_nr:		'lel'
 	})
 	return ex
 }
@@ -200,42 +209,56 @@ process_img_buffer = (pic)=>{
 
 
 handle_comment = ()=>{
+	exhibit_id = ''
 	$('.exhibit_comment').hover(function(){
 		$(this).css('cursor', 'pointer');
-		console.log('comment')
-
 	})
 	const span = $("#close_modal")
 		
 	$('.exhibit_comment').on('click', async function(){ //opening comment modal
-		modal_return_id=this.id;
-		console.log(modal_return_id)
 		$("#myModal2").css("display", "block");
-		gallery_id = '100000000000000000000003'
-		exhibit_id = '5f8c384340724f55f8f5211b'
+		const room_nr = 	this.id.slice(-2,-1)
+		const exhibit_nr =  this.id.slice(-1)
+		const gallery_id = the_chosen_gall
+		const exhibit_id = exhibits_ids[room_nr][exhibit_nr]
+
 		comments_ar = await get_comments(gallery_id,exhibit_id)
 		const in_mod = Mustache.render(modal_inner_template, {
 			comments: comments_ar
-			// "comments": [
-			//   { "comment_content": "resque" },
-			//   { "comment_content": "hub" },
-			//   { "comment_content": "rip" },
-			//   { "comment_content": "4" },
-			//   { "comment_content": "555555" }
-			// ]
-		  })
-		$("#scroll_obj").append(in_mod)
+		})
+		$("#scroll_obj").append(in_mod) //shows comments
+
+		handle_comment_modal_button(exhibit_id)
 	})	
 	
 	//closing the modal
 	span.on('click', function() {
 		$("#myModal2").css("display", "none");
 	})
-	
-	handle_modal_button()
+
+	//troche slabo bo 2 konwencje, jQuery i ponizsza. ale wazne ze dziala!
+	var myM = document.querySelector('#myModal2')
+	window.onclick = function(event) {
+		if (event.target == myM) {
+			myM.style.display = "none" ;
+		}
+	}
 }
 
-get_comments = async(gallery_id,exhibit_id)=>{
+handle_comment_modal_button = async(exhibit_id)=>{
+	//this function joins both new exhibit and new category, cz. both use the same modal
+	new_ex_form.addEventListener('submit',(e)=>{ //po wcisnieciu buttona w modalu
+		e.preventDefault()
+		comment_txt = input_content.value
+		
+		submit_comment(comment_txt, exhibit_id)
+
+		$("#myModal2").css("display", "none");
+	})	
+}
+
+//BACKEND_(comments)_________________________________________
+get_comments = async(gallery_id, exhibit_id)=>{
 	//getting the comments of an exhibit:
 	comments = []
 	await fetch('/reactions/'+gallery_id+'/'+exhibit_id,{method: 'GET'}).then(async(response)=>{
@@ -252,18 +275,42 @@ get_comments = async(gallery_id,exhibit_id)=>{
 	return comments
 }
 
-handle_modal_button = async()=>{
-	//this function joins both new exhibit and new category, cz. both use the same modal
-	new_ex_form.addEventListener('submit',(e)=>{ //po wcisnieciu buttona w modalu
-		e.preventDefault()
-		$("#myModal2").css("display", "none");
+submit_comment = async(comment_txt, exhibit_id)=>{
+	fetch('/reactions/submit_comment',{method: 'POST',headers: {'Content-Type': 'application/json'},
+		body: JSON.stringify({
+			gallery_id: the_chosen_gall,
+			exhibit_id: exhibit_id,
+			comment_content: comment_txt
+		})
+	}).then((response)=>{
+		response.json().then((data)=>{
+			if(data.error){
+				//gal_info.textContent = data.error
+			}else{
+				//gal_info.textContent = 'New element! '
+				console.log('Comment submitted!')
+				//location.reload(true) 
+			}
+		})
+	}).catch((e)=>{
+		console.log('ERROR in the funciton Submit comment',e)
+	})
+}
+//___________________________________________________________
 
-		content = input_content.value
-		id = modal_return_id 
-		console.log(id)
-		
-		
-	})	
+handle_like = ()=>{
+	$('.exhibit_like').hover(function(){
+		$(this).css('cursor', 'pointer');
+		console.log('like')
+	})
+
+	 $('.exhibit_like').on('click', function(){
+	  	document.getElementById(this.id).like_nr=3
+		 temp_like=temp_like+1;
+		 document.getElementById(this.id).innerHTML = document.getElementById(this.id).like_nr;
+	 	//like_click_id=this.id;
+	 	console.log(this.id)
+	 })
 }
 
 

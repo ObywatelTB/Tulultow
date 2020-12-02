@@ -12,7 +12,7 @@ var categories = []				//all c. stored in gallery.categories
 var new_ex_cats = [] 			//new-exhibit categories
 var new_exhibit_category = ''
 var new_category = ''			//while creating new category
-var exhibits_ids = [];			//used while deleting exhibits
+var exhibits_ids = []			//used while deleting exhibits
 
 var buttons_count = 0
 var buttons_array = []
