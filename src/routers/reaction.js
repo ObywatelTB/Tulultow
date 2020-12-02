@@ -73,7 +73,7 @@ router.post('/reactions/switch_like', auth, async(req,res)=>{
 
 //gives all the comments from a given exhibit in a given gallery
 router.get('/reactions/:gal/:ex', auth, async(req,res)=>{
-	reactions = await Reaction.findOne({gallery_id: req.body.gallery_id})
+	reactions = await Reaction.findOne({gallery_id: req.params.gal})
 	chosen_comments = {}
 	if(reactions){ //there were no reactions yet
 		all_comments = reactions.comments
@@ -81,7 +81,7 @@ router.get('/reactions/:gal/:ex', auth, async(req,res)=>{
 			return c.exhibit_id == req.params.ex
 		})
 	}
-
+	//console.log(reactions)
 	try{
 		res.send(chosen_comments)
 	}catch(e){
@@ -91,7 +91,7 @@ router.get('/reactions/:gal/:ex', auth, async(req,res)=>{
 
 
 //executed when submitting a comment
-router.post('/reactions/submit_comment', auth, async(req,res)=>{
+router.post('/reactions/comment', auth, async(req,res)=>{
 	reactions = await Reaction.findOne({gallery_id: req.body.gallery_id})
 	if(!reactions){ //its the first like/comment in the gallery
 		reactions = await new Reaction({ gallery_id: req.body.gallery_id})
@@ -115,8 +115,8 @@ router.post('/reactions/submit_comment', auth, async(req,res)=>{
 }) 
 
 //executed when deleting a comment
-router.post('/reactions/delete_comment', auth, async(req,res)=>{
-	reactions = await Reaction.findOne({gallery_id: req.body.gallery_id})
+router.delete('/reactions/comment/:gal/:com', auth, async(req,res)=>{
+	reactions = await Reaction.findOne({gallery_id: req.params.gal})
 
 	const reaction_data = {
 		exhibit_id: req.body.exhibit_id,
@@ -131,6 +131,17 @@ router.post('/reactions/delete_comment', auth, async(req,res)=>{
 		res.send(reactions)
 	}catch(e){
 		res.status(500).send(e)
+	}
+
+
+	const gallery = await Gallery.findOne({owner: req.user._id})
+	try{
+		const exhibit = await Exhibit.findOneAndDelete({ _id: req.params.id, owner: gallery._id})
+		if(!exhibit)
+			return res.status(404).send()
+		res.send(exhibit)
+	}catch(e){
+		res.status(505).send(e)
 	}
 }) 
 

@@ -32,7 +32,7 @@
 	  <div class="modal_comments-content">
 		<span class="close" id="close_modal">&times;</span>
 		<p id="modal_p">Comments</p>
-			<div class="scrollmenu" id="scroll_obj">
+			<div class="scrollmenu" id="scroll_obj"> 
 			<!-- A place for the modal Mustache template -->
 			</div>
 		<form id="form_modal">
@@ -50,7 +50,7 @@
 	<div id="testowy"></div>
 	
 	<!-- Mustache Templates ________________________________________________ -->
-	<!-- Mustache template example: -->
+	<!-- Mustache preview template: -->
 	<script id="preview-template" type="text/html">
 		<div class="preview" id="[[prev_id]]">
 			<img class="portrait" src="[[img_src]]"></img>
@@ -76,13 +76,15 @@
  
 	</script>
 		
-	<!-- Mustache template: -->
+	<!-- Mustache modal inner template  -->
 	<script id="modal-inner-template" type="text/html">
-		<ul>
-			[[#comments]]
-				<li><p class="scrollmenu_p">[[comment_content]]</p></li>
-			[[/comments]]
-		</ul>
+		<div class="scrollmenu" id="scroll_obj">
+			<ul>
+				[[#comments]]
+					<li><p class="scrollmenu_p">[[comment_content]]</p></li>
+				[[/comments]]
+			</ul>
+		</div>
 	</script>
 	
 	

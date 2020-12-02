@@ -9,7 +9,6 @@ var recommended_nr = 0
 var users = []  //array of owners of the recommended galleries
 var the_chosen_gall = '' //mongodb id of the chosen gallery
 var categories = []
-var new_ex_form = document.querySelector('#form_modal')
 var input_content = document.querySelector('#input_comment')
 var modal_return_id = 0
 var like_click_id = 0 //?
@@ -215,7 +214,8 @@ handle_comment = ()=>{
 	})
 	const span = $("#close_modal")
 		
-	$('.exhibit_comment').on('click', async function(){ //opening comment modal
+	//opening comment modal
+	$('.exhibit_comment').unbind('click').on('click', async function(){ 
 		$("#myModal2").css("display", "block");
 		const room_nr = 	this.id.slice(-2,-1)
 		const exhibit_nr =  this.id.slice(-1)
@@ -223,10 +223,15 @@ handle_comment = ()=>{
 		const exhibit_id = exhibits_ids[room_nr][exhibit_nr]
 
 		comments_ar = await get_comments(gallery_id,exhibit_id)
-		const in_mod = Mustache.render(modal_inner_template, {
+		// comments_ar = comments_ar.map((c)=>{
+		// 	return {comment_content: c.comment_content}
+		// })
+		
+		
+		in_mod = Mustache.render(modal_inner_template, {
 			comments: comments_ar
 		})
-		$("#scroll_obj").append(in_mod) //shows comments
+		$("#scroll_obj").replaceWith(in_mod) //shows comments
 
 		handle_comment_modal_button(exhibit_id)
 	})	
@@ -245,14 +250,12 @@ handle_comment = ()=>{
 	}
 }
 
-handle_comment_modal_button = async(exhibit_id)=>{
+handle_comment_modal_button = (exhibit_id)=>{
 	//this function joins both new exhibit and new category, cz. both use the same modal
-	new_ex_form.addEventListener('submit',(e)=>{ //po wcisnieciu buttona w modalu
+	$("#form_modal").unbind('submit').bind("submit",  function(e){
 		e.preventDefault()
 		comment_txt = input_content.value
-		
 		submit_comment(comment_txt, exhibit_id)
-
 		$("#myModal2").css("display", "none");
 	})	
 }
@@ -266,6 +269,7 @@ get_comments = async(gallery_id, exhibit_id)=>{
 			if(data.error){
 				console.log(data.error)
 			}else{
+				//console.log('dostalem komentarze, to one: ',data)
 				comments = data
 			}
 		})
@@ -275,7 +279,7 @@ get_comments = async(gallery_id, exhibit_id)=>{
 	return comments
 }
 
-submit_comment = async(comment_txt, exhibit_id)=>{
+submit_comment = (comment_txt, exhibit_id)=>{
 	fetch('/reactions/submit_comment',{method: 'POST',headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify({
 			gallery_id: the_chosen_gall,
@@ -288,7 +292,7 @@ submit_comment = async(comment_txt, exhibit_id)=>{
 				//gal_info.textContent = data.error
 			}else{
 				//gal_info.textContent = 'New element! '
-				console.log('Comment submitted!')
+				console.log('Comment submitted! comm:')
 				//location.reload(true) 
 			}
 		})
