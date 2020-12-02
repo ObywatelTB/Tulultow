@@ -12,7 +12,7 @@ set_picture = async(exhibit, sent_buffer, category)=>{
 	if(sent_buffer){
 		
 	}else{ //domyslne foto
-		if ("Song Book".includes(category)){
+		if ("Song Book Game Film".includes(category)){
 			file_path = '../../public/img/cats/'+ category.toLowerCase() +'.png'
 		}else{
 			file_path = '../../public/img/cats/other.png'	
