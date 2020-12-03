@@ -1,6 +1,6 @@
+
 //drawing the user's gallery
-// $(document).ready(function(){
-$(function(){
+$(document).ready(function(){
 
 const gal_info = $('#browse_info')
 const elements_nr = 3  //number of previews visible in one line!
@@ -190,7 +190,7 @@ draw_exhibit = (data, r,e)=>{
 		prev_title: 	data[e].title,
 		prev_title2:	data[e].content,
 		exhibit_id:		'exhibit_'+r+e,
-		like_nr:		data[e].likes
+		like_nr:		'lel'
 	})
 	return ex
 }
@@ -254,13 +254,26 @@ handle_comment = ()=>{
 
 handle_comment_modal_deletion = async(comments_ar)=>{
 	$('.scrollmenu_p').hover(function(){  	//mouse enters
-		const ex_id = $(this).attr('comment_content')
-		console.log(ex_id)
-		var del_id = '#0'
-		$(del_id).css( "display", "inline" )
+		var ex_id = $(this).attr('id')
+		var del_id = '#'+ ex_id.substring(2)
+		var index_of_comment=0;
+		for(var i =0;i < comments_ar.length;i++)
+		{
+			if(comments_ar[i]._id.toString() ==  ex_id.substring(2))
+			{
+				index_of_comment=i;
+				console.log("foud it!!!")
+			}
+
+		}
+		console.log(comments_ar[index_of_comment].author_id)
+		if(comments_ar[index_of_comment].author_id.toString() == '000000000000000000000001')
+		 	$(del_id).css( "display", "inline" )
+		  
 	}, function(){						//mouse leaves
-		const ex_id = $(this).attr('id')
-		var del_id = '#0'
+		var ex_id = $(this).attr('id')
+		var del_id = '#'+ ex_id.substring(2)
+		
 		$(del_id).css( "display", "none" )
 	})
 }
@@ -286,7 +299,7 @@ get_comments = async(gallery_id, exhibit_id)=>{
 			if(data.error){
 				console.log(data.error)
 			}else{
-				//console.log('dostalem komentarze, to one: ',data)
+				console.log('dostalem komentarze, to one: ',data)
 				comments = data
 			}
 		})
@@ -317,68 +330,23 @@ submit_comment = (comment_txt, exhibit_id)=>{
 		console.log('ERROR in the funciton Submit comment',e)
 	})
 }
-
-delete_comment = (gallery_id, comment_id)=>{
-	fetch('/reactions/comment/'+ gallery_id + '/' + comment_id, {method: 'DELETE'}).then((response)=>{
-		response.json().then((data)=>{
-			if(data.error){
-				//gal_info.textContent = data.error
-			}else{
-				//gal_info.textContent = 'New element! '
-				console.log('Comment deleted')
-				//location.reload(true) 
-			}
-		})
-	}).catch((e)=>{
-		console.log('ERROR in the comment deletion fetch function (delete_comment)',e)
-	})
-}
 //___________________________________________________________
 
 handle_like = ()=>{
 	$('.exhibit_like').hover(function(){
 		$(this).css('cursor', 'pointer');
+		console.log('like')
 	})
 
-	 $('.exhibit_like').unbind('click').on('click', async function(){
-		const room_nr = 	this.id.slice(-2,-1)
-		const exhibit_nr =  this.id.slice(-1)
-		const exhibit_id = exhibits_ids[room_nr][exhibit_nr]
-
-		likes_count = await submit_like(exhibit_id)
-
-		//$('this')
-		//TUTAJ MA BYC ZMIANA WYSWIETLANIA IKONY I LICZBY
-	  	document.getElementById(this.id).like_nr = likes_count
-		document.getElementById(this.id).innerHTML = document.getElementById(this.id).like_nr;
-
+	 $('.exhibit_like').on('click', function(){
+	  	document.getElementById(this.id).like_nr=3
+		 temp_like=temp_like+1;
+		 document.getElementById(this.id).innerHTML = document.getElementById(this.id).like_nr;
+	 	//like_click_id=this.id;
+	 	console.log(this.id)
 	 })
 }
 
-//BACKEND_(likes)____________________________________________
-submit_like = async(exhibit_id)=>{
-	likes_count = 0
-	await fetch('/reactions/switch_like',{method: 'POST',headers: {'Content-Type': 'application/json'},
-		body: JSON.stringify({
-			gallery_id: the_chosen_gall,
-			exhibit_id: exhibit_id
-		})
-	}).then(async(response)=>{
-		await response.json().then((data)=>{
-			if(data.error){
-				//gal_info.textContent = data.error
-			}else{
-				//gal_info.textContent = 'New element! '
-				console.log('Switched like! nr:', data.likes)
-				likes_count = data.likes
-			}
-		})
-	}).catch((e)=>{
-		console.log('ERROR in the funciton Submit comment',e)
-	})
-	return likes_count
-}
-//___________________________________________________________
 
 exhibit_hover = ()=>{ //can be used to display like and comment icons
 	$('.exhibit').hover(function(){  	//mouse enters
@@ -399,7 +367,7 @@ exhibit_hover = ()=>{ //can be used to display like and comment icons
 
 
 display_gallery = () =>{
-	$('.preview').on('mousemove',function (){  	//mouse enters
+	$('.preview').hover(function (){  	//mouse enters
 		const prev_id = $(this).attr('id')
 		const row = parseInt(prev_id.slice(-2,-1))
 		const col = parseInt(prev_id.slice(-1))
@@ -407,13 +375,12 @@ display_gallery = () =>{
 		the_chosen_gall = recommended_galleries[index].gallery
 		
 		$(this).css('cursor', 'pointer');
-
 		$(this).unbind().click(async function(){
 			$('#previews').hide()
 			await draw_gallery()
 			exhibit_hover()
 			const user = await getting_user(the_chosen_gall)
-			gal_info.text( 'The gallery of ' +user.name )
+			gal_info.textContent = 'The gallery of '//+user.name
 			$('#browse_butt').show()
 		})
 	})
