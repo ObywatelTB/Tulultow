@@ -234,6 +234,7 @@ handle_comment = ()=>{
 		$("#scroll_obj").replaceWith(in_mod) //shows comments
 
 		handle_comment_modal_button(exhibit_id)
+		handle_comment_modal_deletion(comments_ar)
 	})	
 	
 	//closing the modal
@@ -249,6 +250,21 @@ handle_comment = ()=>{
 		}
 	}
 }
+
+handle_comment_modal_deletion = async(comments_ar)=>{
+	$('.scrollmenu_p').hover(function(){  	//mouse enters
+		const ex_id = $(this).attr('comment_content')
+		console.log(ex_id)
+		var del_id = '#0'
+		$(del_id).css( "display", "inline" )
+	}, function(){						//mouse leaves
+		const ex_id = $(this).attr('id')
+		var del_id = '#0'
+		$(del_id).css( "display", "none" )
+	})
+}
+
+
 
 handle_comment_modal_button = (exhibit_id)=>{
 	//this function joins both new exhibit and new category, cz. both use the same modal
@@ -280,7 +296,7 @@ get_comments = async(gallery_id, exhibit_id)=>{
 }
 
 submit_comment = (comment_txt, exhibit_id)=>{
-	fetch('/reactions/submit_comment',{method: 'POST',headers: {'Content-Type': 'application/json'},
+	fetch('/reactions/comment',{method: 'POST',headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify({
 			gallery_id: the_chosen_gall,
 			exhibit_id: exhibit_id,
