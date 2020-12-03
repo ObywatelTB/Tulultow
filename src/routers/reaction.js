@@ -6,7 +6,7 @@ const router = express.Router()
 const auth = require('../middleware/auth')
 
 
-
+// LIKES_____________________________________________________________
 
 //switches like reaction (like/dislike)  - executed when clicking the like button
 router.post('/reactions/switch_like', auth, async(req,res)=>{
@@ -62,14 +62,19 @@ router.post('/reactions/switch_like', auth, async(req,res)=>{
 	}
 	//console.log(exhibit)
 	await reactions.save()
-	
 	try{
-		res.send(reactions)
+		res.send({likes: exhibit.likes})
 	}catch(e){
 		res.status(500).send(e)
 	}
 }) 
 
+
+
+
+
+
+// COMMENTS______________________________________________________
 
 //gives all the comments from a given exhibit in a given gallery
 router.get('/reactions/:gal/:ex', auth, async(req,res)=>{
@@ -88,7 +93,6 @@ router.get('/reactions/:gal/:ex', auth, async(req,res)=>{
 		res.status(500).send(e)
 	}
 })
-
 
 //executed when submitting a comment
 router.post('/reactions/comment', auth, async(req,res)=>{
@@ -116,71 +120,24 @@ router.post('/reactions/comment', auth, async(req,res)=>{
 
 //executed when deleting a comment
 router.delete('/reactions/comment/:gal/:com', auth, async(req,res)=>{
-	reactions = await Reaction.findOne({gallery_id: req.params.gal})
-
-	const reaction_data = {
-		exhibit_id: req.body.exhibit_id,
-		author_id: req.user._id,
-		comment_id: req.body.comment
-	}
-	reactions.comments.push( reaction_data )
-
-	//console.log(exhibit)
-	await reactions.save()
 	try{
-		res.send(reactions)
-	}catch(e){
-		res.status(500).send(e)
-	}
-
-
-	const gallery = await Gallery.findOne({owner: req.user._id})
-	try{
-		const exhibit = await Exhibit.findOneAndDelete({ _id: req.params.id, owner: gallery._id})
-		if(!exhibit)
+		reactions = await Reaction.findOne({gallery_id: req.params.gal})
+		if(!reactions)
 			return res.status(404).send()
-		res.send(exhibit)
+
+		com_index = reactions.comments.findIndex(c=>{
+			return c._id == req.params.com
+		})
+		console.log('ind',reactions.comments[com_index])
+		removed = reactions.comments.splice(com_index,1)	//deletion of a record
+		await reactions.save()
+		
+		res.send(removed)
 	}catch(e){
 		res.status(505).send(e)
 	}
 }) 
 
-
-
-
-
-
-/* 
-//pokaz wszystkie reakcje w galerii zalogowanego uzytkownika
-router.get('/exhibits/:room', auth, async(req,res)=>{
-	const gallery = await Gallery.findOne({owner: req.user._id})
-	var exhibits = {}
-	if(gallery.rooms[req.params.room]){
-		exhibits_ids = gallery.rooms[req.params.room].room.exhibits
-		exhibits = await Exhibit.find({'_id': { $in : exhibits_ids }})
-	}else{
-		console.log('get exhibits. nie ma tej kategorii')
-	}
-	try{
-		res.send(exhibits)
-	}catch(e){
-		res.status(500).send(e)
-	}
-})
-
-//DELETE A REACTION
-router.delete('/exhibits/:id', auth, async(req,res)=>{
-	const gallery = await Gallery.findOne({owner: req.user._id})
-	try{
-		const exhibit = await Exhibit.findOneAndDelete({ _id: req.params.id, owner: gallery._id})
-		if(!exhibit)
-			return res.status(404).send()
-		res.send(exhibit)
-	}catch(e){
-		res.status(505).send(e)
-	}
-}) 
- */
 
 
 module.exports = router
