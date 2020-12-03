@@ -1,5 +1,6 @@
 //drawing the user's gallery
-$(document).ready(function(){
+// $(document).ready(function(){
+$(function(){
 
 const gal_info = $('#browse_info')
 const elements_nr = 3  //number of previews visible in one line!
@@ -382,7 +383,7 @@ exhibit_hover = ()=>{ //can be used to display like and comment icons
 
 
 display_gallery = () =>{
-	$('.preview').hover(function (){  	//mouse enters
+	$('.preview').on('mousemove',function (){  	//mouse enters
 		const prev_id = $(this).attr('id')
 		const row = parseInt(prev_id.slice(-2,-1))
 		const col = parseInt(prev_id.slice(-1))
@@ -390,6 +391,7 @@ display_gallery = () =>{
 		the_chosen_gall = recommended_galleries[index].gallery
 		
 		$(this).css('cursor', 'pointer');
+
 		$(this).unbind().click(async function(){
 			$('#previews').hide()
 			await draw_gallery()
