@@ -32,8 +32,7 @@ def im_2_b64(image):
 
 db = connect(settings.MONGO_DATABASE_NAME)
 
-img = Image.new("RGB", (100, 100), color=(73, 109, 137))
-img_b64 = im_2_b64(img)
+
 
 basepath = path.dirname(__file__)
 filepath = path.abspath(path.join(basepath, "..", "..", "config/admin.json"))
@@ -150,6 +149,17 @@ def createUserAndGalleriesDatabase(n):
 
 
     for x in range(n):
+        rnd = random.randint(0,3)
+        img_path='g'
+        if rnd==0:
+            img_path='b'
+        elif rnd==1:
+            img_path='r'
+
+        path1 = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '../..', 'public//img//user_'+img_path+'.png'))
+        img =  Image.open(path1)
+        img_b64 = im_2_b64(img)
+
         tempId = (str(x+1)).zfill(24)
         user1 = Users(
             _id=tempId,
