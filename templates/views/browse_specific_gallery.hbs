@@ -66,8 +66,10 @@
 				<h6>[[prev_title2]]</h6>
 			</div>
 			<div class="exhibit_reaction" id=[[exhibit_id]]> [[like_nr]] </div>
-            <img src="/img/points.png" class="exhibit_like" id=[[exhibit_id]] ></img>
-            <img src="/img/comment.png" class="exhibit_comment" id=[[exhibit_id]]></img>		
+             <img src="/img/like_text.png" class="exhibit_like" id=[[exhibit_id]] ></img> 
+             <img src="/img/comment_text.png" class="exhibit_comment" id=[[exhibit_id]]></img> 	
+
+					
 		</div>
  
 	</script>
@@ -77,16 +79,23 @@
 		<div class="scrollmenu" id="scroll_obj">
 			<ul>
 				[[#comments]]
-					<li><span class="scrollmenu_p">
-						[[comment_content]]				
-					</span>
-					<div style="position: relative; width: 0; height: 0">
-   					 <span class="delete_comment" id=0>×</span> 
-					</div>
-
+					<li>
+						<div class="scrollmenu_p" id = "x_[[_id]]">
+							
+						
+							
+							[[comment_content]]
+							<div style="position: relative; width: 0; height: 0">
+   							 <span class="delete_comment" id=[[_id]]>×</span> 
+							</div>	
+						<div class =  "modal_comment_line">
+   							<span class="modal_comments-user"> [[author_id]] </span> 
+							<span class="modal_comments-date"> 01.01.01 14:50</span> 		
+							</div>
+						
 					
-					</li>
-					
+						</div> 
+					</li>				
 				[[/comments]]
 				
 					
@@ -95,6 +104,8 @@
 	</script>
 	
 	
+
+
 	{{>footer}}
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
 	<script type="text/javascript" src="/js/logout.js"></script>

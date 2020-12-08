@@ -1,5 +1,5 @@
 //drawing the user's gallery
-// $(document).ready(function(){
+
 
 
 const gal_info = $('#browse_info')
@@ -17,6 +17,7 @@ var exhibits_ids = []
 
 //Mustache templates
 prev_template = $('#preview-template').html()
+
 
 $(function(){
 

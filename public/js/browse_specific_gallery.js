@@ -147,13 +147,25 @@ handle_comment = ()=>{
 
 handle_comment_modal_deletion = async(comments_ar)=>{
 	$('.scrollmenu_p').hover(function(){  	//mouse enters
-		const ex_id = $(this).attr('comment_content')
-		console.log(ex_id)
-		var del_id = '#0'
-		$(del_id).css( "display", "inline" )
+		var ex_id = $(this).attr('id')
+		var del_id = '#'+ ex_id.substring(2)
+		var index_of_comment=0;
+		for(var i =0;i < comments_ar.length;i++)
+		{
+			if(comments_ar[i]._id.toString() ==  ex_id.substring(2))
+			{
+				index_of_comment=i;
+				console.log("foud it!!!")
+			}
+
+		}
+		console.log(comments_ar[index_of_comment].author_id)
+		if(comments_ar[index_of_comment].author_id.toString() == '000000000000000000000001')
+		 	$(del_id).css( "display", "inline" )
+
 	}, function(){						//mouse leaves
-		const ex_id = $(this).attr('id')
-		var del_id = '#0'
+		var ex_id = $(this).attr('id')
+		var del_id = '#'+ ex_id.substring(2)
 		$(del_id).css( "display", "none" )
 	})
 }
