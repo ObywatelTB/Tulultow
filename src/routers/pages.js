@@ -29,6 +29,14 @@ router.get('/browse_galleries', auth,(req,res)=>{
 	})
 })
 
+router.get('/browse_galleries/:gal', auth,(req,res)=>{
+	res.render('browse_specific_gallery', {
+		title: 'Browse galleries',
+		name: 'tom h',
+		gallery_id: req.params.gal
+	})
+})
+
 router.get('/settings', auth, async(req,res)=>{
 	try{
 		const user = req.user

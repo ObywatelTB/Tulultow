@@ -89,6 +89,17 @@ router.get('/users', async (req,res)=>{
 	}
 })
 
+router.get('/users/galleries', async (req,res)=>{
+	try{
+		gals = await User.find({}).populate('galleries')//.exec(async function(error, u) {
+
+		gals2 = gals.map(g => g.galleries)
+		res.send(gals2)
+	}catch(e){
+		res.status(500).send(e)
+	}
+})
+
 router.get('/users/me', auth, async (req,res)=>{
 	try{
 		const user = await req.user

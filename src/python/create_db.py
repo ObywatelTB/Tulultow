@@ -9,6 +9,7 @@ import base64
 import os
 from os import path
 from python_settings import settings
+from random_object_id import generate
 
 
 if sys.argv[1] == "dev":
@@ -32,8 +33,7 @@ def im_2_b64(image):
 
 db = connect(settings.MONGO_DATABASE_NAME)
 
-img = Image.new("RGB", (100, 100), color=(73, 109, 137))
-img_b64 = im_2_b64(img)
+
 
 basepath = path.dirname(__file__)
 filepath = path.abspath(path.join(basepath, "..", "..", "config/admin.json"))
@@ -150,15 +150,26 @@ def createUserAndGalleriesDatabase(n):
 
 
     for x in range(n):
-        tempId = (str(x+1)).zfill(24)
+        rnd = random.randint(0,3)
+        img_path='g'
+        if rnd==0:
+            img_path='b'
+        elif rnd==1:
+            img_path='r'
+
+        path1 = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '../..', 'public//img//user_'+img_path+'.png'))
+        img =  Image.open(path1)
+        img_b64 = im_2_b64(img)
+
+        tempId = generate()
         user1 = Users(
             _id=tempId,
             city="Krakow",
             country="Russia",
             administrator=False,
             date_of_birth=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
-            name="userRR " + str(x),
-            email="userR" + str(x) + "@gmail.com",
+            name="user00" + str(x),
+            email="user00" + str(x) + "@gmail.com",
             password="$2a$08$Md0BP6ApyYmZd/SLdIgb6eBmOTOAE1XQZZ4iNP6To8EqmTuoE4aFe",
             avatar=base64.decodebytes(img_b64),
             createdAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
@@ -168,7 +179,7 @@ def createUserAndGalleriesDatabase(n):
     userList_local = Users.objects()
 
     for x in range(n):
-        tempId = '1'+ (str(x + 1)).zfill(23)
+        tempId = generate()
         gal1 = Galleries(
             _id=tempId,
             owner=userList_local[x+1]._id,
@@ -286,16 +297,20 @@ if sys.argv[2] == "clear_db":
 	print('elko')
 	clearDatabaseAndCreateAdmin()
 elif sys.argv[2] == "fill_db":
-	createUserAndGalleriesDatabase(int(sys.argv[3]))
-	userList = Users.objects()
-	galleriesList = Galleries.objects()
-	createLinksBetweenUsers(userList)
-elif sys.argv[2] == "recommended initialisation":
+    createUserAndGalleriesDatabase(int(sys.argv[3]))
+    userList = Users.objects()
+    galleriesList = Galleries.objects()
+    createLinksBetweenUsers(userList)
+    for x in range(len(userList)):
+        createRecommendedForAllUsers(userList[x])
+        
+'''elif sys.argv[2] == "recommended initialisation":
     for x in range(len(userList)):
         createRecommendedForAllUsers(userList[x])
 elif sys.argv[2] == "recommended final":
-    for x in range(len(userList)):
-        createFinalList(userList[0])
+    print('elko')
+    #for x in range(len(userList)):
+    #    createFinalList(userList[x])'''
 
 
 
