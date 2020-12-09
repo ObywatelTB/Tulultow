@@ -155,12 +155,12 @@ handle_comment_modal_deletion = async(comments_ar)=>{
 			if(comments_ar[i]._id.toString() ==  ex_id.substring(2))
 			{
 				index_of_comment=i;
-				console.log("foud it!!!")
+				console.log("found it!!!")
 			}
 
 		}
 		console.log(comments_ar[index_of_comment].author_id)
-		if(comments_ar[index_of_comment].author_id.toString() == '000000000000000000000001')
+		if(comments_ar[index_of_comment].author_id.toString() == '5fcf9d174e10ee0308cb5033')
 		 	$(del_id).css( "display", "inline" )
 
 	}, function(){						//mouse leaves
@@ -325,14 +325,14 @@ display_gallery = async() =>{
 	exhibit_hover()
 
 	const user = await getting_user(the_chosen_gal)
-	gal_info.text( 'The gallery of ' + user.name)
+	gal_info.text( 'The gallery of ' + user.name +'.')
 	if (categories.length == 0){
 		$('#main-content').append('<h3>Apparently this user\'s gallery is empty!</h3>')
 	}
 	
 	$('#browse_butt').show()	
 	$('#browse_butt').on('click',function(){
-		location.reload(true) 
+		location.replace('/browse_galleries');
 	})
 }
 

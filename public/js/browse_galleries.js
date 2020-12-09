@@ -105,7 +105,7 @@ get_avatar = async(preview_gal_id)=>{
 
 
 previews = async()=>{
-	gal_info.text('Take a look at these galleries:')
+	gal_info.text('These galleries might interest you:')
 	$('#browse_butt').hide()
 	await getting_galleries()
 	

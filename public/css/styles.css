@@ -44,6 +44,21 @@ h1{
 
 
 
+.column {
+	float: left;
+	width: 50%;
+}
+  
+  /* Clear floats after the columns */
+.row:after 
+{
+	content: "";
+	display: table;
+	clear: both;
+}
+
+
+
 .weather-content{
 	flex-grow: 1;
 }
@@ -219,7 +234,7 @@ button.exhibit{
 }
 
 .landscape{
-	width: 350px;
+	width: 500px;
 }
 
 .portrait {
@@ -407,6 +422,7 @@ tr:hover{ background-color: #f5f5f5;}
 	margin-left: auto;
 	margin-right: auto;
 }
+
 
 
 
