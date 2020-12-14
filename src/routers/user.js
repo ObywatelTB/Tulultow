@@ -78,6 +78,16 @@ router.post('/users/logout', auth, async(req,res)=>{
 })
 
 
+//returns the name of the logged-in user
+router.get('/users/logged_name', auth, async(req, res)=>{
+	try{
+		res.send(req.user)
+	}catch(e){
+		res.status(500).send(e)
+	}
+})
+
+
 //chyba do wyrzucenia, zastapienia:
 //PONIZSZE TYLKO Z MYSLA O FAVOURITES:
 router.get('/users', async (req,res)=>{

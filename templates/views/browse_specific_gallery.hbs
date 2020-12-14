@@ -78,27 +78,20 @@
 	<script id="modal-inner-template" type="text/html">
 		<div class="scrollmenu" id="scroll_obj">
 			<ul>
-				[[#comments]]
-					<li>
-						<div class="scrollmenu_p" id = "x_[[_id]]">
-							
-						
-							
-							[[comment_content]]
-							<div style="position: relative; width: 0; height: 0">
-   							 <span class="delete_comment" id=[[_id]]>×</span> 
-							</div>	
+				[[#comments_data]]
+				<li>
+					<div class="scrollmenu_p" id = "x_[[_id]]">
+						[[comment_content]]
+						<div style="position: relative; width: 0; height: 0">
+							<span class="delete_comment" id=[[_id]]>×</span> 
+						</div>	
 						<div class =  "modal_comment_line">
-   							<span class="modal_comments-user"> [[author_id]] </span> 
-							<span class="modal_comments-date"> 01.01.01 14:50</span> 		
-							</div>
-						
-					
-						</div> 
-					</li>				
-				[[/comments]]
-				
-					
+							<span class="modal_comments-user"> [[author_name]] </span> 
+							<span class="modal_comments-date"> [[date]]</span> 		
+						</div>				
+					</div> 
+				</li>				
+				[[/comments_data]]	
 			</ul>
 		</div>
 	</script>

@@ -86,7 +86,8 @@ router.get('/reactions/:gal/:ex', auth, async(req,res)=>{
 			return c.exhibit_id == req.params.ex
 		})
 	}
-	//console.log(reactions)
+	// var xxx = chosen_comments[0]._id.getTimestamp()
+	// console.log('timeik: ', xxx)
 	try{
 		res.send(chosen_comments)
 	}catch(e){
@@ -105,7 +106,8 @@ router.post('/reactions/comment', auth, async(req,res)=>{
 	const reaction_data = {
 		exhibit_id: req.body.exhibit_id,
 		comment_content: req.body.comment_content,
-		author_id: req.user._id
+		author_id: req.user._id,
+		author_name: req.user.name
 	}
 	reactions.comments.push( reaction_data )
 

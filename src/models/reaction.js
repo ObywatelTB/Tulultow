@@ -29,6 +29,10 @@ const reactionSchema = mongoose.Schema({
 			required: true,
 			ref: 'User'
 		},
+		author_name:{
+			type: String,
+			required: true
+		},
 		comment_content:{
 			type: String,
 			required: true

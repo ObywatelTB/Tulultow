@@ -29,14 +29,12 @@ draw_gallery = async()=>{
 	await get_categories()
 	for(var r=0;r<categories.length;r++){	   						//ROOMS
 		 await fetch('/exhibits/'+ the_chosen_gal +'/'+r,{method: 'GET'}).then( async(response)=>{
-			await response.json().then(async(data)=>{
+			await response.json().then((data)=>{
 				if(data.error){
 					gal_info.textContent = data.error
 				}else{
-					room = await draw_room(data,r);
-					$('#rooms').append(room);
-					handle_comment();
-					handle_like();
+					room =  draw_room(data,r);
+					$('#rooms').append(room);	
 				}
 			})
 		}).catch((e)=>{
@@ -100,7 +98,7 @@ process_img_buffer = (pic)=>{
 }
 
 
-
+//_COMMENTS__________________________________________________
 handle_comment = ()=>{
 	exhibit_id = ''
 	$('.exhibit_comment').hover(function(){
@@ -108,7 +106,7 @@ handle_comment = ()=>{
 	})
 	const span = $("#close_modal")
 		
-	//opening comment modal
+	//opening comment modal. displaying comments
 	$('.exhibit_comment').unbind('click').on('click', async function(){ 
 		$("#myModal2").css("display", "block");
 		const room_nr = 	this.id.slice(-2,-1)
@@ -117,18 +115,21 @@ handle_comment = ()=>{
 		const exhibit_id = exhibits_ids[room_nr][exhibit_nr]
 
 		comments_ar = await get_comments(gallery_id,exhibit_id)
-		// comments_ar = comments_ar.map((c)=>{
-		// 	return {comment_content: c.comment_content}
-		// })
-		
-		
+
+		var options = { hour: 'numeric', minute: 'numeric',weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' };
+		comments_ar.map(el=>{ 	//getting the date from comment's _id
+			timestamp = el._id.toString().substring(0,8)
+			timestamp = new Date(parseInt(timestamp, 16)*1000)
+			el.date = timestamp.toLocaleDateString("en-GB", options)
+		})
+
 		in_mod = Mustache.render(modal_inner_template, {
-			comments: comments_ar
+			comments_data: comments_ar
 		})
 		$("#scroll_obj").replaceWith(in_mod) //shows comments
 
-		handle_comment_modal_button(exhibit_id)
-		handle_comment_modal_deletion(comments_ar)
+		handle_comment_submit_button(exhibit_id)
+		handle_comment_deletion(comments_ar)
 	})	
 	
 	//closing the modal
@@ -145,34 +146,7 @@ handle_comment = ()=>{
 	}
 }
 
-handle_comment_modal_deletion = async(comments_ar)=>{
-	$('.scrollmenu_p').hover(function(){  	//mouse enters
-		var ex_id = $(this).attr('id')
-		var del_id = '#'+ ex_id.substring(2)
-		var index_of_comment=0;
-		for(var i =0;i < comments_ar.length;i++)
-		{
-			if(comments_ar[i]._id.toString() ==  ex_id.substring(2))
-			{
-				index_of_comment=i;
-				console.log("found it!!!")
-			}
-
-		}
-		console.log(comments_ar[index_of_comment].author_id)
-		if(comments_ar[index_of_comment].author_id.toString() == '5fcf9d174e10ee0308cb5033')
-		 	$(del_id).css( "display", "inline" )
-
-	}, function(){						//mouse leaves
-		var ex_id = $(this).attr('id')
-		var del_id = '#'+ ex_id.substring(2)
-		$(del_id).css( "display", "none" )
-	})
-}
-
-
-
-handle_comment_modal_button = (exhibit_id)=>{
+handle_comment_submit_button = (exhibit_id)=>{
 	//this function joins both new exhibit and new category, cz. both use the same modal
 	$("#form_modal").unbind('submit').bind("submit",  function(e){
 		e.preventDefault()
@@ -180,6 +154,36 @@ handle_comment_modal_button = (exhibit_id)=>{
 		submit_comment(comment_txt, exhibit_id)
 		$("#myModal2").css("display", "none");
 	})	
+}
+
+handle_comment_deletion = async(comments_ar)=>{
+	const gallery_id = the_chosen_gal
+
+	$('.scrollmenu_p').on('mouseenter',async function(){  	//mouse enters
+		var ex_id = $(this).attr('id')
+		var del_id = '#'+ ex_id.substring(2)
+
+		var comment_ind=0
+		comments_ar.map((el,ind)=>{
+			if(el._id.toString() == ex_id.substring(2))
+			comment_ind = ind
+		})
+
+		logged_user_id = await get_loggedin_name()
+		if(comments_ar[comment_ind].author_id.toString() == logged_user_id)
+		{
+		 	$(del_id).css( "display", "inline" )
+		}
+		//deleting the comment
+		$(del_id).on('click', async function(){
+			await delete_comment(gallery_id, comments_ar[comment_ind]._id)
+			$("#myModal2").css("display", "none");
+		})
+	}).on('mouseleave', function(){						//mouse leaves
+		var ex_id = $(this).attr('id')
+		var del_id = '#'+ ex_id.substring(2)
+		$(del_id).css( "display", "none" )
+	})
 }
 
 //BACKEND_(comments)_________________________________________
@@ -223,9 +227,26 @@ submit_comment = (comment_txt, exhibit_id)=>{
 	})
 }
 
-delete_comment = (gallery_id, comment_id)=>{
-	fetch('/reactions/comment/'+ gallery_id + '/' + comment_id, {method: 'DELETE'}).then((response)=>{
-		response.json().then((data)=>{
+get_loggedin_name = async()=>{
+	//getting the name of the logged in user:
+	user_id = ''
+	await fetch('/users/logged_name', {method: 'GET'}).then(async(response)=>{
+		await response.json().then((data)=>{
+			if(data.error){
+				console.log(data.error)
+			}else{
+				user_id = data._id
+			}
+		})
+		}).catch((e)=>{
+			console.log('blad wewnatrz funkcji get_loggedin_name', e)
+		})
+	return user_id
+}
+
+delete_comment = async(gallery_id, comment_id)=>{
+	await fetch('/reactions/comment/'+ gallery_id + '/' + comment_id, {method: 'DELETE'}).then(async(response)=>{
+		await response.json().then((data)=>{
 			if(data.error){
 				//gal_info.textContent = data.error
 			}else{
@@ -240,6 +261,8 @@ delete_comment = (gallery_id, comment_id)=>{
 }
 //___________________________________________________________
 
+
+//_LIKES_____________________________________________________
 handle_like = ()=>{
 	$('.exhibit_like').hover(function(){
 		$(this).css('cursor', 'pointer');
@@ -283,7 +306,7 @@ submit_like = async(exhibit_id)=>{
 	})
 	return likes_count
 }
-//_BACKEND, user__________________________________________________________
+//_BACKEND, user (author of the gallery)_____________________
 getting_user = async(gallery_id)=>{
 	var new_user = {}
 	await fetch('/galleries/owner/'+gallery_id, {method: 'GET'})
@@ -302,6 +325,7 @@ getting_user = async(gallery_id)=>{
 }
 //___________________________________________________________
 
+//do wywalenia?
 exhibit_hover = ()=>{ //can be used to display like and comment icons
 	$('.exhibit').hover(function(){  	//mouse enters
 		// const ex_id = $(this).attr('id')
@@ -322,7 +346,9 @@ exhibit_hover = ()=>{ //can be used to display like and comment icons
 
 display_gallery = async() =>{
 	await draw_gallery()
-	exhibit_hover()
+	handle_comment();
+	handle_like();
+	//exhibit_hover()
 
 	const user = await getting_user(the_chosen_gal)
 	gal_info.text( 'The gallery of ' + user.name +'.')
@@ -337,11 +363,10 @@ display_gallery = async() =>{
 }
 
 
-//=====main function
+//_MAIN___________________________________________________________
 main =  async ()=>{
 	Mustache.tags = ["[[", "]]"];
 	
-	//DISPLAYING ACTUAL GALLERY
 	display_gallery()
 }
 
