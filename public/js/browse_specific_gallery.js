@@ -81,7 +81,8 @@ draw_exhibit = (data, r,e)=>{
 		prev_title: 	data[e].title,
 		prev_title2:	data[e].content,
 		exhibit_id:		'exhibit_'+r+e,
-		like_nr:		data[e].likes
+		like_nr:		data[e].likes,
+		likes_givers:	 ['Saab', 'Volvo', 'BMW']
 	})
 	return ex
 }
