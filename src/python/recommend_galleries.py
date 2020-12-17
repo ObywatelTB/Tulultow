@@ -1,17 +1,26 @@
 ﻿import json
 import sys
 import os
-from mongoengine import *
 from python_settings import settings
+from mongoengine import *
 
-if sys.argv[1] == "dev":
-    os.environ["SETTINGS_MODULE"] = 'settings'
+ON_HEROKU = 'ON_HEROKU' in os.environ	
+
+if ON_HEROKU:
+    print('Im in Heroku')
+    os.environ["SETTINGS_MODULE"] = 'settings_heroku'
 else:
-    os.environ["SETTINGS_MODULE"] = 'settings_test'
+    if sys.argv[1] == "tulultow-api":
+        os.environ["SETTINGS_MODULE"] = 'settings'
+        sys.path.append(settings.SECRET_KEY)
 
-sys.path.append(settings.SECRET_KEY)
+    if sys.argv[1] == "tulultow-api-test":
+        os.environ["SETTINGS_MODULE"] = 'settings_test'
+        sys.path.append(settings.SECRET_KEY)
+
 
 connect(settings.MONGO_DATABASE_NAME)
+
 
 
 class Struct:

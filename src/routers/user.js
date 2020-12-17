@@ -11,7 +11,13 @@ const Gallery = require('../models/gallery')
 
 run_python_script = (argums)=>{
 	try{
-		const python = spawn(process.env.PYTHON_ENV, argums);
+		if (process.env._ && process.env._.indexOf("heroku")){
+			//in heroku
+			python_env = 'python'
+		}else{
+			python_env = process.env.PYTHON_ENV
+		}
+		const python = spawn(python_env, argums);
 	
 		python.stdout.on('data',function(chunk){
 			var textChunk = chunk.toString('utf8')
