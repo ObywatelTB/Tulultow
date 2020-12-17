@@ -29,11 +29,11 @@ draw_gallery = async()=>{
 	await get_categories()
 	for(var r=0;r<categories.length;r++){	   						//ROOMS
 		 await fetch('/exhibits/'+ the_chosen_gal +'/'+r,{method: 'GET'}).then( async(response)=>{
-			await response.json().then((data)=>{
+			await response.json().then(async(data)=>{
 				if(data.error){
 					gal_info.textContent = data.error
 				}else{
-					room =  draw_room(data,r);
+					room =  await draw_room(data,r);
 					$('#rooms').append(room);	
 				}
 			})
@@ -57,7 +57,7 @@ get_categories = async()=>{
 	})
 }
 
-draw_room = (data,r)=>{
+draw_room = async(data,r)=>{
 	var room = $('<div></div>').attr('class','room')
 	var title = $('<h2></h2>').text(categories[r]) //name of the room - category
 	room.append(title);
@@ -67,7 +67,7 @@ draw_room = (data,r)=>{
 		ex_ids_row.push(data[e]._id)
 		//exhibits_ids[r].push(data[e]._id) 
 
-		div = draw_exhibit(data,r,e)
+		div = await draw_exhibit(data,r,e)
 		room.append(div);
 	}
 	exhibits_ids[r] = ex_ids_row
@@ -75,14 +75,17 @@ draw_room = (data,r)=>{
 	return room
 }
 
-draw_exhibit = (data, r,e)=>{
+draw_exhibit = async(data, r,e)=>{
+	likes_authors = await get_likes(the_chosen_gal, data[e]._id)
+	console.log('hejej', likes_authors)
+
 	const ex = Mustache.render(exhibit_template, {
 		img_src:		process_img_buffer(data[e].picture),
 		prev_title: 	data[e].title,
 		prev_title2:	data[e].content,
 		exhibit_id:		'exhibit_'+r+e,
 		like_nr:		data[e].likes,
-		likes_givers:	 ['Saab', 'Volvo', 'BMW']
+		likes_givers:	 likes_authors
 	})
 	return ex
 }
@@ -191,7 +194,7 @@ handle_comment_deletion = async(comments_ar)=>{
 get_comments = async(gallery_id, exhibit_id)=>{
 	//getting the comments of an exhibit:
 	comments = []
-	await fetch('/reactions/'+gallery_id+'/'+exhibit_id,{method: 'GET'}).then(async(response)=>{
+	await fetch('/reactions/comments/'+gallery_id+'/'+exhibit_id,{method: 'GET'}).then(async(response)=>{
 		await response.json().then((data)=>{
 			if(data.error){
 				console.log(data.error)
@@ -285,6 +288,24 @@ handle_like = ()=>{
 }
 
 //BACKEND_(likes)____________________________________________
+get_likes = async(gallery_id, exhibit_id)=>{
+	//used in   draw_exhibit()
+	//getting the likes of an exhibit:
+	comments = []
+	await fetch('/reactions/likes/'+gallery_id+'/'+exhibit_id,{method: 'GET'}).then(async(response)=>{
+		await response.json().then((data)=>{
+			if(data.error){
+				console.log(data.error)
+			}else{
+				console.log('i got likes, here they are: ',data)
+				comments = data
+			}
+		})
+		}).catch((e)=>{
+			console.log('error in the function get likes', e)
+		})
+	return comments
+}
 submit_like = async(exhibit_id)=>{
 	likes_count = 0
 	await fetch('/reactions/switch_like',{method: 'POST',headers: {'Content-Type': 'application/json'},

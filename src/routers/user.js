@@ -17,6 +17,7 @@ run_python_script = (argums)=>{
 		}else{
 			python_env = process.env.PYTHON_ENV
 		}
+		// console.log('pyth spawn',python_env)
 		const python = spawn(python_env, argums);
 	
 		python.stdout.on('data',function(chunk){

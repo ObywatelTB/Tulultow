@@ -16,6 +16,10 @@ const reactionSchema = mongoose.Schema({
 			type: mongoose.Schema.Types.ObjectId,
 			required: true,
 			ref: 'User'
+		},
+		author_name:{
+			type: String,
+			required: true
 		}
 	}],
 	comments: [{
