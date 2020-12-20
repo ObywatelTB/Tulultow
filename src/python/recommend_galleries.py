@@ -3,20 +3,24 @@ import sys
 import os
 from python_settings import settings
 from mongoengine import *
+import recommended_functions as recommend
 
 ON_HEROKU = 'ON_HEROKU' in os.environ	
+name_of_file='settings'
 
 if ON_HEROKU:
     print('Im in Heroku')
     os.environ["SETTINGS_MODULE"] = 'settings_heroku'
+    name_of_file='settings_heroku'
 else:
     if sys.argv[1] == "tulultow-api":
         os.environ["SETTINGS_MODULE"] = 'settings'
         sys.path.append(settings.SECRET_KEY)
-
+        name_of_file='settings'
     if sys.argv[1] == "tulultow-api-test":
         os.environ["SETTINGS_MODULE"] = 'settings_test'
         sys.path.append(settings.SECRET_KEY)
+        name_of_file='settings_test'
 
 
 connect(settings.MONGO_DATABASE_NAME)
@@ -94,6 +98,40 @@ class Galleries (DynamicDocument):
     }
 
 
+def create_list_of_recommended(given_user):
+    user_temp = given_user
+
+   # tp = recursion(userTemp2, 0, sizeOfList1)
+    tp = recommend.create_recommended(user_temp, 0,15,name_of_file)
+
+    list_to_show_to_givenUser_with_galleries = []
+    user_temp.recommended_galleries = list_to_show_to_givenUser_with_galleries
+
+    tabOb = column(tp, 0)
+    tabVal = column(tp, 1)
+
+    for i, element in enumerate(tp):
+        user_temp.recommended_galleries.append({"points": tabVal[i], "gallery": tabOb[i]})
+        Users.objects(_id=given_user._id).update(set__recommended_galleries=user_temp.recommended_galleries)
+
+
+
+
+
+def create_final_list(given_user):
+    sizeOfList1=20
+    if  len(userList)<20:
+        sizeOfList1=len(userList)-1
+    #tp = recursion(john, 1, sizeOfList1)
+    tp = recommend.create_recommended(given_user, 1,15,name_of_file)
+    given_user.recommended_galleries = []
+    for i, element in enumerate(tp):
+        given_user.recommended_galleries.append({"points": column(tp, 1)[i], "gallery": column(tp, 0)[i]})
+        Users.objects(_id=given_user._id).update(set__recommended_galleries=given_user.recommended_galleries)
+
+
+
+
 userList = Users.objects()
 galleriesList = Galleries.objects()
 
@@ -101,94 +139,11 @@ user0=Users.objects.get(email=sys.argv[2])
 #user0=Users.objects.get(email="Username@gmail.com")
 
 
-def recursion(john, callibrationBool):
-    listToShowToJohn = []
-    listToShowToJohnTemp = []
-
-    def geLikedPoints(favourite_galleriesOfUser, i, callibrationBool2):
-        if (i < 1):
-            return 1
-        else:
-            counter = 0
-            for galleriesC in favourite_galleriesOfUser:
-                s = Struct(**galleriesC)
-                gal = Galleries.objects(_id=s.gallery).first()
-                galOwner = Users.objects(_id=gal.owner).first()
-                if callibrationBool2 == 1:
-                    pointCalc = s.points * calibrationForGivenUsers(john, galOwner) * i
-                else:
-                    pointCalc = s.points
-
-                if gal not in listToShowToJohnTemp:
-                    listToShowToJohn.append([s.gallery, pointCalc])
-                    listToShowToJohnTemp.append(s.gallery)
-                else:
-                    for n, j in enumerate(listToShowToJohn):
-                        if j[0] == gal:
-                            listToShowToJohn[n] = [s.gallery, j[1] + pointCalc]
-
-                likedGalleriesOfUserFriends = galOwner.favourite_galleries
-                geLikedPoints(likedGalleriesOfUserFriends, i - 1, callibrationBool2)
-                counter = counter + 1
-
-    geLikedPoints(john.favourite_galleries, 3, callibrationBool)
-
-    listToShowToJohn.sort(key=lambda x: x[1], reverse=True)
-
-    top20 = listToShowToJohn[:20]
-
-    i = 1
-    sizeOfList=20
-    if  len(userList)<20:
-        sizeOfList=len(userList)-1
-
-    while (len(top20) < sizeOfList-1) :
-        if galleriesList[i].owner != john._id:
-            top20.append([galleriesList[i]._id, 0])
-            i += 1
-
-    return top20
-
-
-def createListOfRecommendedForGivenUser_Recursion(john):
-    userTemp2 = john
-    tp = recursion(userTemp2, 0)
-
-    listToShowToJohnWithGalleries = []
-    userTemp2.recommended_galleries = listToShowToJohnWithGalleries
-
-    tabOb = column(tp, 0)
-    tabVal = column(tp, 1)
-
-    for i, element in enumerate(tp):
-        userTemp2.recommended_galleries.append({"points": tabVal[i], "gallery": tabOb[i]})
-        Users.objects(_id=john._id).update(set__recommended_galleries=userTemp2.recommended_galleries)
-
-
-def calibrationForGivenUsers(john, johnFriend):
-    wagaTemp=0.1
-    for user2 in johnFriend.favourite_galleries:
-        for user3 in john.favourite_galleries:
-            s1 = Struct(**user2)
-            s2 = Struct(**user3)
-            if s1 == s2:
-                waga=waga+0.1
-
-    return wagaTemp
-
-
-def createFinalList(john):
-    tp = recursion(john, 1)
-    john.recommended_galleries = []
-    for i, element in enumerate(tp):
-        john.recommended_galleries.append({"points": column(tp, 1)[i], "gallery": column(tp, 0)[i]})
-        Users.objects(_id=john._id).update(set__recommended_galleries=john.recommended_galleries)
-
 
 #Inicjalizacja dla wszystkich użytkowników
-createListOfRecommendedForGivenUser_Recursion(user0)
+create_list_of_recommended(user0)
 
 #kalibracja i propozycja
-createFinalList(user0)
+create_final_list(user0)
 
 

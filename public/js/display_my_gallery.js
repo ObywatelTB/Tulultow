@@ -101,10 +101,13 @@ create_modal = async()=>{
 			if( butt_id != 'new_cat_butt'){
 				$('#modal_p').text( 'Lets add a new '+ cat + ' exhibit.' )
 				$('#input_content').show()
+				$('#input_comboBox').hide()
 				$('#form_modal button').text('Add exhibit!')
 				new_exhibit_category = cat //potrzebne przy wysylaniu requesta
 			}else{											//new category
 				$('#modal_p').text( 'Lets add a new Category.' )
+				$('#input_title').hide()
+				$('#input_comboBox').show()
 				$('#input_content').hide()
 				$('#form_modal button').text('Add category')
 				new_exhibit_category = ''
@@ -132,7 +135,7 @@ handle_modal_button = async()=>{
 		e.preventDefault()
 		
 		title = input_title.value
-		new_cat = title
+		new_cat = input_comboBox.value
 		content = input_content.value
 		
 		if(new_exhibit_category){				//adding exhibit
