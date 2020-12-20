@@ -101,12 +101,14 @@ create_modal = async()=>{
 			if( butt_id != 'new_cat_butt'){
 				$('#modal_p').text( 'Lets add a new '+ cat + ' exhibit.' )
 				$('#input_content').show()
+				$('#label_exist_error').hide()
 				$('#input_comboBox').hide()
 				$('#form_modal button').text('Add exhibit!')
 				new_exhibit_category = cat //potrzebne przy wysylaniu requesta
 			}else{											//new category
 				$('#modal_p').text( 'Lets add a new Category.' )
 				$('#input_title').hide()
+				$('#label_exist_error').hide()
 				$('#input_comboBox').show()
 				$('#input_content').hide()
 				$('#form_modal button').text('Add category')
@@ -131,6 +133,11 @@ create_modal = async()=>{
 
 handle_modal_button = async()=>{
 //this function joins both new exhibit and new category, cz. both use the same modal
+
+	$('#input_comboBox').on('change', function (e) {
+    	$('#label_exist_error').hide()
+	});
+
 	new_ex_form.addEventListener('submit',(e)=>{ //po wcisnieciu buttona w modalu
 		e.preventDefault()
 		
@@ -142,8 +149,20 @@ handle_modal_button = async()=>{
 			console.log('adding exhibit', new_exhibit_category)
 			add_exhibit_request(title, content)			
 		}else{									//adding category
-			console.log('adding category', new_category)
-			add_category_request(new_cat)		
+			var cat_not_there=true;
+			for(var r=0;r<categories.length;r++){
+				if(categories[r] == new_cat){
+					cat_not_there=false;
+					break;
+				}
+			}
+			if(cat_not_there){
+				console.log('adding category', new_category)
+				add_category_request(new_cat)	
+			}	
+			else{
+				$('#label_exist_error').show()
+			}			
 		}
 	})	
 }
