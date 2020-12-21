@@ -93,6 +93,66 @@ class Galleries(DynamicDocument):
 
 
 
+class Reactions(DynamicDocument):
+    _id = ObjectIdField(primary_key=True)
+    gallery_id = ObjectIdField()
+    likes = ListField(StringField())
+    comments = ListField(StringField())
+    createdAt = DateField()
+    updatedAt = DateField()
+   
+
+    def json(self):
+        user_dict = {
+            "_id": str(self.pk),
+            "gallery_id": self.gallery_id,
+            "likes": self.likes,
+            "comments": self.comments,
+            "createdAt": self.createdAt,
+            "updatedAt": self.updatedAt,
+           
+        }
+        return json.dumps(user_dict)
+
+    meta = {
+        "indexes": ["email"]
+    }
+
+
+class Exhibits(DynamicDocument):
+    _id = ObjectIdField(primary_key=True)
+    content = ObjectIdField()
+    title = StringField()
+    category = StringField()
+    owner =  ObjectIdField()
+    picture = BinaryField()
+    createdAt = DateField()
+    updatedAt = DateField()
+   
+
+    def json(self):
+        user_dict = {
+            "_id": str(self.pk),
+            "content": self.content,
+            "title": self.title,
+            "category": self.category,
+            "owner": self.title,
+            "picture": self.category,
+            "createdAt": self.createdAt,
+            "updatedAt": self.updatedAt,
+           
+        }
+        return json.dumps(user_dict)
+
+    meta = {
+        "indexes": ["email"]
+    }
+
+
+
+
+
+
 
 def clear_database_except_admin():
     basepath = path.dirname(__file__)
@@ -110,7 +170,14 @@ def clear_database_except_admin():
             lunch = usr
             lunch.delete()
 
+    for rct in reactionList:
+            lunch = rct
+            lunch.delete()
 
+    for exh in exhibitList:
+            lunch = exh
+            lunch.delete()
+    
 
 def create_users_and_galleries(number_of_users):
     does_admin_exist = 0
@@ -221,6 +288,8 @@ with open(filepath) as f:
 
 userList = Users.objects()
 galleriesList = Galleries.objects()
+reactionList = Reactions.objects()
+exhibitList = Exhibits.objects()
 
 if sys.argv[2] == "clear_db":
     clear_database_except_admin()

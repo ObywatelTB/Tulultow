@@ -75,6 +75,63 @@ class Galleries (DynamicDocument):
 
 
 
+class Reactions(DynamicDocument):
+    _id = ObjectIdField(primary_key=True)
+    gallery_id = ObjectIdField()
+    likes = ListField(StringField())
+    comments = ListField(StringField())
+    createdAt = DateField()
+    updatedAt = DateField()
+   
+
+    def json(self):
+        user_dict = {
+            "_id": str(self.pk),
+            "gallery_id": self.gallery_id,
+            "likes": self.likes,
+            "comments": self.comments,
+            "createdAt": self.createdAt,
+            "updatedAt": self.updatedAt,
+           
+        }
+        return json.dumps(user_dict)
+
+    meta = {
+        "indexes": ["email"]
+    }
+
+
+class Exhibits(DynamicDocument):
+    _id = ObjectIdField(primary_key=True)
+    content = ObjectIdField()
+    title = StringField()
+    category = StringField()
+    owner =  ObjectIdField()
+    picture = BinaryField()
+    createdAt = DateField()
+    updatedAt = DateField()
+   
+
+    def json(self):
+        user_dict = {
+            "_id": str(self.pk),
+            "content": self.content,
+            "title": self.title,
+            "category": self.category,
+            "owner": self.title,
+            "picture": self.category,
+            "createdAt": self.createdAt,
+            "updatedAt": self.updatedAt,
+           
+        }
+        return json.dumps(user_dict)
+
+    meta = {
+        "indexes": ["email"]
+    }
+
+
+
 
 
 
