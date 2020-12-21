@@ -9,22 +9,23 @@
 </head>
 
 <body>
-	<div class="main-content">
-		{{>header}} 
-		<p> Check out what has grabbed your attention. </p>
+	<div id="page-container">
+		<div id="content-wrap">
+			{{>header}} 
+			<p> Check out what has grabbed your attention. </p>
+
+			<div id="divi">
+				<table id="table">
+					<tr>
+						<th> User name</th>
+						<th> Region</th>
+						<th> Gallery</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		{{>footer}}
 	</div>
-	
-	<div id="divi">
-		<table id="table">
-			<tr>
-				<th> User name</th>
-				<th> Region</th>
-				<th> Gallery</th>
-			</tr>
-		</table>
-	</div>
-	<p></p>
-	{{>footer}}
 	
 	<script src="/js/favourites.js"></script>
 	<script type="text/javascript" src="/js/logout.js"></script>

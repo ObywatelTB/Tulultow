@@ -11,46 +11,38 @@
 </head>
 
 <body>
-	<div class="main-content">
-	
-	{{>header}}
-	<p id="browse_info"></p>
-		
-	</div>
-	
-	
-
-	<div id="previews" class="rooms">
-	</div>
-	
-	<div id="rooms" class="rooms">
-	</div>
-	
-
-<!-- The Modal -->
-	<div id="myModal2" class="modal_comments">
-
-	  <!-- Modal content -->
-	  <div class="modal_comments-content">
-		<span class="close" id="close_modal">&times;</span>
-		<p id="modal_p">Comments</p>
-			<div class="scrollmenu" id="scroll_obj"> 
-			<!-- A place for the modal Mustache template -->
+	<div id="page-container">
+		<div id="content-wrap">
+			{{>header}}
+			<p id="browse_info"></p>
+					
+			<div id="previews" class="rooms">
 			</div>
-		<form id="form_modal">
-			<input id="input_comment" placeholder="Write comment">
-			<button>Add !</button>
-		</form>
-	  </div>
+			
+			<div id="rooms" class="rooms">
+			</div>
 
+			<button id="browse_butt" style="transform: translate(7%, 0%);"> Browse others </button>
+		</div>
+		{{>footer}}
 	</div>
 
-	<button id="browse_butt" style="transform: translate(7%, 0%);"> Browse others </button>
-	
+	<!-- The Modal -->
+	<div id="myModal2" class="modal_comments">
+		<!-- Modal content -->
+		<div class="modal_comments-content">
+			<span class="close" id="close_modal">&times;</span>
+			<p id="modal_p">Comments</p>
+				<div class="scrollmenu" id="scroll_obj"> 
+				<!-- A place for the modal Mustache template -->
+				</div>
+			<form id="form_modal">
+				<input id="input_comment" placeholder="Write comment">
+				<button>Add !</button>
+			</form>
+		</div>
+	</div>
 
-
-	<div id="testowy"></div>
-	
 	<!-- Mustache Templates ________________________________________________ -->
 	<!-- Mustache preview template: -->
 	<script id="preview-template" type="text/html">
@@ -62,10 +54,7 @@
 			</div>
 		</div>
 	</script>
-	
-	
-	
-	{{>footer}}
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
 	<script type="text/javascript" src="/js/logout.js"></script>
 	<script type="text/javascript" src="/js/browse_galleries.js"></script>

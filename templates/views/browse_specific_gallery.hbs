@@ -11,31 +11,32 @@
 </head>
 
 <body>
-	<div id="main-content">
-	
-		{{>header}}
-		<h4 id="browse_info"></h4>
-		
+	<div id="page-container">
+		<div id="content-wrap">
+			{{>header}}
+			<h4 id="browse_info"></h4>
+
+			<!-- Getting the gallery id from the query: -->
+			<script>
+				var the_chosen_gal =  "{{gallery_id}}"
+			</script>
+
+			<div id="previews" class="rooms">
+			</div>
+			
+			<div id="rooms" class="rooms">
+			</div>
+
+			<button id="browse_butt" style="transform: translate(7%, 0%);"> Browse others </button>
+		</div>
+		{{>footer}}
 	</div>
-	
-	<!-- Getting the gallery id from the query: -->
-	<script>
-		var the_chosen_gal =  "{{gallery_id}}"
-	</script>
 
 
-	<div id="previews" class="rooms">
-	</div>
-	
-	<div id="rooms" class="rooms">
-	</div>
-	
-
-<!-- The Modal -->
+	<!-- The Modal -->
 	<div id="myModal2" class="modal_comments">
-
-	  <!-- Modal content -->
-	  <div class="modal_comments-content">
+		<!-- Modal content -->
+		<div class="modal_comments-content">
 		<span class="close" id="close_modal">&times;</span>
 		<p id="modal_p">Comments</p>
 			<div class="scrollmenu" id="scroll_obj"> 
@@ -45,18 +46,10 @@
 			<input id="input_comment" placeholder="Write comment">
 			<button>Add !</button>
 		</form>
-	  </div>
-
+		</div>
 	</div>
 
-	<button id="browse_butt" style="transform: translate(7%, 0%);"> Browse others </button>
-	
-
-
-	<div id="testowy"></div>
-	
-	<!-- Mustache Templates ________________________________________________ -->
-
+	<!-- Mustache Templates ______________________________________________ -->
 	<!-- Mustache exhibit template: -->
 	<script id="exhibit-template" type="text/html">
 		<div class="exhibit">
@@ -67,20 +60,15 @@
 			</div>
 			<div class="exhibit_reaction" id=[[exhibit_id]]> 
 				[[like_nr]]
-				<div class="dropdown-content">
-   				 	
-    [[#likes_givers]]
-    <p>[[.]]</p>
-    [[/likes_givers]]
-  
+				<div class="dropdown-content">	
+					[[#likes_givers]]
+					<p>[[.]]</p>
+					[[/likes_givers]]
   				</div>
 			 </div>
              <img src="/img/like_text.png" class="exhibit_like" id=[[exhibit_id]] ></img> 
-             <img src="/img/comment_text.png" class="exhibit_comment" id=[[exhibit_id]]></img> 	
-			
-					
+             <img src="/img/comment_text.png" class="exhibit_comment" id=[[exhibit_id]]></img> 			
 		</div>
- 
 	</script>
 		
 	<!-- Mustache modal inner template  -->
@@ -88,43 +76,25 @@
 		<div class="scrollmenu" id="scroll_obj">
 			<ul>
 				[[#comments]]
-					<li>
-						<div class="scrollmenu_p" id = "x_[[_id]]">
-							
-						
-							
-							[[comment_content]]
-							<div style="position: relative; width: 0; height: 0">
-   							 <span class="delete_comment" id=[[_id]]>×</span> 
-							</div>	
+				<li>
+					<div class="scrollmenu_p" id = "x_[[_id]]">
+						[[comment_content]]
+						<div style="position: relative; width: 0; height: 0">
+							<span class="delete_comment" id=[[_id]]>×</span> 
+						</div>	
 						<div class =  "modal_comment_line">
-   							<span class="modal_comments-user"> [[author_id]] </span> 
+							<span class="modal_comments-user"> [[author_id]] </span> 
 							<span class="modal_comments-date"> 01.01.01 14:50</span> 		
-							</div>
-						
-					
-						</div> 
-					</li>				
-				[[/comments]]
-				
-					
+						</div>
+					</div> 
+				</li>				
+				[[/comments]]	
 			</ul>
 		</div>
 	</script>
 	
-	
-
-
-	{{>footer}}
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
 	<script type="text/javascript" src="/js/logout.js"></script>
 	<script type="text/javascript" src="/js/browse_specific_gallery.js"></script>
 </body>
-
-<!--
-<></>
-<></>
--->
-
 </html>
-

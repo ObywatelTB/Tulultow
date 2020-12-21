@@ -9,20 +9,27 @@
 </head>
 
 <body>
-	<div class="weather-content">
-		{{>header}}
-		
-		
-		<form>
-			<input placeholder="Location">
-			<button>Search</button>
-		</form>
-		
-		<p id="message-1"> </p>
-		<p id="message-2"> </p>
+	<div id="page-container">
+		<div id="content-wrap">
+			<div class="weather-content">
+				{{>header}}
+				
+				<p> Let's check the whether in the place where the author
+					of your favourite gallery is living, so you can have a topic for a small talk! 
+				</p>
+
+				<form>
+					<input placeholder="Location">
+					<button>Search</button>
+				</form>
+				
+				<p id="message-1"> </p>
+				<p id="message-2"> </p>
+			</div>
+		</div>
+		{{>footer}}
 	</div>
-	{{>footer}}
-	
+		
 	<script src="/js/weather.js"></script>
 	<script type="text/javascript" src="/js/logout.js"></script>
 </body>

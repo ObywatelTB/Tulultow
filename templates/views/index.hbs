@@ -11,18 +11,21 @@
 </head>
 
 <body>
-	{{>header}}
-	<p>Here you can create your own gallery!</p>
-	
-	<p id="gal_info"> </p>
-	
-	<div id="rooms" class="rooms">
+	<div id="page-container">
+		<div id="content-wrap">
+			{{>header}}
+			<p>Here you can create your own gallery!</p>
+			
+			<p id="gal_info"> </p>
+			
+			<div id="rooms" class="rooms">
+			</div>
+			
+			<!-- <p></p> -->
+			<button id="new_cat_butt" style="transform: translate(7%, 0%);"> Add category </button>
+		</div>
+		{{>footer}}
 	</div>
-	
-	<!-- <p></p> -->
-	<button id="new_cat_butt" style="transform: translate(7%, 0%);"> Add category </button>
-	
-	
 	
 	<!-- The Modal -->
 	<div id="myModal" class="modal">
@@ -64,8 +67,6 @@
 		</div>
 	</script>
 	
-	
-	{{>footer}}
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
 	<script src="/js/display_my_gallery.js"></script>
 	<script src="/js/logout.js"></script>

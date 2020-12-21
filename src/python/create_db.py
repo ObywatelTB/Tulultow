@@ -234,6 +234,3 @@ elif sys.argv[2] == "fill_db":
         create_recommended_list(userList[x])
     print('db_created')
 
-
-
-
