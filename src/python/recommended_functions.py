@@ -5,14 +5,12 @@ from mongoengine import *
 from python_settings import settings
 
 
-
-
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
 
 class Users (DynamicDocument):
-    _id = ObjectIdField()
+    _id = ObjectIdField(primary_key=True)
     email = StringField(unique=True, required=True)
     password = StringField()
     administrator = BooleanField()
@@ -22,6 +20,7 @@ class Users (DynamicDocument):
     country = StringField()
     favourite_galleries = ListField()
     recommended_galleries = ListField()
+    avatar = BinaryField()
     tokens = ListField()
     createdAt = DateField()
     updatedAt = DateField()
@@ -39,6 +38,7 @@ class Users (DynamicDocument):
             "favourite_galleries": self.favourite_galleries,
             "recommended_galleries": self.recommended_galleries,
             "tokens": self.tokens,
+            "avatar": self.avatar,
             "createdAt": self.createdAt,
             "updatedAt": self.updatedAt
         }
@@ -49,8 +49,8 @@ class Users (DynamicDocument):
     }
 
 
-class Galleries (DynamicDocument):
-    _id = ObjectIdField()
+class Galleries(DynamicDocument):
+    _id = ObjectIdField(primary_key=True)
     categories = ListField()
     rooms = ListField()
     owner = ObjectIdField()
@@ -59,7 +59,7 @@ class Galleries (DynamicDocument):
 
     def json(self):
         user_dict = {
-            "_id": self._id,
+            "_id": str(self.pk),
             "categories": self.city,
             "rooms": self.country,
             "owner": self.owner,
@@ -71,6 +71,7 @@ class Galleries (DynamicDocument):
     meta = {
         "indexes": ["email"]
     }
+
 
 
 
@@ -132,7 +133,34 @@ class Exhibits(DynamicDocument):
 
 
 
+def geLikedPoints(favourite_galleriesOfUser, i, callibrationBool2):
+    list_to_show_to_user = []
+    list_to_show_to_user_Temp = []
+    if (i < 1):
+        return 1
+    else:
+        counter = 0
+        for galleriesC in favourite_galleriesOfUser:
+            s = Struct(**galleriesC)
+            gal = Galleries.objects(_id=s.gallery).first()
+            galOwner = Users.objects(_id=gal.owner).first()
+            if callibrationBool2 == 1:
+                pointCalc = s.points * calibrationForGivenUsers(given_user, galOwner) * i
+            else:
+                pointCalc = s.points
 
+            if gal not in list_to_show_to_user_Temp:
+                list_to_show_to_user.append([s.gallery, pointCalc])
+                list_to_show_to_user_Temp.append(s.gallery)
+            else:
+                for n, j in enumerate(list_to_show_to_user):
+                    if j[0] == gal:
+                        list_to_show_to_user[n] = [s.gallery, j[1] + pointCalc]
+
+            likedGalleriesOfUserFriends = galOwner.favourite_galleries
+            geLikedPoints(likedGalleriesOfUserFriends, i - 1, callibrationBool2)
+            counter = counter + 1
+    return list_to_show_to_user
 
 
 def create_recommended(given_user, callibration_bool, size_of_list, name_of_file):
@@ -140,43 +168,19 @@ def create_recommended(given_user, callibration_bool, size_of_list, name_of_file
 
     galleriesList = Galleries.objects()
 
-    list_to_show_to_user = []
-    list_to_show_to_user_Temp = []
+   
+    
     
 
-    def geLikedPoints(favourite_galleriesOfUser, i, callibrationBool2):
-        if (i < 1):
-            return 1
-        else:
-            counter = 0
-            for galleriesC in favourite_galleriesOfUser:
-                s = Struct(**galleriesC)
-                gal = Galleries.objects(_id=s.gallery).first()
-                galOwner = Users.objects(_id=gal.owner).first()
-                if callibrationBool2 == 1:
-                    pointCalc = s.points * calibrationForGivenUsers(given_user, galOwner) * i
-                else:
-                    pointCalc = s.points
-
-                if gal not in list_to_show_to_user_Temp:
-                    list_to_show_to_user.append([s.gallery, pointCalc])
-                    list_to_show_to_user_Temp.append(s.gallery)
-                else:
-                    for n, j in enumerate(list_to_show_to_user):
-                        if j[0] == gal:
-                            list_to_show_to_user[n] = [s.gallery, j[1] + pointCalc]
-
-                likedGalleriesOfUserFriends = galOwner.favourite_galleries
-                geLikedPoints(likedGalleriesOfUserFriends, i - 1, callibrationBool2)
-                counter = counter + 1
-
-    geLikedPoints(given_user.favourite_galleries, 3, callibration_bool)
-
-    
-    list_to_show_to_user.sort(key=lambda x: x[1], reverse=True)
     
 
-    top20 = list_to_show_to_user[:20]
+    list_to_show = geLikedPoints(given_user.favourite_galleries, 3, callibration_bool)
+
+    
+    list_to_show.sort(key=lambda x: x[1], reverse=True)
+    
+
+    top20 = list_to_show[:20]
     newTop20 =[]
     
     

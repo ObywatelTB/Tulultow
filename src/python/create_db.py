@@ -11,7 +11,10 @@ from os import path
 from python_settings import settings
 from random_object_id import generate
 import recommended_functions as recommend
-
+from recommended_functions import Users
+from recommended_functions import Galleries
+from recommended_functions import Reactions
+from recommended_functions import Exhibits
 
 class Struct:
     def __init__(self, **entries):
@@ -28,131 +31,6 @@ def column(matrix, i):
     return [row[i] for row in matrix]
 
 
-class Users(DynamicDocument):
-    _id = ObjectIdField(primary_key=True)
-    city = StringField()
-    country = StringField()
-    name = StringField()
-    email = StringField(unique=True, required=True)
-    password = StringField()
-    administrator = BooleanField()
-    date_of_birth = DateField()
-    favourite_galleries = ListField()
-    recommended_galleries = ListField()
-    tokens = ListField()
-    avatar = BinaryField()
-    createdAt = DateField()
-    updatedAt = DateField()
-
-    def json(self):
-        user_dict = {
-            "_id": str(self.pk),
-            "city": self.city,
-            "country": self.country,
-            "name": self.name,
-            "email": self.email,
-            "administrator": self.administrator,
-            "password": self.email,
-            "date_of_birth": self.date_of_birth,
-            "favourite_galleries": self.favourite_galleries,
-            "recommended_galleries": self.recommended_galleries,
-            "tokens": self.tokens,
-            "avatar": self.avatar,
-            "createdAt": self.createdAt,
-            "updatedAt": self.updatedAt
-        }
-        return json.dumps(user_dict)
-
-    meta = {
-        "indexes": ["email"]
-    }
-
-
-class Galleries(DynamicDocument):
-    _id = ObjectIdField(primary_key=True)
-    categories = ListField()
-    rooms = ListField()
-    owner = ObjectIdField()
-    createdAt = DateField()
-    updatedAt = DateField()
-
-    def json(self):
-        user_dict = {
-            "_id": str(self.pk),
-            "categories": self.city,
-            "rooms": self.country,
-            "owner": self.owner,
-            "createdAt": self.createdAt,
-            "updatedAt": self.updatedAt
-        }
-        return json.dumps(user_dict)
-
-    meta = {
-        "indexes": ["email"]
-    }
-
-
-
-class Reactions(DynamicDocument):
-    _id = ObjectIdField(primary_key=True)
-    gallery_id = ObjectIdField()
-    likes = ListField(StringField())
-    comments = ListField(StringField())
-    createdAt = DateField()
-    updatedAt = DateField()
-   
-
-    def json(self):
-        user_dict = {
-            "_id": str(self.pk),
-            "gallery_id": self.gallery_id,
-            "likes": self.likes,
-            "comments": self.comments,
-            "createdAt": self.createdAt,
-            "updatedAt": self.updatedAt,
-           
-        }
-        return json.dumps(user_dict)
-
-    meta = {
-        "indexes": ["email"]
-    }
-
-
-class Exhibits(DynamicDocument):
-    _id = ObjectIdField(primary_key=True)
-    content = ObjectIdField()
-    title = StringField()
-    category = StringField()
-    owner =  ObjectIdField()
-    picture = BinaryField()
-    createdAt = DateField()
-    updatedAt = DateField()
-   
-
-    def json(self):
-        user_dict = {
-            "_id": str(self.pk),
-            "content": self.content,
-            "title": self.title,
-            "category": self.category,
-            "owner": self.title,
-            "picture": self.category,
-            "createdAt": self.createdAt,
-            "updatedAt": self.updatedAt,
-           
-        }
-        return json.dumps(user_dict)
-
-    meta = {
-        "indexes": ["email"]
-    }
-
-
-
-
-
-
 
 def clear_database_except_admin():
     basepath = path.dirname(__file__)
@@ -162,22 +40,28 @@ def clear_database_except_admin():
 
     for usr in userList:
         if usr.email != admin_json.get('email'):
-            lunch = usr
-            lunch.delete()
+            usr.delete()
 
-    for usr in galleriesList:
-        if usr.owner != admin_json.get('_id'):
-            lunch = usr
-            lunch.delete()
+    for glr in galleriesList:
+        if glr.owner != admin_json.get('_id'):
+            glr.delete()
 
     for rct in reactionList:
-            lunch = rct
-            lunch.delete()
+            rct.delete()
 
     for exh in exhibitList:
-            lunch = exh
-            lunch.delete()
+            exh.delete()
     
+   
+    tempId = generate()
+    Galleries(
+        _id=tempId,
+        owner=adminData.get('_id'),
+        createdAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
+        updatedAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764)
+    ).save()
+        
+
 
 def create_users_and_galleries(number_of_users):
     does_admin_exist = 0
@@ -195,6 +79,13 @@ def create_users_and_galleries(number_of_users):
             password=adminData.get('password'),
         ).save()
 
+        tempId = generate()
+        Galleries(
+            _id=tempId,
+            owner=adminData.get('_id'),
+            createdAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764),
+            updatedAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764)
+        ).save()
 
     for usr in range(number_of_users):
         rnd = random.randint(0,3)

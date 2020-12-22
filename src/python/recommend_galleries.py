@@ -4,6 +4,8 @@ import os
 from python_settings import settings
 from mongoengine import *
 import recommended_functions as recommend
+from recommended_functions import Users
+from recommended_functions import Galleries
 
 ON_HEROKU = 'ON_HEROKU' in os.environ	
 name_of_file='settings'
@@ -35,67 +37,6 @@ class Struct:
 def column(matrix, i):
     return [row[i] for row in matrix]
 
-
-class Users (DynamicDocument):
-    _id = ObjectIdField()
-    email = StringField(unique=True, required=True)
-    password = StringField()
-    administrator = BooleanField()
-    name = StringField()
-    date_of_birth = DateField()
-    city = StringField()
-    country = StringField()
-    favourite_galleries = ListField()
-    recommended_galleries = ListField()
-    tokens = ListField()
-    createdAt = DateField()
-    updatedAt = DateField()
-
-    def json(self):
-        user_dict = {
-            "_id": self._id,
-            "city": self.city,
-            "country": self.country,
-            "name": self.name,
-            "date_of_birth": self.date_of_birth,
-            "administrator": self.administrator,
-            "email": self.email,
-            "password": self.password,
-            "favourite_galleries": self.favourite_galleries,
-            "recommended_galleries": self.recommended_galleries,
-            "tokens": self.tokens,
-            "createdAt": self.createdAt,
-            "updatedAt": self.updatedAt
-        }
-        return json.dumps(user_dict)
-
-    meta = {
-        "indexes": ["email"]
-    }
-
-
-class Galleries (DynamicDocument):
-    _id = ObjectIdField()
-    categories = ListField()
-    rooms = ListField()
-    owner = ObjectIdField()
-    createdAt = DateField()
-    updatedAt = DateField()
-
-    def json(self):
-        user_dict = {
-            "_id": self._id,
-            "categories": self.city,
-            "rooms": self.country,
-            "owner": self.owner,
-            "createdAt": self.createdAt,
-            "updatedAt": self.updatedAt
-        }
-        return json.dumps(user_dict)
-
-    meta = {
-        "indexes": ["email"]
-    }
 
 
 def create_list_of_recommended(given_user):
