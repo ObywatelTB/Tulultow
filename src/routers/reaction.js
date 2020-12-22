@@ -70,13 +70,13 @@ router.post('/reactions/switch_like', auth, async(req,res)=>{
 router.get('/reactions/likes/:gal', auth, async(req,res)=>{
 	reactions = await Reaction.findOne({gallery_id: req.params.gal})
 
-	my_likes = reactions.likes.filter(l=>{
-		return String(l.author_id) == String(req.user._id)
-	}).map(l=>{
-		return l.exhibit_id
-	})
-
 	try{
+		my_likes = reactions.likes.filter(l=>{
+			return String(l.author_id) == String(req.user._id)
+		}).map(l=>{
+			return l.exhibit_id
+		})
+
 		res.send(my_likes)
 	}catch(e){
 		res.status(500).send(e)

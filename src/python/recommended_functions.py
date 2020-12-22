@@ -133,54 +133,53 @@ class Exhibits(DynamicDocument):
 
 
 
-def geLikedPoints(favourite_galleriesOfUser, i, callibrationBool2):
-    list_to_show_to_user = []
-    list_to_show_to_user_Temp = []
-    if (i < 1):
-        return 1
-    else:
-        counter = 0
-        for galleriesC in favourite_galleriesOfUser:
-            s = Struct(**galleriesC)
-            gal = Galleries.objects(_id=s.gallery).first()
-            galOwner = Users.objects(_id=gal.owner).first()
-            if callibrationBool2 == 1:
-                pointCalc = s.points * calibrationForGivenUsers(given_user, galOwner) * i
-            else:
-                pointCalc = s.points
-
-            if gal not in list_to_show_to_user_Temp:
-                list_to_show_to_user.append([s.gallery, pointCalc])
-                list_to_show_to_user_Temp.append(s.gallery)
-            else:
-                for n, j in enumerate(list_to_show_to_user):
-                    if j[0] == gal:
-                        list_to_show_to_user[n] = [s.gallery, j[1] + pointCalc]
-
-            likedGalleriesOfUserFriends = galOwner.favourite_galleries
-            geLikedPoints(likedGalleriesOfUserFriends, i - 1, callibrationBool2)
-            counter = counter + 1
-    return list_to_show_to_user
-
 
 def create_recommended(given_user, callibration_bool, size_of_list, name_of_file):
     lunchDB(name_of_file)
-
+    list_to_show_to_user = []
+    list_to_show_to_user_Temp = []
     galleriesList = Galleries.objects()
 
    
-    
+    def geLikedPoints(favourite_galleriesOfUser, i, callibrationBool2):
+       
+        if (i < 1):
+            return 1
+        else:
+            counter = 0
+            for galleriesC in favourite_galleriesOfUser:
+                s = Struct(**galleriesC)
+                gal = Galleries.objects(_id=s.gallery).first()
+                galOwner = Users.objects(_id=gal.owner).first()
+                if callibrationBool2 == 1:
+                    pointCalc = s.points * calibrationForGivenUsers(given_user, galOwner) * i
+                else:
+                    pointCalc = s.points
+
+                if gal not in list_to_show_to_user_Temp:
+                    list_to_show_to_user.append([s.gallery, pointCalc])
+                    list_to_show_to_user_Temp.append(s.gallery)
+                else:
+                    for n, j in enumerate(list_to_show_to_user):
+                        if j[0] == gal:
+                            list_to_show_to_user[n] = [s.gallery, j[1] + pointCalc]
+
+                likedGalleriesOfUserFriends = galOwner.favourite_galleries
+                geLikedPoints(likedGalleriesOfUserFriends, i - 1, callibrationBool2)
+                counter = counter + 1
+            
+        
     
 
     
 
-    list_to_show = geLikedPoints(given_user.favourite_galleries, 3, callibration_bool)
+    geLikedPoints(given_user.favourite_galleries, 3, callibration_bool)
 
     
-    list_to_show.sort(key=lambda x: x[1], reverse=True)
+    list_to_show_to_user.sort(key=lambda x: x[1], reverse=True)
     
 
-    top20 = list_to_show[:20]
+    top20 = list_to_show_to_user[:20]
     newTop20 =[]
     
     

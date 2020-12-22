@@ -95,12 +95,13 @@ draw_room = async(data,r)=>{
 draw_exhibit = async(data, r,e)=>{
 	likes_authors = await get_likes(the_chosen_gal, data[e]._id)
 	like_img_src = ''
-	if(exhibits_liked_by_this_user.includes(data[e]._id)){
+	if(exhibits_liked_by_this_user.length &&
+	 exhibits_liked_by_this_user.includes(data[e]._id)){
 		like_img_src = '/img/like_text1.png'
 	}else{
 		like_img_src = '/img/like_text0.png'
 	}
-
+	
 	const ex = Mustache.render(exhibit_template, {
 		img_src:		process_img_buffer(data[e].picture),
 		prev_title: 	data[e].title,
@@ -307,7 +308,8 @@ handle_like = ()=>{
 		$(this).siblings('.exhibit_reaction').children("p").text(likes_count)
 
 		//Changing the like icon
-		if(exhibits_liked_by_this_user.includes(exhibit_id)){ //now disliked
+		if(exhibits_liked_by_this_user.length &&
+		 exhibits_liked_by_this_user.includes(exhibit_id)){ //now disliked
 			exhibits_liked_by_this_user.pop(exhibit_id)
 			$(this).attr("src","/img/like_text0.png")
 		}else{ //now liked
@@ -335,7 +337,7 @@ get_likes = async(gallery_id, exhibit_id)=>{
 			if(data.error){
 				console.log(data.error)
 			}else{
-				console.log('i got likes, here they are: ',data)
+				//console.log('i got likes, here they are: ',data)
 				comments = data
 			}
 		})
@@ -399,8 +401,7 @@ display_gallery = async() =>{
 	
 	$('#browse_butt').show()	
 	$('#browse_butt').on('click',function(){
-		//location.replace('/browse_galleries');
-		gal_info.text( 'Gotcha!')
+		location.replace('/browse_galleries');
 	})
 }
 
