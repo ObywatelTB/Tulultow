@@ -36,7 +36,7 @@ get_db_name = async()=>{
 
 visibility = (user, db_name)=>{
 	if(user.administrator){
-		$("#main-content").hide()
+		$("#non-admin-content").hide()
 		$("#admin-page").show()
 	}
 	$('#db_name').text(db_name).css('color','orange')

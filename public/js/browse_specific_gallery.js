@@ -14,6 +14,7 @@ var input_content = document.querySelector('#input_comment')
 var modal_return_id = 0
 var like_click_id = 0 //?
 var exhibits_ids = []
+var exhibits_liked_by_this_user = []
 
 //Mustache templates
 exhibit_template = $('#exhibit-template').html()
@@ -27,6 +28,7 @@ $(function(){
 //DISPLAYING GALLERY
 draw_gallery = async()=>{
 	await get_categories()
+	await get_liked_exhibits()
 	for(var r=0;r<categories.length;r++){	   						//ROOMS
 		 await fetch('/exhibits/'+ the_chosen_gal +'/'+r,{method: 'GET'}).then( async(response)=>{
 			await response.json().then(async(data)=>{
@@ -43,6 +45,7 @@ draw_gallery = async()=>{
 	}
 }
 
+//BACKEND___________________________________________
 get_categories = async()=>{
 	await fetch('/galleries/'+the_chosen_gal,{method: 'GET'}).then( async(response)=>{
 		await response.json().then((data)=>{
@@ -52,7 +55,21 @@ get_categories = async()=>{
 				categories = data.categories
 			}
 		}).catch((e)=>{
-			console.log('wewnatrz funkcji login',e)
+			console.log('ERROR in get_categories function',e)
+		})
+	})
+}
+
+get_liked_exhibits = async()=>{
+	await fetch('/reactions/likes/'+the_chosen_gal,{method: 'GET'}).then( async(response)=>{
+		await response.json().then((data)=>{
+			if(data.error){
+				console.log(data.error)
+			}else{
+				exhibits_liked_by_this_user = data
+			}
+		}).catch((e)=>{
+			console.log('ERROR in get_liked_exhibits function',e)
 		})
 	})
 }
@@ -77,15 +94,22 @@ draw_room = async(data,r)=>{
 
 draw_exhibit = async(data, r,e)=>{
 	likes_authors = await get_likes(the_chosen_gal, data[e]._id)
-	console.log('hejej', likes_authors)
+	like_img_src = ''
+	if(exhibits_liked_by_this_user.includes(data[e]._id)){
+		like_img_src = '/img/like_text1.png'
+	}else{
+		like_img_src = '/img/like_text0.png'
+	}
 
 	const ex = Mustache.render(exhibit_template, {
 		img_src:		process_img_buffer(data[e].picture),
 		prev_title: 	data[e].title,
 		prev_title2:	data[e].content,
 		exhibit_id:		'exhibit_'+r+e,
+		reaction_id:	'reaction_'+r+e,
+		like_img_source: like_img_src,
 		like_nr:		data[e].likes,
-		likes_givers:	 likes_authors
+		likes_givers:	likes_authors
 	})
 	return ex
 }
@@ -126,7 +150,7 @@ handle_comment = ()=>{
 			timestamp = new Date(parseInt(timestamp, 16)*1000)
 			el.date = timestamp.toLocaleDateString("en-GB", options)
 		})
-
+		console.log('comments:',comments_ar)
 		in_mod = Mustache.render(modal_inner_template, {
 			comments_data: comments_ar
 		})
@@ -179,7 +203,7 @@ handle_comment_deletion = async(comments_ar)=>{
 		 	$(del_id).css( "display", "inline" )
 		}
 		//deleting the comment
-		$(del_id).on('click', async function(){
+		$(del_id).unbind('click').on('click', async function(){
 			await delete_comment(gallery_id, comments_ar[comment_ind]._id)
 			$("#myModal2").css("display", "none");
 		})
@@ -279,11 +303,18 @@ handle_like = ()=>{
 
 		likes_count = await submit_like(exhibit_id)
 
-		//$('this')
-		//TUTAJ MA BYC ZMIANA WYSWIETLANIA IKONY I LICZBY
+		//Changing the like icon
+		if(exhibits_liked_by_this_user.includes(exhibit_id)){ //now dislike
+			exhibits_liked_by_this_user.pop(exhibit_id)
+			$(this).attr("src","/img/like_text0.png")
+		}else{ //now like
+			exhibits_liked_by_this_user.push(exhibit_id)
+			$(this).attr("src","/img/like_text1.png")
+		}
+
+		//Changing the likes count
 	  	document.getElementById(this.id).like_nr = likes_count
 		document.getElementById(this.id).innerHTML = document.getElementById(this.id).like_nr;
-
 	 })
 }
 
@@ -347,23 +378,6 @@ getting_user = async(gallery_id)=>{
 }
 //___________________________________________________________
 
-//do wywalenia?
-exhibit_hover = ()=>{ //can be used to display like and comment icons
-	$('.exhibit').hover(function(){  	//mouse enters
-		// const ex_id = $(this).attr('id')
-		// const room_nr = 	ex_id.slice(-2,-1)
-		// const exhibit_nr =  ex_id.slice(-1)
-		// var del_id = '#delete_'+room_nr+exhibit_nr
-		// $(del_id).css( "display", "inline" )
-	}, function(){						//mouse leaves
-		// const ex_id = $(this).attr('id')
-		// const room_nr = 	ex_id.slice(-2,-1)
-		// const exhibit_nr =  ex_id.slice(-1)
-		// var del_id = '#delete_'+room_nr+exhibit_nr
-		// $(del_id).css( "display", "none" )
-	})
-}
-
 
 
 display_gallery = async() =>{
@@ -380,7 +394,8 @@ display_gallery = async() =>{
 	
 	$('#browse_butt').show()	
 	$('#browse_butt').on('click',function(){
-		location.replace('/browse_galleries');
+		//location.replace('/browse_galleries');
+		gal_info.text( 'Gotcha!')
 	})
 }
 

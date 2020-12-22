@@ -50,7 +50,7 @@ router.get('/settings', auth, async(req,res)=>{
 })
 
 
-//====== POGODA, DO WYWALENIA. 
+//====== Wheather
 router.get('/weather',(req,res)=>{
 	res.render('weather', {
 		title: 'Weather page',
@@ -58,9 +58,7 @@ router.get('/weather',(req,res)=>{
 	})
 })
 
-//the 2nd argument, function, describes what happens
-// when somebody visits the chosen page 
-// req-(uest) to the server; res(ponse) of the server
+
 router.get('/w',(req,res)=>{
 	if(!req.query.address){
 		return res.send({

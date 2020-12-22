@@ -62,7 +62,7 @@ router.post('/users/login', async(req,res)=>{
 		user = await User.findByCredentials(req.body.email, req.body.password)
 		const token = await user.generateAuthToken()
 		await res.cookie('auth',token)
-		res.send({user,token}) //wywala blad, bo chyba nie moze byc po res.cookie()
+		res.send({user,token}) //there was some error
 
 		//res.redirect('/settings')
 		//location.reload()
@@ -95,8 +95,7 @@ router.get('/users/logged_name', auth, async(req, res)=>{
 })
 
 
-//chyba do wyrzucenia, zastapienia:
-//PONIZSZE TYLKO Z MYSLA O FAVOURITES:
+//this one used only in Favourites:
 router.get('/users', async (req,res)=>{
 	try{
 		const users = await User.find({})
@@ -136,7 +135,7 @@ router.post('/users/recommended', auth, async(req,res)=>{
 	}
 })
 
-//dodawanie punktowanych galerii - sprawdzic czy dziala
+//adding galleries with points - check whether works
 router.post('/users/favourite', auth, async(req,res)=>{
 	req.user.favourite_galleries.push({ favourite_gallery: req.body })
 	await req.user.save()
@@ -157,7 +156,7 @@ router.get('/users/db_name', auth, async (req,res)=>{
 })
 
 
-//modyfikacje do BAZY DANYCH
+//modifications to a DATABASE
 router.get('/users/clear_db', auth, async (req,res)=>{
 	try{
 		run_python_script(['src/python/create_db.py', User.db.name, 'clear_db'])
@@ -179,7 +178,7 @@ router.get('/users/fill_db', auth, async (req,res)=>{
 })
 
 
-//ponizszy request musi byc PO innych 'users/x' !!
+//the request below has to be written AFTER other reaquests like: 'users/x' !!
 router.get('/users/:id', auth, async(req,res)=>{
 	const _id = req.params.id
 	try{
@@ -219,7 +218,7 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async(req,res)=>{
 	res.status(400).send({error: error.message})
 })
 
-//wrzucanie domyslnego foto (hard coded)
+//adding the default picture (hard coded)
 router.post('/users/me/avatar_init', auth, upload.single('avatar'), async(req,res)=>{
 	const f_path = path.join(__dirname, '../../public/img/user_b.png')
 	var buffer0 = fs.readFileSync(f_path)

@@ -8,7 +8,7 @@ const pagesRouter = require('./routers/pages')
 const galleryRouter = require('./routers/gallery')
 const exhibitRouter = require('./routers/exhibit')
 const reactionRouter = require('./routers/reaction')
-const fetch = require("node-fetch") //na potrzeby testow w funkcji main()
+const fetch = require("node-fetch") //only for the tests in the main() function
 
 //Define paths for Express config
 const publicDirectoryPath = path.join(__dirname, '../public')
@@ -25,13 +25,13 @@ hbs.registerPartials(partialsPath)
 //Setup static directory to serve
 app.use(express.static(publicDirectoryPath))
 
-app.use(express.json()) //to jest ta dodana linijka!
+app.use(express.json()) //important line
 app.use(cookieParser())
 app.use(userRouter)
 app.use(galleryRouter)
 app.use(exhibitRouter)
 app.use(reactionRouter)
-app.use(pagesRouter)  //MUSI BYC NA KONCU, BO MA *
+app.use(pagesRouter)  //IT HAS TO BE AT THE END, CZ IT HAS *
 
 
 module.exports = app

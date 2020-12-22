@@ -4,21 +4,8 @@ const User = require('../models/user')
 const router = express.Router()
 const auth = require('../middleware/auth')
 
-//create a gallery - prolly gotta be deleted
-router.post('/galleries', auth, async(req,res)=>{
-	/* const gallery = new Gallery({
-		categories: [{category: "Song"}, {category: "Film"}],
-		owner: '5f280d05fe326f2d7410120c'
-	})
-	try{
-		await gallery.save()
-		res.send(gallery)
-	}catch(e){
-		res.status(500).send(e)
-	} */
-})
 
-//show a YOUR gallery
+//show YOUR gallery
 router.get('/galleries/me', auth, async(req,res)=>{
 	const gallery = await Gallery.find({owner: req.user._id})
 	try{

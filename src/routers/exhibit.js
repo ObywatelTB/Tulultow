@@ -11,7 +11,7 @@ const sharp = require('sharp')
 set_picture = async(exhibit, sent_buffer, category)=>{
 	if(sent_buffer){
 		
-	}else{ //domyslne foto
+	}else{ //default picture
 		if ("Song Book Game Film Quote Dish Perfume Person Place Invention".includes(category)){
 			file_path = '../../public/img/cats/'+ category.toLowerCase() +'.png'
 		}else{
@@ -25,7 +25,7 @@ set_picture = async(exhibit, sent_buffer, category)=>{
 	exhibit.save()
 }
 
-//create an exhibit - uzywane poprzez wcisniecie przycisku przez uzytkownika
+//create an exhibit - used when user presses a button
 router.post('/exhibits', auth, async(req,res)=>{
 	const gallery = await Gallery.findOne({owner: req.user._id})
 	const ex_data = {
@@ -37,21 +37,21 @@ router.post('/exhibits', auth, async(req,res)=>{
 	const exhibit = new Exhibit(ex_data)
 	await set_picture(exhibit, req.body.picture, req.body.category)
 	
-	gal_rooms_cats = gallery.rooms.map((r)=>{ //to bedzie zamienione na prostsze, sprawdzanie categories
+	gal_rooms_cats = gallery.rooms.map((r)=>{ //can be replaced by simpler, checking categories
 		return r.room.category
 	})
 	
-	if(gal_rooms_cats.includes(req.body.category)){ //juz istnieje taki pokoj
-		//ponizsze nadpisuje gallery!
+	if(gal_rooms_cats.includes(req.body.category)){ //such a room already exists
+		//the one below overwrites the gallery!
 		gallery.rooms.map((r)=>{
 			if(r.room.category === req.body.category)
 				r.room.exhibits.push( exhibit._id )
 			return r
 		})
-	}else{		//jeszcze nie istnieje taki pokoj
+	}else{		//there's no such room yet
 		gallery.rooms.push({room:{category: req.body.category, exhibits:[ exhibit._id ]  }})
 		gallery.categories.push( req.body.category )
-		//DODAC WPIS DO categories
+		//ADD A RECORD TO CATEGORIES
 	}
 	await gallery.save()
 	try{
@@ -76,7 +76,7 @@ router.get('/exhibits/:id/pic', async (req,res)=>{
 	}
 })
 
-//pokaz wszystkie eksponaty w galerii zalogowanego uzytkownika
+//show all the exhibits in the gallery of the logged-in user
 router.get('/exhibits/:room', auth, async(req,res)=>{
 	const gallery = await Gallery.findOne({owner: req.user._id})
 	var exhibits = {}
@@ -93,7 +93,7 @@ router.get('/exhibits/:room', auth, async(req,res)=>{
 	}
 })
 
-//pokaz wszystkie eksponaty w WYBRANEJ galerii
+//show all the exhibits in the CHOSEN gallery
 router.get('/exhibits/:id/:room', auth, async(req,res)=>{
 	const gallery = await Gallery.findById(req.params.id)
 	var exhibits = {}
@@ -123,45 +123,5 @@ router.delete('/exhibits/:id', auth, async(req,res)=>{
 	}
 }) 
 
-/*  
-//AVATAR. image upload
-const upload = multer({
-	limits: {
-		fileSize: 1000000
-	},
-	fileFilter(req,file,cb){
-		if(!file.originalname.match(/\.(jpg|jpeg|png)$/)){
-			return cb(new Error('please upload jpg,jpeg,png!'))
-		}	
-		cb(undefined,true) 
-	}
-})
- */
-
-
-
-/* 
-router.post('/exhibits/:id/avatar', auth, upload.single('avatar'), async(req,res)=>{
-	const buffer = await sharp(req.file.buffer).resize({width:250, height: 300}).png().toBuffer()
-	req.user.avatar = buffer
-	await req.user.save()
-	res.status(200).send()
-}, (error,req,res,next)=>{
-	res.status(400).send({error: error.message})
-})
-  */
-
-
-
-
-//pokaz wybrany eksponat w galerii
-/* router.get('/exhibits/:id', auth, async(req,res)=>{
-	const gallery = await Gallery.find({owner: req.user._id})
-	try{
-		//res.send(gallery)
-	}catch(e){
-		res.status(500).send(e)
-	}
-}) */
 
 module.exports = router

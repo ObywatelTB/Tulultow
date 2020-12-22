@@ -30,11 +30,11 @@ router.post('/reactions/switch_like', auth, async(req,res)=>{
 			})
 		})
 		if(excerpts.length > 1){
-			throw 'BLAD w mechanizmie lajkow. Przypada wiecej rekordow na jednego uzytkownika.'
+			throw 'ERROR in the liking mechanism. Too many likes per user.'
 		}
 
 		excerpt = excerpts[0]
-		if(excerpt){
+		if(excerpt){	//if this user already liked this exhibit
 			like_state = false
 		}
 	}
@@ -49,19 +49,15 @@ router.post('/reactions/switch_like', auth, async(req,res)=>{
 		exhibit.likes = exhibit.likes + 1
 		await exhibit.save()
 	}else{ 			//somebody disliked
-		likes_ar = reactions.likes
-		ex_index = -1
-		for(i=0; i<likes_ar.length; i++){
-			if (likes_ar[i]._id == excerpt._id){
-				ex_index = i
-				break
-			}
-		}
-		likes_ar.splice(ex_index,1)	//deletion of a record
+		ind = reactions.likes.findIndex(l=>{
+			return l._id == excerpt._id
+		})
+		reactions.likes.splice(ind,1)	//deletion of a record
+
 		exhibit.likes = exhibit.likes - 1
 		await exhibit.save()
 	}
-	//console.log(exhibit)
+	
 	await reactions.save()
 	try{
 		res.send({likes: exhibit.likes})
@@ -69,6 +65,23 @@ router.post('/reactions/switch_like', auth, async(req,res)=>{
 		res.status(500).send(e)
 	}
 }) 
+
+//gives all the ids of exhibits liked by current user
+router.get('/reactions/likes/:gal', auth, async(req,res)=>{
+	reactions = await Reaction.findOne({gallery_id: req.params.gal})
+
+	my_likes = reactions.likes.filter(l=>{
+		return String(l.author_id) == String(req.user._id)
+	}).map(l=>{
+		return l.exhibit_id
+	})
+
+	try{
+		res.send(my_likes)
+	}catch(e){
+		res.status(500).send(e)
+	}
+})
 
 
 //gives all the (users who gave) likes to a given exhibit in a given gallery
@@ -84,8 +97,7 @@ router.get('/reactions/likes/:gal/:ex', auth, async(req,res)=>{
 			return l.author_name
 		})
 	}
-	// var xxx = chosen_comments[0]._id.getTimestamp()
-	// console.log('timeik: ', xxx)
+
 	try{
 		res.send(chosen_likes_authors)
 	}catch(e){
