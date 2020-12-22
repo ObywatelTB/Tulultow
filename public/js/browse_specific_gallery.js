@@ -107,8 +107,10 @@ draw_exhibit = async(data, r,e)=>{
 		prev_title2:	data[e].content,
 		exhibit_id:		'exhibit_'+r+e,
 		reaction_id:	'reaction_'+r+e,
+		like_id:		'like'+r+e,
 		like_img_source: like_img_src,
 		like_nr:		data[e].likes,
+		comment_id:		'comment_'+r+e,
 		likes_givers:	likes_authors
 	})
 	return ex
@@ -296,26 +298,31 @@ handle_like = ()=>{
 		$(this).css('cursor', 'pointer');
 	})
 
-	 $('.exhibit_like').unbind('click').on('click', async function(){
+	$('.exhibit_like').unbind('click').on('click', async function(){
 		const room_nr = 	this.id.slice(-2,-1)
 		const exhibit_nr =  this.id.slice(-1)
 		const exhibit_id = exhibits_ids[room_nr][exhibit_nr]
 
 		likes_count = await submit_like(exhibit_id)
+		$(this).siblings('.exhibit_reaction').children("p").text(likes_count)
 
 		//Changing the like icon
-		if(exhibits_liked_by_this_user.includes(exhibit_id)){ //now dislike
+		if(exhibits_liked_by_this_user.includes(exhibit_id)){ //now disliked
 			exhibits_liked_by_this_user.pop(exhibit_id)
 			$(this).attr("src","/img/like_text0.png")
-		}else{ //now like
+		}else{ //now liked
 			exhibits_liked_by_this_user.push(exhibit_id)
 			$(this).attr("src","/img/like_text1.png")
 		}
-
-		//Changing the likes count
-	  	document.getElementById(this.id).like_nr = likes_count
-		document.getElementById(this.id).innerHTML = document.getElementById(this.id).like_nr;
-	 })
+		
+		//updating the likes' givers list
+		$(this).siblings('.exhibit_reaction').children(".dropdown-content").text('')
+		likes_authors = await get_likes(the_chosen_gal, exhibit_id)
+		likes_authors.map(l_author=>{
+			$(this).siblings('.exhibit_reaction').children(".dropdown-content").append('<p>'+l_author+'</p>')
+		})
+		//console.log('elo',aj)
+	})
 }
 
 //BACKEND_(likes)____________________________________________
@@ -347,10 +354,8 @@ submit_like = async(exhibit_id)=>{
 	}).then(async(response)=>{
 		await response.json().then((data)=>{
 			if(data.error){
-				//gal_info.textContent = data.error
+				//
 			}else{
-				//gal_info.textContent = 'New element! '
-				console.log('Switched like! nr:', data.likes)
 				likes_count = data.likes
 			}
 		})
@@ -401,7 +406,7 @@ display_gallery = async() =>{
 
 
 //_MAIN___________________________________________________________
-main =  async ()=>{
+main =  async()=>{
 	Mustache.tags = ["[[", "]]"];
 	
 	display_gallery()

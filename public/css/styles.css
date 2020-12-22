@@ -145,23 +145,22 @@ button.exhibit{
 	font-weight: bold;
 	width: 65px;
 	bottom:  -20px;
-	right: -5px;
+	right: -1px;
 	
 }
 
 
 .exhibit_reaction{
-     font-size: 11px;	
+    font-size: 12px;	
     position: absolute;
-	bottom:  -19px;
-	left: 35px;
+	bottom:  -31px;
+	left: 30px;
 }
 
 
 .exhibit_reaction:hover .dropdown-content {
 	display: block;
-  }
-
+}
 
 .dropdown-content{
 	display: none;
