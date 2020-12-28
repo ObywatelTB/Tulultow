@@ -30,7 +30,7 @@ const gallerySchema = mongoose.Schema({
 		}
 	}],
 	owner:{
-		type: mongoose.Schema.Types.ObjectId, //czyli chyba _id usera
+		type: mongoose.Schema.Types.ObjectId, //user _id
 		required: true,
 		ref: 'User'
 	}		

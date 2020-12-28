@@ -26,7 +26,7 @@ const exhibitSchema = mongoose.Schema({
 		default: 0
 	},
 	owner:{
-		type: mongoose.Schema.Types.ObjectId, //czyli chyba _id galerii
+		type: mongoose.Schema.Types.ObjectId, //gallery _id
 		required: true,
 		ref: 'Gallery'
 	}		

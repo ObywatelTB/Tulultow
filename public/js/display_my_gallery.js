@@ -144,7 +144,7 @@ create_modal = async()=>{
 		$("#myModal").css("display", "none");
 	})
 	
-	//troche slabo bo 2 konwencje, jQuery i ponizsza. ale wazne ze dziala!
+	//not good because two conventions, jQuery and the one below. But it works!
 	var myM = document.querySelector('#myModal')
 	window.onclick = function(event) {
 		if (event.target == myM) {

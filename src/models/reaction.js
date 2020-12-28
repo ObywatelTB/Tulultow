@@ -43,7 +43,7 @@ const reactionSchema = mongoose.Schema({
 		}
 	}],
 	gallery_id:{
-		//type: mongoose.Schema.Types.ObjectId, //czyli _id galerii
+		//type: mongoose.Schema.Types.ObjectId, //gallery _id 
 		type: String,
 		required: true,
 		ref: 'Gallery'

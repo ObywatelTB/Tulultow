@@ -132,60 +132,47 @@ class Exhibits(DynamicDocument):
     }
 
 
+def geLikedPoints(given_user, favourite_galleriesOfUser, i, callibrationBool2):
+    list_to_show_to_user = []
+    list_to_show_to_user_Temp = []
+    if (i < 1):
+        return 1
+    else:
+        counter = 0
+        for galleriesC in favourite_galleriesOfUser:
+            s = Struct(**galleriesC)
+            gal = Galleries.objects(_id=s.gallery).first()
+            galOwner = Users.objects(_id=gal.owner).first()
+            if callibrationBool2 == 1:
+                pointCalc = s.points * calibrationForGivenUsers(given_user, galOwner) * i
+            else:
+                pointCalc = s.points
+
+            if gal not in list_to_show_to_user_Temp:
+                list_to_show_to_user.append([s.gallery, pointCalc])
+                list_to_show_to_user_Temp.append(s.gallery)
+            else:
+                for n, j in enumerate(list_to_show_to_user):
+                    if j[0] == gal:
+                        list_to_show_to_user[n] = [s.gallery, j[1] + pointCalc]
+
+            likedGalleriesOfUserFriends = galOwner.favourite_galleries
+            geLikedPoints(given_user, likedGalleriesOfUserFriends, i - 1, callibrationBool2)
+            counter = counter + 1
+    return list_to_show_to_user
+
 
 
 def create_recommended(given_user, callibration_bool, size_of_list, name_of_file):
     lunchDB(name_of_file)
-    list_to_show_to_user = []
-    list_to_show_to_user_Temp = []
     galleriesList = Galleries.objects()
-
-   
-    def geLikedPoints(favourite_galleriesOfUser, i, callibrationBool2):
-       
-        if (i < 1):
-            return 1
-        else:
-            counter = 0
-            for galleriesC in favourite_galleriesOfUser:
-                s = Struct(**galleriesC)
-                gal = Galleries.objects(_id=s.gallery).first()
-                galOwner = Users.objects(_id=gal.owner).first()
-                if callibrationBool2 == 1:
-                    pointCalc = s.points * calibrationForGivenUsers(given_user, galOwner) * i
-                else:
-                    pointCalc = s.points
-
-                if gal not in list_to_show_to_user_Temp:
-                    list_to_show_to_user.append([s.gallery, pointCalc])
-                    list_to_show_to_user_Temp.append(s.gallery)
-                else:
-                    for n, j in enumerate(list_to_show_to_user):
-                        if j[0] == gal:
-                            list_to_show_to_user[n] = [s.gallery, j[1] + pointCalc]
-
-                likedGalleriesOfUserFriends = galOwner.favourite_galleries
-                geLikedPoints(likedGalleriesOfUserFriends, i - 1, callibrationBool2)
-                counter = counter + 1
-            
-        
-    
-
-    
-
-    geLikedPoints(given_user.favourite_galleries, 3, callibration_bool)
-
-    
+    list_to_show_to_user = geLikedPoints(given_user, given_user.favourite_galleries, 3, callibration_bool)  
     list_to_show_to_user.sort(key=lambda x: x[1], reverse=True)
-    
-
     top20 = list_to_show_to_user[:20]
     newTop20 =[]
-    
-    
+     
     i = 1
     for itt in top20:
-        #print(john.email+"  "+ str(galleriesList[i]._id))        
         isItAlreadyThere=0
         for t in newTop20:
             if t[0] == itt[0]:
@@ -195,7 +182,6 @@ def create_recommended(given_user, callibration_bool, size_of_list, name_of_file
             newTop20.append([itt[0], itt[1]])
         i += 1
 
-   
     i = 1
     while (len(newTop20) < size_of_list-1) :
         if galleriesList[i].owner != given_user._id:
@@ -216,10 +202,10 @@ def lunchDB(strFileName):
     connect(settings.MONGO_DATABASE_NAME)
 
 
-def calibrationForGivenUsers(john, johnFriend):
+def calibrationForGivenUsers(givenUser, givenUser_friend):
     wagaTemp=0.1
-    for user2 in johnFriend.favourite_galleries:
-        for user3 in john.favourite_galleries:
+    for user2 in givenUser_friend.favourite_galleries:
+        for user3 in givenUser.favourite_galleries:
             s1 = Struct(**user2)
             s2 = Struct(**user3)
             if s1 == s2:
