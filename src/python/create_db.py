@@ -155,18 +155,22 @@ def create_recommended_list(given_user):
         Users.objects(_id=userList[x]._id).update(set__recommended_galleries=userTemp2.recommended_galleries)
 
 
-
-
+ON_HEROKU = 'ON_HEROKU' in os.environ	
 name_of_file='settings'
 
-if sys.argv[1] == "dev":
-    os.environ["SETTINGS_MODULE"] = 'settings'
-    name_of_file='settings'
+if ON_HEROKU:
+    print('Im in Heroku')
+    os.environ["SETTINGS_MODULE"] = 'settings_heroku'
+    name_of_file='settings_heroku'
 else:
-    os.environ["SETTINGS_MODULE"] = 'settings_test'
-    name_of_file='settings_test'
-
-sys.path.append(settings.SECRET_KEY)
+    if sys.argv[1] == "tulultow-api":
+        os.environ["SETTINGS_MODULE"] = 'settings'
+        sys.path.append(settings.SECRET_KEY)
+        name_of_file='settings'
+    if sys.argv[1] == "tulultow-api-test":
+        os.environ["SETTINGS_MODULE"] = 'settings_test'
+        sys.path.append(settings.SECRET_KEY)
+        name_of_file='settings_test'
 
 db = connect(settings.MONGO_DATABASE_NAME)
 
