@@ -1,0 +1,7 @@
+{
+	"_id": "000000000000000000000000",
+	"name": "administrator",
+	"email": "admin@gmail.com",
+	"password":"$2a$08$Md0BP6ApyYmZd/SLdIgb6eBmOTOAE1XQZZ4iNP6To8EqmTuoE4aFe",
+	"administrator": "true"
+}

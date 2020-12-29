@@ -1,6 +1,7 @@
 node_modules/
 src/python/.idea/
-config/
+config/dev.env
+config/test.env
 src/python/__pycache__/
 moje_notki.txt
 .vscode/
