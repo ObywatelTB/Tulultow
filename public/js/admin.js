@@ -1,6 +1,10 @@
 $(document).ready(function(){
 	
-	
+const default_db_name = 'tulultow-api'
+const test_db_name = 'tulultow-api-test'
+// const default_db_name = 'tulultow-api-test'
+// const test_db_name = 'tulultow-api'
+
 get_myself = async()=>{
 	user = {}
 	await fetch('/users/me',{method: 'GET'}).then( async(response)=>{
@@ -41,10 +45,10 @@ visibility = (user, db_name)=>{
 	}
 	$('#db_name').text(db_name).css('color','orange')
 	
-	if(db_name === 'tulultow-api'){ 			//Normalna DB
+	if(db_name === default_db_name){ 		//Normalna DB
 		$('#db_access').text('can\'t').css('color','red')
 		$('#db_modify').replaceWith($('<p>Can\'t modify the main database!</p>').css('color','red') )
-	}else if(db_name === 'tulultow-api-test'){ 	//Testowa DB
+	}else if(db_name === test_db_name){ 	//Testowa DB
 		$('#db_access').text('can').css('color','green')
 	}else{
 		$('#db').text('No connected to the valid database!').css('color','red')

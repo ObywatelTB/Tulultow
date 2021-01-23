@@ -20,7 +20,6 @@ class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
 
-
 def im_2_b64(image):
     buff = BytesIO()
     image.save(buff, format="PNG")
@@ -61,8 +60,6 @@ def clear_database_except_admin():
         updatedAt=datetime.datetime(2020, 2, 2, 6, 35, 6, 764)
     ).save()
         
-
-
 def create_users_and_galleries(number_of_users):
     does_admin_exist = 0
     if len(userList)>0:
@@ -127,8 +124,6 @@ def create_users_and_galleries(number_of_users):
     galleriesList_local = Galleries.objects()
     return [userList_local, galleriesList_local]
 
-
-
 def create_links_between_users(userList_local):
     for j in range(len(userList_local)):
         randList = random.sample(range(len(userList_local)), 5)
@@ -140,7 +135,6 @@ def create_links_between_users(userList_local):
                 gal = Galleries.objects(owner=userList_local[randList[i]]._id).get()
                 userTemp.favourite_galleries.append({"points": randPoints[i], "gallery": gal._id})
                 userTemp.save()
-
 
 def create_recommended_list(given_user):
     userTemp2 = given_user
@@ -172,7 +166,9 @@ else:
         sys.path.append(settings.SECRET_KEY)
         name_of_file='settings_test'
 
-db = connect(settings.MONGO_DATABASE_NAME)
+#db = connect(settings.MONGO_DATABASE_NAME)
+db = connect(settings.MONGO_DATABASE_NAME, host=settings.MONGODB_URI)
+
 
 basepath = path.dirname(__file__)
 filepath = path.abspath(path.join(basepath, "..", "..", "config/admin.json"))

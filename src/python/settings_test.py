@@ -7,3 +7,4 @@ load_dotenv(dotenv_path=env_path)
 
 SECRET_KEY = os.environ.get("PYTHON_LIBRARIES")
 MONGO_DATABASE_NAME = os.environ.get("MONGODB_NAME")
+MONGODB_URI = os.environ.get("MONGODB_URI")

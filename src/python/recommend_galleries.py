@@ -25,7 +25,8 @@ else:
         name_of_file='settings_test'
 
 
-connect(settings.MONGO_DATABASE_NAME)
+#connect(settings.MONGO_DATABASE_NAME)
+connect(settings.MONGO_DATABASE_NAME, host=settings.MONGODB_URI)
 
 
 

@@ -199,7 +199,8 @@ def create_recommended(given_user, callibration_bool, size_of_list, name_of_file
 
 def lunchDB(strFileName):
     os.environ["SETTINGS_MODULE"] = strFileName
-    connect(settings.MONGO_DATABASE_NAME)
+    #connect(settings.MONGO_DATABASE_NAME)
+    connect(settings.MONGO_DATABASE_NAME, host=settings.MONGODB_URI)
 
 
 def calibrationForGivenUsers(givenUser, givenUser_friend):

@@ -160,7 +160,7 @@ router.get('/users/db_name', auth, async (req,res)=>{
 router.get('/users/clear_db', auth, async (req,res)=>{
 	try{
 		run_python_script(['src/python/create_db.py', User.db.name, 'clear_db'])
-		
+		console.log()
 		res.send({"python script": "done"})
 	}catch(e){
 		res.status(500).send(e)
