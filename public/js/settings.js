@@ -95,11 +95,11 @@ upload_avatar = async(file)=>{
 			if(data.error){
 				console.log(data.error)
 			}else{
-				console.log("dodano pliczek,", data)
+				console.log("The file was added,", data)
 			}
 		})
 	}).catch((e)=>{
-		console.log('blad wewnatrz funkcji get avatar', e)
+		console.log('Error in the upload_avatar function', e)
 	})
 }
 

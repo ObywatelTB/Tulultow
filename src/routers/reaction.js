@@ -69,14 +69,15 @@ router.post('/reactions/switch_like', auth, async(req,res)=>{
 //gives all the ids of exhibits liked by current user
 router.get('/reactions/likes/:gal', auth, async(req,res)=>{
 	reactions = await Reaction.findOne({gallery_id: req.params.gal})
-
-	try{
+	my_likes = []
+	if(reactions){
 		my_likes = reactions.likes.filter(l=>{
 			return String(l.author_id) == String(req.user._id)
 		}).map(l=>{
 			return l.exhibit_id
 		})
-
+	}
+	try{
 		res.send(my_likes)
 	}catch(e){
 		res.status(500).send(e)
@@ -87,7 +88,8 @@ router.get('/reactions/likes/:gal', auth, async(req,res)=>{
 //gives all the (users who gave) likes to a given exhibit in a given gallery
 router.get('/reactions/likes/:gal/:ex', auth, async(req,res)=>{
 	reactions = await Reaction.findOne({gallery_id: req.params.gal})
-	chosen_likes = {}
+	chosen_likes = []
+	chosen_likes_authors = []
 	if(reactions){ //there were no reactions yet
 		all_likes = reactions.likes
 		chosen_likes = all_likes.filter(l=>{
@@ -97,7 +99,6 @@ router.get('/reactions/likes/:gal/:ex', auth, async(req,res)=>{
 			return l.author_name
 		})
 	}
-
 	try{
 		res.send(chosen_likes_authors)
 	}catch(e){
